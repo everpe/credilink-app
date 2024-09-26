@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "testApp": {
+    "credilinkApp": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -70,10 +70,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "testApp:build:production"
+              "buildTarget": "credilinkApp:build:production"
             },
             "development": {
-              "browserTarget": "testApp:build:development"
+              "buildTarget": "credilinkApp:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -81,7 +81,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "testApp:build"
+            "buildTarget": "credilinkApp:build"
           }
         },
         "test": {
