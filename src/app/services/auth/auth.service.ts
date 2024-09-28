@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { LoginRequestDto, LoginResponseDto } from 'src/app/interfaces/auth.interface';
@@ -10,7 +11,7 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
     /**
    * Método para hacer login
    * @param loginRequest - Datos de solicitud de login (usuario y contraseña)
@@ -55,6 +56,12 @@ export class AuthService {
      */
     isAuthenticated(): boolean {
       return !!this.getToken(); // Retorna true si hay un token
+    }
+
+
+    logout(): void {
+      localStorage.removeItem('auth_token'); 
+      this.router.navigate(['/authentication/login']); 
     }
 
 }
