@@ -49,43 +49,32 @@
 
           <div class="or-border m-t-30">or sign in with</div>
 
-          <form class="m-t-30">
-            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block"
-              >Username</mat-label
-            >
+          <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="m-t-30">
+            <!-- Username -->
+            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Usuario</mat-label>
             <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input matInput />
+              <input matInput formControlName="username" placeholder="Ingresa tu usuario" />
             </mat-form-field>
-            <!-- password -->
-            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block"
-              >Password</mat-label
-            >
+            
+            <!-- Password -->
+            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Contraseña</mat-label>
             <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input matInput type="password" />
+              <input matInput type="password" formControlName="password" placeholder="Ingresa tu contraseña" />
             </mat-form-field>
-
+          
+            <!-- Remember me -->
             <div class="d-flex align-items-center m-b-12">
-              <mat-checkbox color="primary">Remember this Device</mat-checkbox>
-              <a
-                [routerLink]="['/']"
-                class="text-primary f-w-600 text-decoration-none m-l-auto f-s-14"
-                >Forgot Password ?</a
-              >
+              <!-- <mat-checkbox color="primary" formControlName="rememberMe">Remember this Device</mat-checkbox> -->
+              <a [routerLink]="['/forgot-password']" class="text-primary f-w-600 text-decoration-none m-l-auto f-s-14">
+                ¿Olvidaste tu contraseña?
+              </a>
             </div>
-            <a [routerLink]="['/']" mat-flat-button color="primary" class="w-100">
-              Sign In
-            </a>
-            <!-- input -->
+          
+            <!-- Submit Button -->
+            <button mat-flat-button color="primary" class="w-100" type="submit" [disabled]="loginForm.invalid">
+              Iniciar sesión
+            </button>
           </form>
-          <span class="d-block f-w-500 text-center m-t-24"
-            >New to Modernize?
-            <a
-              [routerLink]="['/authentication/register']"
-              class="text-decoration-none text-primary f-w-500 f-s-14"
-            >
-              Create an account</a
-            >
-          </span>
         </mat-card-content>
       </mat-card>
     </div>

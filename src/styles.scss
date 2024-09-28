@@ -1,3 +1,6 @@
+@import 'ngx-toastr/toastr';
+
+
 /* You can add global styles to this file, and also import other style files */
 .max-w-100{
     max-width: 100%;
@@ -5,3 +8,7 @@
 .max-w-80{
     max-width: 70%;
 }
+.snackbar-error {
+    background-color: #f44336; /* Rojo (color de error) */
+    color: white;
+  }

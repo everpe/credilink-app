@@ -17,7 +17,7 @@ export class AuthService {
    * @returns Observable con la respuesta del servidor (token, datos del usuario)
    */
     login(loginRequest: LoginRequestDto): Observable<LoginResponseDto> {
-      return this.http.post<LoginResponseDto>(`${environment.apiUrl}/login`, loginRequest)
+      return this.http.post<LoginResponseDto>(`${environment.apiUrl}/login/`, loginRequest)
         .pipe(
           catchError((error) => {
             console.error('Error durante el login:', error);
