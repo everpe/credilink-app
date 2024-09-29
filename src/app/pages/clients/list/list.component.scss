@@ -1,0 +1,27 @@
+.container {
+    @apply p-6 bg-gray-100 rounded-lg;
+  }
+  
+  table {
+    @apply min-w-full border-collapse;
+  }
+  
+  th {
+    @apply bg-gray-800 text-white text-left px-4 py-2;
+  }
+  
+  td {
+    @apply px-4 py-2 border-b border-gray-200;
+  }
+  
+  tr:nth-child(even) {
+    @apply bg-gray-100;
+  }
+  
+  tr:hover {
+    @apply bg-gray-50;
+  }
+
+  .overflow-x-auto {
+    overflow-x: auto;
+  }

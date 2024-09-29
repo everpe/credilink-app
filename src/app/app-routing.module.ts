@@ -29,10 +29,8 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'extra',
-        canActivate: [authGuard],
-        loadChildren: () =>
-          import('./pages/extra/extra.module').then((m) => m.ExtraModule),
+        path: 'clients',
+        loadComponent: () => import('./pages/clients/list/list.component').then(m => m.ListComponent)  // Lazy loading de componente standalone
       },
     ],
   },
