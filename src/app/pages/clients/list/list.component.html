@@ -25,9 +25,9 @@
             <td mat-cell *matCellDef="let client"> {{ client.last_name }} </td>
           </ng-container>
 
-          <ng-container matColumnDef="type_document">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Tipo Documento </th>
-            <td mat-cell *matCellDef="let client"> {{ client.type_document }} </td>
+          <ng-container matColumnDef="job_relationship">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Rl. Laboral </th>
+            <td mat-cell *matCellDef="let client"> {{ client.job_relationship.name }} </td>
           </ng-container>
 
           <ng-container matColumnDef="document_number">
@@ -35,10 +35,15 @@
             <td mat-cell *matCellDef="let client"> {{ client.document_number }} </td>
           </ng-container>
 
-          <ng-container matColumnDef="city">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Ciudad </th>
-            <td mat-cell *matCellDef="let client"> {{ client.city }} </td>
+          <ng-container matColumnDef="created_at">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Fecha de creación </th>
+            <td mat-cell *matCellDef="let client"> {{ client.created_at }} </td>
           </ng-container>
+          <ng-container matColumnDef="created_by">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Creado por </th>
+            <td mat-cell *matCellDef="let client"> {{ client.created_by.username }} </td>
+          </ng-container>
+
 
           <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Estado </th>

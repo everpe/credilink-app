@@ -40,10 +40,10 @@ export class ListComponent implements AfterViewInit {
   displayedColumns: string[] = [
     'first_name',
     'last_name',
-    'type_document',
+    'job_relationship',
     'document_number',
-    'city',
-    // 'mobile',
+    'created_at',
+    'created_by',
     'status',
     'actions' 
   ];
