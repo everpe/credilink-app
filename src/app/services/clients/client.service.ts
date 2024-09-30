@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CreateClientDto } from 'src/app/interfaces/client.interface';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -20,5 +21,9 @@ export class ClientService {
 
     // Realizar la solicitud GET con los parámetros
     return this.http.get(`${environment.apiUrl}/clients/`, { params });
+  }
+
+  createClient(newClient: CreateClientDto): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/clients/`, newClient);
   }
 }

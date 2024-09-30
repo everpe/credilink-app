@@ -2,11 +2,13 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '
 import { FormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ClientService } from 'src/app/services/clients/client.service';
+import { NewClientFormComponent } from '../new-client-form/new-client-form.component';
 
 @Component({
   selector: 'app-list',
@@ -49,7 +51,7 @@ export class ListComponent implements AfterViewInit {
   private paginator!: MatPaginator;
   clientsDatasource = new MatTableDataSource<any>();
 
-  constructor(private clientService: ClientService) {
+  constructor(private clientService: ClientService, private dialog: MatDialog) {
     }
 
   ngAfterViewInit(): void {
@@ -78,6 +80,20 @@ export class ListComponent implements AfterViewInit {
     // console.log('offset;' + this.offset)
     this.limit = event.pageSize;
     this.getClients();  // Vuelve a llamar al servicio para obtener nuevos datos
+  }
+
+
+  openNewClientDialog(): void {
+    const dialogRef = this.dialog.open(NewClientFormComponent, {
+      width: '800px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getClients();  // Actualiza la lista de clientes después de registrar uno nuevo
+      }
+    });
   }
 
   editClient(client: any): void {

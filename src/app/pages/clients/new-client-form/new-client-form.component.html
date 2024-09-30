@@ -1,0 +1,160 @@
+<div class="p-8">
+
+    <h2 mat-dialog-title class="text-xl font-bold text-center mb-6">Registrar nuevo cliente</h2>
+    <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Nombre -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="first_name" />
+        <mat-error *ngIf="clientForm.get('first_name')?.hasError('required')">
+          El nombre es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Apellido -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Apellido</mat-label>
+        <input matInput formControlName="last_name" />
+        <mat-error *ngIf="clientForm.get('last_name')?.hasError('required')">
+          El apellido es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Tipo de Documento -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Tipo de Documento</mat-label>
+        <mat-select formControlName="document_type">
+          <mat-option *ngFor="let type of documentTypes" [value]="type">{{ type }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="clientForm.get('document_type')?.hasError('required')">
+          El tipo de documento es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Número de Documento -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Número de Documento</mat-label>
+        <input matInput formControlName="document_number" />
+        <mat-error *ngIf="clientForm.get('document_number')?.hasError('required')">
+          El número de documento es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Lugar de Expedición -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Lugar de Expedición</mat-label>
+        <input matInput formControlName="place_of_issue" />
+        <mat-error *ngIf="clientForm.get('place_of_issue')?.hasError('required')">
+          El lugar de expedición es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Género -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Género</mat-label>
+        <mat-select formControlName="gender">
+          <mat-option *ngFor="let gender of genders" [value]="gender">{{ gender }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="clientForm.get('gender')?.hasError('required')">
+          El género es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Teléfono -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="phone" />
+        <mat-error *ngIf="clientForm.get('phone')?.hasError('required')">
+          El teléfono es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Móvil -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Móvil</mat-label>
+        <input matInput formControlName="mobile" />
+        <mat-error *ngIf="clientForm.get('mobile')?.hasError('required')">
+          El móvil es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Dirección -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Dirección</mat-label>
+        <input matInput formControlName="address" />
+        <mat-error *ngIf="clientForm.get('address')?.hasError('required')">
+          La dirección es requerida
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Barrio -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Barrio</mat-label>
+        <input matInput formControlName="neighborhood" />
+        <mat-error *ngIf="clientForm.get('neighborhood')?.hasError('required')">
+          El barrio es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Ciudad -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Ciudad</mat-label>
+        <input matInput formControlName="city" />
+        <mat-error *ngIf="clientForm.get('city')?.hasError('required')">
+          La ciudad es requerida
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Teléfono de Oficina -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Teléfono de Oficina</mat-label>
+        <input matInput formControlName="office_phone" />
+        <mat-error *ngIf="clientForm.get('office_phone')?.hasError('required')">
+          El teléfono de oficina es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Tipo de Vinculación -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Tipo de Vinculación</mat-label>
+        <input matInput formControlName="type_of_linkage" />
+        <mat-error *ngIf="clientForm.get('type_of_linkage')?.hasError('required')">
+          El tipo de vinculación es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Sede -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Sede</mat-label>
+        <input matInput type="number" formControlName="sede" />
+        <mat-error *ngIf="clientForm.get('sede')?.hasError('required')">
+          La sede es requerida
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Relación de Trabajo -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Relación de Trabajo</mat-label>
+        <input matInput type="number" formControlName="job_relationship" />
+        <mat-error *ngIf="clientForm.get('job_relationship')?.hasError('required')">
+          La relación de trabajo es requerida
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Observaciones -->
+      <mat-form-field appearance="outline" class="w-full md:col-span-2">
+        <mat-label>Observaciones</mat-label>
+        <textarea matInput formControlName="observations"></textarea>
+        <mat-error *ngIf="clientForm.get('observations')?.hasError('required')">
+          Las observaciones son requeridas
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Botones -->
+      <div class="flex justify-end md:col-span-2 space-x-4">
+        <button mat-raised-button  (click)="onCancel()">Cancelar</button>
+
+        <button mat-raised-button color="primary" [disabled]="clientForm.invalid">Registrar</button>
+      </div>
+    </form>
+</div>

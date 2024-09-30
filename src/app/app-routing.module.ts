@@ -30,6 +30,7 @@ const routes: Routes = [
       },
       {
         path: 'clients',
+        canActivate: [authGuard],
         loadComponent: () => import('./pages/clients/list/list.component').then(m => m.ListComponent)  // Lazy loading de componente standalone
       },
     ],

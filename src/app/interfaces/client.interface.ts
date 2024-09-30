@@ -1,7 +1,7 @@
 export interface CreateClientDto {
     first_name: string;
     last_name: string;
-    type_document: string;
+    document_type: TypeDocument;
     document_number: string;
     place_of_issue: string;
     gender: Gender;
@@ -15,9 +15,9 @@ export interface CreateClientDto {
     type_of_linkage: string;
     sede: number;
     job_relationship: number;
-    email: string;
 }
   
+
 export enum TypeDocument {
     CC = 'CC',
     TI = 'TI',
