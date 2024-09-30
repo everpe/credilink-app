@@ -7,40 +7,34 @@
 
     <mat-card-content>
       <div class="overflow-x-auto">
-        <table mat-table [dataSource]="clientsDatasource" matSort class="min-w-full bg-white shadow-md rounded-lg">
-          <!-- Definición de columnas -->
+        <table mat-table [dataSource]="clientsDatasource" matSort class="min-w-full shadow-md rounded-lg bg-back">
           <ng-container matColumnDef="first_name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Nombre </th>
             <td mat-cell *matCellDef="let client"> {{ client.first_name }} </td>
           </ng-container>
 
           <ng-container matColumnDef="last_name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellido </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Apellido </th>
             <td mat-cell *matCellDef="let client"> {{ client.last_name }} </td>
           </ng-container>
 
           <ng-container matColumnDef="type_document">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Documento </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Tipo Documento </th>
             <td mat-cell *matCellDef="let client"> {{ client.type_document }} </td>
           </ng-container>
 
           <ng-container matColumnDef="document_number">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Documento </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Documento </th>
             <td mat-cell *matCellDef="let client"> {{ client.document_number }} </td>
           </ng-container>
 
           <ng-container matColumnDef="city">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Ciudad </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Ciudad </th>
             <td mat-cell *matCellDef="let client"> {{ client.city }} </td>
           </ng-container>
 
-          <!-- <ng-container matColumnDef="mobile">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Móvil </th>
-            <td mat-cell *matCellDef="let client"> {{ client.mobile }} </td>
-          </ng-container> -->
-
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Estado </th>
             <td mat-cell *matCellDef="let client">
               <span [class.text-green-600]="client.status" [class.text-red-600]="!client.status">
                 {{ client.status ? 'Activo' : 'Inactivo' }}
@@ -49,7 +43,7 @@
           </ng-container>
 
           <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef> Acciones </th>
+            <th mat-header-cell *matHeaderCellDef class="bg-gray-800 text-white font-bold p-4"> Acciones </th>
             <td mat-cell *matCellDef="let client">
               <button mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>more_vert</mat-icon>

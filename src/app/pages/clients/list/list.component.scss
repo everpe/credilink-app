@@ -6,10 +6,6 @@
     @apply min-w-full border-collapse;
   }
   
-  th {
-    @apply bg-gray-800 text-white text-left px-4 py-2;
-  }
-  
   td {
     @apply px-4 py-2 border-b border-gray-200;
   }
@@ -25,3 +21,9 @@
   .overflow-x-auto {
     overflow-x: auto;
   }
+
+::ng-deep .mat-mdc-table .mat-mdc-header-cell
+{
+  background-color: #3f6699  !important; //#5D87FF !important;
+
+}

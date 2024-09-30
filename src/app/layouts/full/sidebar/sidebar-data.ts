@@ -15,7 +15,7 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Clientes',
     iconName: 'users',
-    route: '/',
+    route: '/clients',
   },
   {
     displayName: 'Codeudores',
