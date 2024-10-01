@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { debounceTime } from 'rxjs/operators';
+import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
 
 @Component({
   selector: 'app-list',
@@ -145,6 +146,21 @@ export class ListComponent implements AfterViewInit {
 
   // Método para eliminar cliente
   deleteClient(client: any): void {
-    console.log('Eliminar cliente:', client);
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      width: '400px',
+      data: { message : `¿Está seguro que desea desactivar este cliente: ${client.first_name.toUpperCase()} ?` }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.clientService.deleteClientById(client.id).subscribe(resp => {
+          this.snackBar.success('Este cliente ha sido desactivado exitosamente.');
+          this.getClients(); 
+        }, error => {
+          this.snackBar.error('Ocurrió un error al actualizar el cliente.');
+          console.error(error);
+        });;
+      }
+    });
   }
 }

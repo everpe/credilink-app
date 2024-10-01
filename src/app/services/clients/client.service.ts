@@ -31,5 +31,8 @@ export class ClientService {
   updateClient(id: number, updateClientDto: UpdateClientDto): Observable<any> {
     return this.http.patch(`${environment.apiUrl}/clients/${id}/`, updateClientDto);
   }
-  
+  deleteClientById(clientId: number): Observable<void> {
+    const url = `${environment.apiUrl}/clients/${clientId}/`;
+    return this.http.delete<void>(url);
+  }
 }
