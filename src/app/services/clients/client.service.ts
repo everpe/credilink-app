@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateClientDto, JobRelationship } from 'src/app/interfaces/client.interface';
+import { CreateClientDto, JobRelationship, UpdateClientDto } from 'src/app/interfaces/client.interface';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -27,4 +27,9 @@ export class ClientService {
   getJobRelationships(sede: number): Observable<JobRelationship[]> {
     return this.http.get<JobRelationship[]>( `${environment.apiUrl}/job_relationships/?sede=${sede}`);
   }
+
+  updateClient(id: number, updateClientDto: UpdateClientDto): Observable<any> {
+    return this.http.patch(`${environment.apiUrl}/clients/${id}/`, updateClientDto);
+  }
+  
 }

@@ -36,3 +36,23 @@ export interface JobRelationship {
     sede: number;
     company: number;
 }
+
+export interface UpdateClientDto {
+    first_name: string;
+    last_name: string;
+    document_type: string;
+    document_number: string;
+    place_of_issue: string;
+    gender: string;
+    phone: string;
+    mobile: string;
+    address: string;
+    neighborhood: string;
+    city: string;
+    observations: string;
+    office_phone: string;
+    type_of_linkage: string;
+    sede: number;
+    job_relationship: number;
+  }
+  

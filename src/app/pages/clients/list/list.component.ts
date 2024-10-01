@@ -9,7 +9,6 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ClientService } from 'src/app/services/clients/client.service';
 import { NewClientFormComponent } from '../new-client-form/new-client-form.component';
-import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
 import { ToastrService } from 'ngx-toastr';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -105,13 +104,7 @@ export class ListComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        const confirmDialogRef = this.dialog.open(ConfirmComponent, {
-          width: '400px',
-          data: { message: '¿Estás seguro de crear este cliente?' }
-        });
 
-        confirmDialogRef.afterClosed().subscribe(confirmed => {
-          if (confirmed) {
             this.clientService.createClient(result).subscribe(
               resp => {
                 this.snackBar.success('El cliente ha sido creado satisfactoriamente.');
@@ -122,15 +115,32 @@ export class ListComponent implements AfterViewInit {
                 this.snackBar.error('Hubo un error al crear el cliente.');
               }
             );
-          }
-        });
+   
       }
     });
   }
 
 
   editClient(client: any): void {
-    console.log('Editar cliente:', client);
+    const dialogRef = this.dialog.open(NewClientFormComponent, {
+      width: '750px',
+      data: { client, isEditMode: true },  // Pasamos el cliente para editar
+      disableClose: true
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.clientService.updateClient(client.id, result).subscribe(resp => {
+          this.snackBar.success('Cambios efectuados exitosamente.');
+          this.getClients();  // Refresca la lista de clientes
+        }, error => {
+          this.snackBar.error('Ocurrió un error al actualizar el cliente.');
+          console.error(error);
+        });
+      } else {
+        this.snackBar.info('Cambios no efectuados.');
+      }
+    });
   }
 
   // Método para eliminar cliente
