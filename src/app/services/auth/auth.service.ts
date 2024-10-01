@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
-import { LoginRequestDto, LoginResponseDto } from 'src/app/interfaces/auth.interface';
+import { LoginRequestDto, LoginResponseDto, Sede } from 'src/app/interfaces/auth.interface';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -34,6 +34,10 @@ export class AuthService {
     setToken(token: string): void {
       localStorage.setItem('auth_token', token);
     }
+
+    setSedeUserToStorage(sede: string): void {
+      localStorage.setItem('sede_user', sede);
+    }
   
     /**
      * Método para obtener el token de autenticación desde localStorage
@@ -43,6 +47,9 @@ export class AuthService {
       return localStorage.getItem('auth_token');
     }
   
+    getSedeUser(): string | null {
+      return localStorage.getItem('sede_user');
+    }
     /**
      * Método para eliminar el token de autenticación de localStorage
      */

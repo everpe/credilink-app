@@ -29,3 +29,10 @@ export enum Gender {
     Masculino = 'Masculino',
     Femenino = 'Femenino',
 }
+
+export interface JobRelationship {
+    id: number;
+    name: string;
+    sede: number;
+    company: number;
+}

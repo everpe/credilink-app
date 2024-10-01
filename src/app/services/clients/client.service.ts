@@ -1,7 +1,7 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateClientDto } from 'src/app/interfaces/client.interface';
+import { CreateClientDto, JobRelationship } from 'src/app/interfaces/client.interface';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -12,18 +12,19 @@ export class ClientService {
 
   // Método para obtener la lista paginada de clientes
   getClients(offset: number, limit: number, sede: number, search: string): Observable<any> {
-    // Crear los parámetros de la solicitud GET
     let params = new HttpParams()
       .set('offset', offset)
       .set('limit', limit)
       .set('sede', sede)
       .set('search', search);
-
-    // Realizar la solicitud GET con los parámetros
     return this.http.get(`${environment.apiUrl}/clients/`, { params });
   }
 
   createClient(newClient: CreateClientDto): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/clients/`, newClient);
+  }
+
+  getJobRelationships(sede: number): Observable<JobRelationship[]> {
+    return this.http.get<JobRelationship[]>( `${environment.apiUrl}/job_relationships/?sede=${sede}`);
   }
 }

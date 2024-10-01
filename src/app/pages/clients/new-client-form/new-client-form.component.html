@@ -1,4 +1,4 @@
-<div class="p-8">
+<div class="p-10">
 
     <h2 mat-dialog-title class="text-xl font-bold text-center mb-6">Registrar nuevo cliente</h2>
     <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -23,10 +23,10 @@
       <!-- Tipo de Documento -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Tipo de Documento</mat-label>
-        <mat-select formControlName="document_type">
+        <mat-select formControlName="type_document">
           <mat-option *ngFor="let type of documentTypes" [value]="type">{{ type }}</mat-option>
         </mat-select>
-        <mat-error *ngIf="clientForm.get('document_type')?.hasError('required')">
+        <mat-error *ngIf="clientForm.get('type_document')?.hasError('required')">
           El tipo de documento es requerido
         </mat-error>
       </mat-form-field>
@@ -60,12 +60,14 @@
         </mat-error>
       </mat-form-field>
 
-      <!-- Teléfono -->
       <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Teléfono</mat-label>
-        <input matInput formControlName="phone" />
-        <mat-error *ngIf="clientForm.get('phone')?.hasError('required')">
-          El teléfono es requerido
+        <mat-label>Correo</mat-label>
+        <input matInput formControlName="email" />
+        <mat-error *ngIf="clientForm.get('email')?.hasError('required')">
+          El correo electrónico es requerido
+        </mat-error>
+        <mat-error *ngIf="clientForm.get('email')?.hasError('email') && !clientForm.get('email')?.hasError('required')">
+          Formato correo electrónico incorrecto
         </mat-error>
       </mat-form-field>
 
@@ -75,6 +77,24 @@
         <input matInput formControlName="mobile" />
         <mat-error *ngIf="clientForm.get('mobile')?.hasError('required')">
           El móvil es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Teléfono -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="phone" />
+        <mat-error *ngIf="clientForm.get('phone')?.hasError('required')">
+          El teléfono es requerido
+        </mat-error>
+      </mat-form-field>
+
+       <!-- Teléfono de Oficina -->
+       <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Teléfono de Oficina</mat-label>
+        <input matInput formControlName="office_phone" />
+        <mat-error *ngIf="clientForm.get('office_phone')?.hasError('required')">
+          El teléfono de oficina es requerido
         </mat-error>
       </mat-form-field>
 
@@ -105,14 +125,7 @@
         </mat-error>
       </mat-form-field>
 
-      <!-- Teléfono de Oficina -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Teléfono de Oficina</mat-label>
-        <input matInput formControlName="office_phone" />
-        <mat-error *ngIf="clientForm.get('office_phone')?.hasError('required')">
-          El teléfono de oficina es requerido
-        </mat-error>
-      </mat-form-field>
+     
 
       <!-- Tipo de Vinculación -->
       <mat-form-field appearance="outline" class="w-full">
@@ -124,25 +137,30 @@
       </mat-form-field>
 
       <!-- Sede -->
-      <mat-form-field appearance="outline" class="w-full">
+      <!-- <mat-form-field appearance="outline" class="w-full">
         <mat-label>Sede</mat-label>
         <input matInput type="number" formControlName="sede" />
         <mat-error *ngIf="clientForm.get('sede')?.hasError('required')">
           La sede es requerida
         </mat-error>
-      </mat-form-field>
+      </mat-form-field> -->
 
       <!-- Relación de Trabajo -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Relación de Trabajo</mat-label>
-        <input matInput type="number" formControlName="job_relationship" />
+        <mat-select formControlName="job_relationship">
+          <mat-option *ngFor="let relationship of lisJobRelationShips" [value]="relationship.id">
+            {{ relationship.name }}
+          </mat-option>
+        </mat-select>
         <mat-error *ngIf="clientForm.get('job_relationship')?.hasError('required')">
           La relación de trabajo es requerida
         </mat-error>
       </mat-form-field>
+      
 
       <!-- Observaciones -->
-      <mat-form-field appearance="outline" class="w-full md:col-span-2">
+      <mat-form-field appearance="outline" class="w-full md:col-span-3">
         <mat-label>Observaciones</mat-label>
         <textarea matInput formControlName="observations"></textarea>
         <mat-error *ngIf="clientForm.get('observations')?.hasError('required')">
