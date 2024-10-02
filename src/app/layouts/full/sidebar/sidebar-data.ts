@@ -20,7 +20,7 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Codeudores',
     iconName: 'users',
-    route: '/',
+    route: '/codebtors',
   },
   {
     displayName: 'Créditos',

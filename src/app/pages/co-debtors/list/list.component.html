@@ -1,0 +1,96 @@
+<h2 class="text-2xl font-semibold">Codeudores</h2>
+<div class="container mx-auto mt-4">
+  <div class="flex justify-between items-center">
+
+    <!-- Campo de búsqueda -->
+    <mat-form-field appearance="outline">
+      <mat-label>Buscar codeudor</mat-label>
+      <input matInput placeholder="Buscar" [formControl]="search">
+    </mat-form-field>
+
+    <!-- Botón para registrar un nuevo cliente -->
+    <button mat-raised-button color="primary" class="flex items-center gap-2" (click)="openNewClientDialog()">
+      <mat-icon>person_add</mat-icon>
+      Nuevo codeudor
+    </button>
+  </div>
+  <mat-card class="mat-elevation-z6 rounded-lg">
+    <mat-card-header>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="overflow-x-auto">
+        <table mat-table [dataSource]="coDebtorsDatasource" matSort class="min-w-full shadow-md rounded-lg bg-back">
+          <ng-container matColumnDef="first_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Nombre </th>
+            <td mat-cell *matCellDef="let client"> {{ client.first_name }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="last_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Apellido </th>
+            <td mat-cell *matCellDef="let client"> {{ client.last_name }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="job_relationship">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Rl. Laboral </th>
+            <td mat-cell *matCellDef="let client"> {{ client.job_relationship.name }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="document_number">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Documento </th>
+            <td mat-cell *matCellDef="let client"> {{ client.document_number }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="created_at">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Fecha de creación </th>
+            <td mat-cell *matCellDef="let client"> {{ client.created_at }} </td>
+          </ng-container>
+          <ng-container matColumnDef="created_by">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Creado por </th>
+            <td mat-cell *matCellDef="let client"> {{ client.created_by.username }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Estado </th>
+            <td mat-cell *matCellDef="let client">
+              <span [class.text-green-600]="client.status" [class.text-red-600]="!client.status">
+                {{ client.status ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="bg-gray-800 text-white font-bold p-4"> Acciones </th>
+            <td mat-cell *matCellDef="let client">
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="editClient(client)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Editar</span>
+                </button>
+                <button mat-menu-item (click)="deleteClient(client)">
+                  <mat-icon>power_settings_new</mat-icon>
+                  <span>Desactivar</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+
+    <div class="container">
+      <mat-paginator 
+        [length]="totalRecords" 
+        [pageSize]="limit" 
+        [pageSizeOptions]="[5, 10, 20]" 
+        (page)="onPageChange($event)">
+      </mat-paginator>
+    </div>
+  </mat-card>
+</div>

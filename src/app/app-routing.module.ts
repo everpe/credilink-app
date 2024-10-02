@@ -33,6 +33,11 @@ const routes: Routes = [
         canActivate: [authGuard],
         loadComponent: () => import('./pages/clients/list/list.component').then(m => m.ListComponent)  // Lazy loading de componente standalone
       },
+      {
+        path: 'codebtors',
+        canActivate: [authGuard],
+        loadComponent: () => import('./pages/co-debtors/list/list.component').then(m => m.ListComponent)  // Lazy loading de componente standalone
+      },
     ],
   },
   {
