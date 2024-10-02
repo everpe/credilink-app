@@ -11,7 +11,6 @@ export class CodebtorService {
 
   constructor(private http: HttpClient) {}
 
-  // Método para obtener la lista de codeudores con paginación
   getCoDebtors(offset: number, limit: number, sede: number, search: string): Observable<{ count: number, results: CoDebtor[] }> {
     const params = new HttpParams()
       .set('offset', offset.toString())
@@ -23,11 +22,11 @@ export class CodebtorService {
   }
 
   createCoDebtor(coDebtor: CreateCoDebtorDto): Observable<any> {
-    return this.http.post<any>(environment.apiUrl, coDebtor);
+    return this.http.post<any>(`${environment.apiUrl}/CoDebtor/`, coDebtor);
   }
 
   updateCoDebtor(id: number, updateCoDebtorDto: UpdateCoDebtorDto): Observable<any> {
-    const url = `${environment.apiUrl}}/api/CoDebtor/${id}/`;
+    const url = `${environment.apiUrl}/CoDebtor/${id}/`;
     return this.http.patch(url, updateCoDebtorDto);
   }
 

@@ -1,12 +1,12 @@
 <div class=" p-11 py-1">
 
-    <h2 mat-dialog-title class="text-xl font-medium  text-center mb-6 mt-4">{{ !isEditMode ? 'Registrar nuevo' : 'Modificar'}} cliente</h2>
-    <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <h2 mat-dialog-title class="text-xl font-medium text-center mb-6  mt-4">{{ !isEditMode ? 'Registrar nuevo' : 'Modificar'}} codeudor</h2>
+    <form [formGroup]="codebtorForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <!-- Nombre -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Nombre</mat-label>
         <input matInput formControlName="first_name" />
-        <mat-error *ngIf="clientForm.get('first_name')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('first_name')?.hasError('required')">
           El nombre es requerido
         </mat-error>
       </mat-form-field>
@@ -15,7 +15,7 @@
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Apellido</mat-label>
         <input matInput formControlName="last_name" />
-        <mat-error *ngIf="clientForm.get('last_name')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('last_name')?.hasError('required')">
           El apellido es requerido
         </mat-error>
       </mat-form-field>
@@ -26,7 +26,7 @@
         <mat-select formControlName="type_document">
           <mat-option *ngFor="let type of documentTypes" [value]="type">{{ type }}</mat-option>
         </mat-select>
-        <mat-error *ngIf="clientForm.get('type_document')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('type_document')?.hasError('required')">
           El tipo de documento es requerido
         </mat-error>
       </mat-form-field>
@@ -35,7 +35,7 @@
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Número de Documento</mat-label>
         <input matInput formControlName="document_number" />
-        <mat-error *ngIf="clientForm.get('document_number')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('document_number')?.hasError('required')">
           El número de documento es requerido
         </mat-error>
       </mat-form-field>
@@ -44,7 +44,7 @@
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Lugar de Expedición</mat-label>
         <input matInput formControlName="place_of_issue" />
-        <mat-error *ngIf="clientForm.get('place_of_issue')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('place_of_issue')?.hasError('required')">
           El lugar de expedición es requerido
         </mat-error>
       </mat-form-field>
@@ -55,7 +55,7 @@
         <mat-select formControlName="gender">
           <mat-option *ngFor="let gender of genders" [value]="gender">{{ gender }}</mat-option>
         </mat-select>
-        <mat-error *ngIf="clientForm.get('gender')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('gender')?.hasError('required')">
           El género es requerido
         </mat-error>
       </mat-form-field>
@@ -63,10 +63,10 @@
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Correo</mat-label>
         <input matInput formControlName="email" />
-        <mat-error *ngIf="clientForm.get('email')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('email')?.hasError('required')">
           El correo electrónico es requerido
         </mat-error>
-        <mat-error *ngIf="clientForm.get('email')?.hasError('email') && !clientForm.get('email')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('email')?.hasError('email') && !codebtorForm.get('email')?.hasError('required')">
           Formato correo electrónico incorrecto
         </mat-error>
       </mat-form-field>
@@ -75,7 +75,7 @@
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Móvil</mat-label>
         <input matInput formControlName="mobile" />
-        <mat-error *ngIf="clientForm.get('mobile')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('mobile')?.hasError('required')">
           El móvil es requerido
         </mat-error>
       </mat-form-field>
@@ -84,7 +84,7 @@
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Teléfono</mat-label>
         <input matInput formControlName="phone" />
-        <mat-error *ngIf="clientForm.get('phone')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('phone')?.hasError('required')">
           El teléfono es requerido
         </mat-error>
       </mat-form-field>
@@ -93,7 +93,7 @@
        <mat-form-field appearance="outline" class="w-full">
         <mat-label>Teléfono de Oficina</mat-label>
         <input matInput formControlName="office_phone" />
-        <mat-error *ngIf="clientForm.get('office_phone')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('office_phone')?.hasError('required')">
           El teléfono de oficina es requerido
         </mat-error>
       </mat-form-field>
@@ -102,7 +102,7 @@
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Dirección</mat-label>
         <input matInput formControlName="address" />
-        <mat-error *ngIf="clientForm.get('address')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('address')?.hasError('required')">
           La dirección es requerida
         </mat-error>
       </mat-form-field>
@@ -111,7 +111,7 @@
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Barrio</mat-label>
         <input matInput formControlName="neighborhood" />
-        <mat-error *ngIf="clientForm.get('neighborhood')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('neighborhood')?.hasError('required')">
           El barrio es requerido
         </mat-error>
       </mat-form-field>
@@ -120,18 +120,17 @@
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Ciudad</mat-label>
         <input matInput formControlName="city" />
-        <mat-error *ngIf="clientForm.get('city')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('city')?.hasError('required')">
           La ciudad es requerida
         </mat-error>
       </mat-form-field>
 
-     
-
+    
       <!-- Tipo de Vinculación -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Tipo de Vinculación</mat-label>
         <input matInput formControlName="type_of_linkage" />
-        <mat-error *ngIf="clientForm.get('type_of_linkage')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('type_of_linkage')?.hasError('required')">
           El tipo de vinculación es requerido
         </mat-error>
       </mat-form-field>
@@ -144,17 +143,16 @@
             {{ relationship.name }}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="clientForm.get('job_relationship')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('job_relationship')?.hasError('required')">
           La relación de trabajo es requerida
         </mat-error>
       </mat-form-field>
       
-
       <!-- Observaciones -->
       <mat-form-field appearance="outline" class="w-full md:col-span-3">
         <mat-label>Observaciones</mat-label>
         <textarea matInput formControlName="observations"></textarea>
-        <mat-error *ngIf="clientForm.get('observations')?.hasError('required')">
+        <mat-error *ngIf="codebtorForm.get('observations')?.hasError('required')">
           Las observaciones son requeridas
         </mat-error>
       </mat-form-field>
@@ -162,8 +160,7 @@
       <!-- Botones -->
       <div class="flex justify-end md:col-span-2 space-x-4">
         <button mat-raised-button  (click)="onCancel()" type="button">Cancelar</button>
-
-        <button mat-raised-button color="primary" [disabled]="clientForm.invalid">Guardar</button>
+        <button mat-raised-button color="primary" [disabled]="codebtorForm.invalid">Guardar</button>
       </div>
     </form>
 </div>

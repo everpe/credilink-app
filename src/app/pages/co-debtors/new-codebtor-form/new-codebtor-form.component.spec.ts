@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewCoDebtorFormComponent } from './new-co-debtor-form.component';
+import { NewCodebtorFormComponent } from './new-codebtor-form.component';
 
-describe('NewCoDebtorFormComponent', () => {
-  let component: NewCoDebtorFormComponent;
-  let fixture: ComponentFixture<NewCoDebtorFormComponent>;
+describe('NewCodebtorFormComponent', () => {
+  let component: NewCodebtorFormComponent;
+  let fixture: ComponentFixture<NewCodebtorFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NewCoDebtorFormComponent]
+      imports: [NewCodebtorFormComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(NewCoDebtorFormComponent);
+    fixture = TestBed.createComponent(NewCodebtorFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

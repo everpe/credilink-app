@@ -1,18 +1,18 @@
 
 
-  mat-form-field {
-    margin-bottom: 16px;
-    border-style: none !important;
-  }
-  .w-full {
-    width: 100%;
-  }
-  .grid-cols-1 {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-  .md\:grid-cols-2 {
-    @media (min-width: 768px) {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
-  }
+  // mat-form-field {
+  //   margin-bottom: 16px;
+  //   border-style: none !important;
+  // }
+  // .w-full {
+  //   width: 100%;
+  // }
+  // .grid-cols-1 {
+  //   display: grid;
+  //   grid-template-columns: 1fr;
+  // }
+  // .md\:grid-cols-2 {
+  //   @media (min-width: 768px) {
+  //     grid-template-columns: 1fr 1fr 1fr;
+  //   }
+  // }

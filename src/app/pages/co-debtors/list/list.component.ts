@@ -13,7 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { debounceTime } from 'rxjs';
 import { CodebtorService } from 'src/app/services/codebtors/codebtor.service';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
-import { NewCoDebtorFormComponent } from '../new-co-debtor-form/new-co-debtor-form.component';
+import { NewCodebtorFormComponent } from '../new-codebtor-form/new-codebtor-form.component';
 
 @Component({
   selector: 'app-list',
@@ -71,12 +71,12 @@ export class ListComponent {
     this.search.valueChanges
       .pipe(debounceTime(500))
       .subscribe(value => {
-        this.getClients();
+        this.getCoDebtors();
       });
-    this.getClients();
+    this.getCoDebtors();
   }
 
-  getClients(): void {
+  getCoDebtors(): void {
     this.coDebtorService.getCoDebtors(this.offset, this.limit, this.sede, this.search.value?.trim().toLowerCase() ?? '').subscribe(
       (response) => {
         this.coDebtorsDatasource.data = response.results;  
@@ -91,12 +91,12 @@ export class ListComponent {
   onPageChange(event: PageEvent): void {
     this.offset = ((event.pageIndex + 1) - 1) * event.pageSize;
     this.limit = event.pageSize;
-    this.getClients(); 
+    this.getCoDebtors(); 
   }
 
 
   openNewClientDialog(): void {
-    const dialogRef = this.dialog.open(NewCoDebtorFormComponent, {
+    const dialogRef = this.dialog.open(NewCodebtorFormComponent, {
       width: '800px',
       disableClose: true
     });
@@ -106,7 +106,7 @@ export class ListComponent {
             this.coDebtorService.createCoDebtor(result).subscribe(
               resp => {
                 this.snackBar.success('El codeudor ha sido creado satisfactoriamente.');
-                this.getClients();
+                this.getCoDebtors();
               },
               error => {
                 console.error(error);
@@ -120,7 +120,7 @@ export class ListComponent {
 
 
   editClient(client: any): void {
-    const dialogRef = this.dialog.open(NewCoDebtorFormComponent, {
+    const dialogRef = this.dialog.open(NewCodebtorFormComponent, {
       width: '750px',
       data: { client, isEditMode: true },  
       disableClose: true
@@ -130,7 +130,7 @@ export class ListComponent {
       if (result) {
         this.coDebtorService.updateCoDebtor(client.id, result).subscribe(resp => {
           this.snackBar.success('Cambios efectuados exitosamente.');
-          this.getClients();  
+          this.getCoDebtors();  
         }, error => {
           this.snackBar.error('Ocurrió un error al actualizar el codeudor.');
           console.error(error);
@@ -152,7 +152,7 @@ export class ListComponent {
       if (result) {
         this.coDebtorService.deleteClientById(client.id).subscribe(resp => {
           this.snackBar.success('Este codeudor ha sido desactivado exitosamente.');
-          this.getClients(); 
+          this.getCoDebtors(); 
         }, error => {
           this.snackBar.error('Ocurrió un error al actualizar el cliente.');
           console.error(error);

@@ -2,13 +2,11 @@
 <div class="container mx-auto mt-4">
   <div class="flex justify-between items-center">
 
-    <!-- Campo de búsqueda -->
     <mat-form-field appearance="outline">
       <mat-label>Buscar codeudor</mat-label>
       <input matInput placeholder="Buscar" [formControl]="search">
     </mat-form-field>
 
-    <!-- Botón para registrar un nuevo cliente -->
     <button mat-raised-button color="primary" class="flex items-center gap-2" (click)="openNewClientDialog()">
       <mat-icon>person_add</mat-icon>
       Nuevo codeudor
