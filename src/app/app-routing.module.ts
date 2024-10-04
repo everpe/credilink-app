@@ -54,8 +54,8 @@ const routes: Routes = [
     ],
   },
   {
-    path: '**',  // Captura cualquier ruta no definida
-    redirectTo: '/dashboard',  // Redirige al dashboard
+    path: '**',  
+    redirectTo: '/dashboard',  
     pathMatch: 'full'
   }
 ];
