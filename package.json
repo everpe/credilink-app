@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "yarn ng build --configuration production",
+    "build": "yarn ng build --configuration production && mv dist/credilink _static",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
