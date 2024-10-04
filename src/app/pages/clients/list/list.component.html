@@ -67,12 +67,12 @@
               </button>
               <mat-menu #menu="matMenu">
                 <button mat-menu-item (click)="editClient(client)">
-                  <mat-icon>edit</mat-icon>
+                  <mat-icon color="primary">edit</mat-icon>
                   <span>Editar</span>
                 </button>
                 <button mat-menu-item (click)="deleteClient(client)">
-                  <mat-icon>power_settings_new</mat-icon>
-                  <span>Desactivar</span>
+                  <mat-icon [color]="client.status ? 'warn' : 'primary'">{{ client.status ? 'toggle_off' : 'toggle_on' }}</mat-icon>
+                  <span>{{ client.status ? 'Desactivar' : 'Activar' }}</span>
                 </button>
               </mat-menu>
             </td>

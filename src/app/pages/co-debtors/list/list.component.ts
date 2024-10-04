@@ -95,7 +95,7 @@ export class ListComponent {
   }
 
 
-  openNewClientDialog(): void {
+  openNewCodebtorDialog(): void {
     const dialogRef = this.dialog.open(NewCodebtorFormComponent, {
       width: '800px',
       disableClose: true
@@ -119,7 +119,7 @@ export class ListComponent {
   }
 
 
-  editClient(client: any): void {
+  editCodebtor(client: any): void {
     const dialogRef = this.dialog.open(NewCodebtorFormComponent, {
       width: '750px',
       data: { client, isEditMode: true },  
@@ -142,7 +142,7 @@ export class ListComponent {
   }
 
   // Método para eliminar cliente
-  deleteClient(client: any): void {
+  deleteCodebtor(client: any): void {
     const dialogRef = this.dialog.open(ConfirmComponent, {
       width: '400px',
       data: { message : `¿Está seguro que desea desactivar este codeudor: ${client.first_name.toUpperCase()} ?` }
@@ -150,10 +150,11 @@ export class ListComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.coDebtorService.deleteClientById(client.id).subscribe(resp => {
-          this.snackBar.success('Este codeudor ha sido desactivado exitosamente.');
+        this.coDebtorService.deleteClientById(client.id).subscribe((resp:any) => {
+          this.snackBar.success(resp.message);
           this.getCoDebtors(); 
-        }, error => {
+        }, 
+        error => {
           this.snackBar.error('Ocurrió un error al actualizar el cliente.');
           console.error(error);
         });;

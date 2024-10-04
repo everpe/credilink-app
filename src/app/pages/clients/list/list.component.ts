@@ -144,7 +144,7 @@ export class ListComponent implements AfterViewInit {
     });
   }
 
-  // Método para eliminar cliente
+  // Método para desactivar cliente
   deleteClient(client: any): void {
     const dialogRef = this.dialog.open(ConfirmComponent, {
       width: '400px',
@@ -153,12 +153,14 @@ export class ListComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.clientService.deleteClientById(client.id).subscribe(resp => {
-          this.snackBar.success('Este cliente ha sido desactivado exitosamente.');
-          this.getClients(); 
-        }, error => {
-          this.snackBar.error('Ocurrió un error al actualizar el cliente.');
-          console.error(error);
+        this.clientService.deleteClientById(client.id).subscribe(
+          (resp: any) => {
+            this.snackBar.success(resp.message);
+            this.getClients(); 
+        }, 
+          error => {
+            this.snackBar.error('Ocurrió un error al actualizar el cliente.');
+            console.error(error);
         });;
       }
     });
