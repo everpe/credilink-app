@@ -31,8 +31,27 @@ export class ClientService {
   updateClient(id: number, updateClientDto: UpdateClientDto): Observable<any> {
     return this.http.patch(`${environment.apiUrl}/clients/${id}/`, updateClientDto);
   }
+ 
   deleteClientById(clientId: number): Observable<void> {
     const url = `${environment.apiUrl}/clients/${clientId}/`;
     return this.http.delete<void>(url);
+  }
+
+  
+  downloadClientReport(sede: number): void {
+    const url = `${environment.apiUrl}/clients/exports/?sede=${sede}`;
+    
+    // Hacemos la petición para descargar el archivo
+    this.http.get(url, { responseType: 'blob' }).subscribe((response: Blob) => {
+      // Crear un enlace para descargar el archivo
+      const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const downloadURL = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadURL;
+      link.download = 'reporte_clientes.xlsx';  // Nombre del archivo
+      link.click();  // Descargar automáticamente
+    }, error => {
+      console.error('Error al descargar el reporte:', error);
+    });
   }
 }

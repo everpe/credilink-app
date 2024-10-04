@@ -14,6 +14,7 @@ import { debounceTime } from 'rxjs';
 import { CodebtorService } from 'src/app/services/codebtors/codebtor.service';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
 import { NewCodebtorFormComponent } from '../new-codebtor-form/new-codebtor-form.component';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-list',
@@ -63,7 +64,8 @@ export class ListComponent {
   constructor(
     private coDebtorService: CodebtorService,
     private dialog: MatDialog,
-    private snackBar: ToastrService
+    private snackBar: ToastrService,
+    private authService: AuthService
   ) { }
 
   ngAfterViewInit(): void {
@@ -160,5 +162,14 @@ export class ListComponent {
         });;
       }
     });
+  }
+
+  downloadReport(): void {
+    const sede = Number(this.authService.getSedeUser());
+    if (!isNaN(sede)) {
+      this.coDebtorService.downloadCodebtorReport(sede);
+    } else {
+      console.error('Invalid sede value');
+    }
   }
 }

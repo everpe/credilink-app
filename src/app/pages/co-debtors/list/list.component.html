@@ -5,12 +5,19 @@
     <mat-form-field appearance="outline">
       <mat-label>Buscar codeudor</mat-label>
       <input matInput placeholder="Buscar" [formControl]="search">
+      <mat-icon matSuffix>person_search</mat-icon>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" class="flex items-center gap-2" (click)="openNewCodebtorDialog()">
-      <mat-icon>person_add</mat-icon>
-      Nuevo codeudor
-    </button>
+    <div class="flex gap-4">
+      <button mat-raised-button color="primary" class="flex items-center gap-2" (click)="openNewCodebtorDialog()">
+        <mat-icon>person_add</mat-icon>
+        Nuevo codeudor
+      </button>
+      <button mat-stroked-button (click)="downloadReport()" color="primary">
+        <mat-icon>download</mat-icon>
+        Reporte excel
+      </button>
+    </div>
   </div>
   <mat-card class="mat-elevation-z6 rounded-lg">
     <mat-card-header>

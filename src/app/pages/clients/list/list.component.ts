@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { debounceTime } from 'rxjs/operators';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-list',
@@ -63,7 +64,8 @@ export class ListComponent implements AfterViewInit {
   constructor(
     private clientService: ClientService,
     private dialog: MatDialog,
-    private snackBar: ToastrService
+    private snackBar: ToastrService,
+    private authService: AuthService
   ) { }
 
   ngAfterViewInit(): void {
@@ -164,5 +166,14 @@ export class ListComponent implements AfterViewInit {
         });;
       }
     });
+  }
+
+  downloadReport(): void {
+    const sede = Number(this.authService.getSedeUser());
+    if (!isNaN(sede)) {
+      this.clientService.downloadClientReport(sede);
+    } else {
+      console.error('Invalid sede value');
+    }
   }
 }
