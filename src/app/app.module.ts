@@ -25,6 +25,7 @@ import { BrandingComponent } from './layouts/full/sidebar/branding.component';
 import { AppNavItemComponent } from './layouts/full/sidebar/nav-item/nav-item.component';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,6 +51,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi()),
     provideToastr(),
+    {provide: LocationStrategy, useClass: HashLocationStrategy}
   ],
   exports: [TablerIconsModule],
   bootstrap: [AppComponent],
