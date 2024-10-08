@@ -38,6 +38,11 @@ const routes: Routes = [
         canActivate: [authGuard],
         loadComponent: () => import('./pages/co-debtors/list/list.component').then(m => m.ListComponent)  // Lazy loading de componente standalone
       },
+      {
+        path: 'credits',
+        canActivate: [authGuard],
+        loadComponent: () => import('./pages/credits/credits.component').then(m => m.CreditsComponent)  
+      },
     ],
   },
   {

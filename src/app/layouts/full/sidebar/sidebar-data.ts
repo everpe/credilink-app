@@ -24,10 +24,10 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Créditos',
-    iconName: 'cards',
-    route: '/',
+    iconName: 'report-money',
+    route: '/credits',
   },
-  // {
+  // { tabler:report-money
   //   navCap: 'Ui Components',
   // },
   // {
