@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { ToastrService } from 'ngx-toastr';
 import { Gender, JobRelationship, TypeDocument } from 'src/app/interfaces/client.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ClientService } from 'src/app/services/clients/client.service';
@@ -42,7 +43,8 @@ export class NewClientFormComponent implements OnInit{
     private clientService: ClientService,
     private authService: AuthService,
     private dialog: MatDialog,  
-    @Inject(MAT_DIALOG_DATA) public data: any  // Usado para pasar datos desde el componente padre
+    @Inject(MAT_DIALOG_DATA) public data: any,  // Usado para pasar datos desde el componente padre
+    private snackBar: ToastrService,
   ) {
       this.isEditMode = !!data?.client;  // Verifica si hay datos de cliente para editar
       this.clientData = data?.client || {};  // Carga los datos del cliente o un objeto vacío
@@ -91,7 +93,28 @@ export class NewClientFormComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dialogRef.close(this.clientForm.value);
+
+        if( this.isEditMode) {
+            this.clientService.updateClient(this.data.client.id, this.clientForm.value).subscribe(resp => {
+            this.snackBar.success(resp.message);
+            this.dialogRef.close(true);
+          }, error => {
+            this.snackBar.error(error.error.error);
+            console.error(error);
+          });
+
+        }else{
+          this.clientService.createClient(this.clientForm.value).subscribe(
+            resp => {
+              this.snackBar.success(resp.message);
+              this.dialogRef.close(true);
+            },
+            error => {
+              console.error(error);
+              this.snackBar.error(error.error.error);
+            }
+          );
+        }
       }
     });
   }

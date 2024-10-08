@@ -107,18 +107,7 @@ export class ListComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-
-            this.clientService.createClient(result).subscribe(
-              resp => {
-                this.snackBar.success('El cliente ha sido creado satisfactoriamente.');
-                this.getClients();
-              },
-              error => {
-                console.error(error);
-                this.snackBar.error('Hubo un error al crear el cliente.');
-              }
-            );
-   
+        this.getClients(); 
       }
     });
   }
@@ -133,13 +122,7 @@ export class ListComponent implements AfterViewInit {
   
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.clientService.updateClient(client.id, result).subscribe(resp => {
-          this.snackBar.success('Cambios efectuados exitosamente.');
-          this.getClients();  // Refresca la lista de clientes
-        }, error => {
-          this.snackBar.error('Ocurrió un error al actualizar el cliente.');
-          console.error(error);
-        });
+          this.getClients();
       } else {
         this.snackBar.info('Cambios no efectuados.');
       }
@@ -161,7 +144,7 @@ export class ListComponent implements AfterViewInit {
             this.getClients(); 
         }, 
           error => {
-            this.snackBar.error('Ocurrió un error al actualizar el cliente.');
+            this.snackBar.error(error.error.error);
             console.error(error);
         });;
       }
