@@ -104,18 +104,7 @@ export class ListComponent {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-
-            this.coDebtorService.createCoDebtor(result).subscribe(
-              resp => {
-                this.snackBar.success('El codeudor ha sido creado satisfactoriamente.');
-                this.getCoDebtors();
-              },
-              error => {
-                console.error(error);
-                this.snackBar.error('Hubo un error al crear el codeudor.');
-              }
-            );
-   
+        this.getCoDebtors();   
       }
     });
   }
@@ -130,13 +119,7 @@ export class ListComponent {
   
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.coDebtorService.updateCoDebtor(client.id, result).subscribe(resp => {
-          this.snackBar.success('Cambios efectuados exitosamente.');
           this.getCoDebtors();  
-        }, error => {
-          this.snackBar.error('Ocurrió un error al actualizar el codeudor.');
-          console.error(error);
-        });
       } else {
         this.snackBar.info('Cambios no efectuados.');
       }

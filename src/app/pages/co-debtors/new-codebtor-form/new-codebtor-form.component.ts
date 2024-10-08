@@ -11,6 +11,8 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { ClientService } from 'src/app/services/clients/client.service';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
 import { NewClientFormComponent } from '../../clients/new-client-form/new-client-form.component';
+import { CodebtorService } from 'src/app/services/codebtors/codebtor.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-new-codebtor-form',
@@ -37,13 +39,16 @@ export class NewCodebtorFormComponent {
   isEditMode: boolean = false;
   codebtorData: any;  // Contendrá los datos del cliente si es modo edición
 
+
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<NewClientFormComponent>,
     private clientService: ClientService,
     private authService: AuthService,
     private dialog: MatDialog,  
-    @Inject(MAT_DIALOG_DATA) public data: any  // Usado para pasar datos desde el componente padre
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private coDebtorService: CodebtorService,
+    private snackBar: ToastrService,
   ) {
       this.isEditMode = !!data?.client;  // Verifica si hay datos de cliente para editar
       this.codebtorData = data?.client || {};  // Carga los datos del cliente o un objeto vacío
@@ -92,7 +97,27 @@ export class NewCodebtorFormComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dialogRef.close(this.codebtorForm.value);
+        if(this.isEditMode){
+            this.coDebtorService.updateCoDebtor(this.data.client?.id, this.codebtorForm.value).subscribe(resp => {
+              this.snackBar.success(resp.message);
+              this.dialogRef.close(true);
+            }, error => {
+              this.snackBar.error(error.error.error);
+              console.error(error);
+            });
+        }
+        else{
+          this.coDebtorService.createCoDebtor(this.codebtorForm.value).subscribe(
+            resp => {
+              this.snackBar.success(resp.message);
+              this.dialogRef.close(true);
+            },
+            error => {
+              console.error(error.error.error);
+              this.snackBar.error(error.error.error);
+            }
+          );
+        }
       }
     });
   }
