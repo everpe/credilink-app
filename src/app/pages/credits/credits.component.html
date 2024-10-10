@@ -56,59 +56,73 @@
                 <mat-card>
                     <mat-card-title class="text-xl font-bold px-6 py-3">Datos del crédito</mat-card-title>
                     <mat-card-content>
-                      <!-- Ajuste Responsive de los campos -->
-                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <!-- Fecha del Crédito -->
-                        <mat-form-field class="w-full" appearance="outline">
-                          <mat-label>Fecha del crédito</mat-label>
-                          <input matInput [matDatepicker]="loanPicker" formControlName="loan_date"
-                            placeholder="Fecha del crédito" />
-                          <mat-datepicker-toggle matSuffix [for]="loanPicker"></mat-datepicker-toggle>
-                          <mat-datepicker #loanPicker></mat-datepicker>
-                        </mat-form-field>
-                  
-                        <!-- Fecha de Recordatorio -->
-                        <mat-form-field class="w-full" appearance="outline">
-                          <mat-label>Fecha de recordatorio</mat-label>
-                          <input matInput [matDatepicker]="reminderPicker" formControlName="reminder_date"
-                            placeholder="Fecha de recordatorio" />
-                          <mat-datepicker-toggle matSuffix [for]="reminderPicker"></mat-datepicker-toggle>
-                          <mat-datepicker #reminderPicker></mat-datepicker>
-                        </mat-form-field>
-                  
-                        <!-- Valor del Préstamo -->
-                        <mat-form-field class="w-full" appearance="outline">
-                          <mat-label>Valor del crédito</mat-label>
-                          <input type="number" matInput formControlName="loan_amount"
-                            placeholder="Valor del crédito" min="1" />
-                        </mat-form-field>
-                  
-                        <!-- Porcentaje de Interés -->
-                        <mat-form-field class="w-full" appearance="outline">
-                          <mat-label>Porcentaje de interés</mat-label>
-                          <input type="number" min="0" max="100" matInput formControlName="interest_rate"
-                            placeholder="Porcentaje de interés" />
-                        </mat-form-field>
-                  
-                        <!-- Número de Cuotas -->
-                        <mat-form-field class="w-full" appearance="outline">
-                          <mat-label>Número de cuotas</mat-label>
-                          <input type="number" matInput formControlName="number_of_installments"
-                            placeholder="Número de cuotas" min="1" />
-                        </mat-form-field>
-                  
-                        <!-- Tipo de Cuotas -->
-                        <mat-form-field class="w-full" appearance="outline">
-                          <mat-label>Por cuotas</mat-label>
-                          <mat-select formControlName="by_quota">
-                            <mat-option [value]="true">Sí</mat-option>
-                            <mat-option [value]="false">No</mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                      </div>
+                        <!-- Ajuste Responsive de los campos -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Fecha del Crédito -->
+                            <mat-form-field class="w-full" appearance="outline">
+                                <mat-label>Fecha del crédito</mat-label>
+                                <input matInput [matDatepicker]="loanPicker" formControlName="loan_date"
+                                    placeholder="Fecha del crédito" />
+                                <mat-datepicker-toggle matSuffix [for]="loanPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #loanPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <!-- Fecha de Recordatorio -->
+                            <mat-form-field class="w-full" appearance="outline">
+                                <mat-label>Fecha de recordatorio</mat-label>
+                                <input matInput [matDatepicker]="reminderPicker" formControlName="reminder_date"
+                                    placeholder="Fecha de recordatorio" />
+                                <mat-datepicker-toggle matSuffix [for]="reminderPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #reminderPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <!-- Valor del Préstamo -->
+                            <mat-form-field class="w-full" appearance="outline">
+                                <mat-label>Valor del crédito</mat-label>
+                                <!-- <span matPrefix>COP&nbsp;</span>  -->
+                                <input type="text" matInput [value]="formattedLoanAmount"
+                                    (input)="onLoanAmountInput($event)" placeholder="Valor del crédito" />
+                                <mat-icon matSuffix>attach_money</mat-icon>
+
+                            </mat-form-field>
+
+
+
+                            <!-- Porcentaje de Interés -->
+                            <mat-form-field class="w-full" appearance="outline">
+                                <mat-label>Porcentaje de interés</mat-label>
+                                <input matInput type="number" formControlName="interest_rate"
+                                    placeholder="Porcentaje de interés" (input)="calculateInterest()" />
+                                <mat-icon matSuffix>percent</mat-icon>
+                            </mat-form-field>
+
+
+                            <!-- Interés Mensual (Campo no editable) -->
+                            <mat-form-field class="w-full" appearance="outline">
+                                <mat-label>Interés mensual</mat-label>
+                                <input matInput [value]="monthlyInterest | currency:'COP    '" disabled />
+                            </mat-form-field>
+
+                            <!-- Tipo de Cuotas -->
+                            <mat-form-field class="w-full" appearance="outline">
+                                <mat-label>Por cuotas</mat-label>
+                                <mat-select formControlName="by_quota" (selectionChange)="onByQuotaChange()">
+                                    <mat-option [value]="true">Sí</mat-option>
+                                    <mat-option [value]="false">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <!-- Número de Cuotas (solo visible si es por cuotas) -->
+                            <mat-form-field class="w-full" *ngIf="creditForm.get('by_quota')?.value === true"
+                                appearance="outline">
+                                <mat-label>Número de cuotas</mat-label>
+                                <input type="number" matInput formControlName="number_of_installments"
+                                    placeholder="Número de cuotas" />
+                            </mat-form-field>
+                        </div>
                     </mat-card-content>
-                  </mat-card>
-                  
+                </mat-card>
+
 
                 <!-- Botón de Guardar -->
                 <div class="mt-4 flex justify-end">
