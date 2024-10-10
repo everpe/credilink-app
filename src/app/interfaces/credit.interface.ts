@@ -9,3 +9,37 @@ export interface CreditDto {
     sede: number;            // ID de la sede
     by_quota: boolean;    
 }
+
+
+export interface GetCreditDto {
+    id: number;
+    by_quota: boolean;
+    client: {
+      id: number;
+      first_name: string;
+      last_name: string;
+      document_number: string; // Assuming cedula/document is returned as document_number
+    };
+    co_debtor: {
+      id: number;
+      first_name: string;
+      last_name: string;
+      document_number: string;
+      company: string;
+      office_phone: string;
+      phone: string;
+      mobile: string;
+      address: string;
+    };
+    loan_date: string;
+    reminder_date: string;
+    loan_amount: number;
+    interest_rate: number;
+    number_of_installments: number;
+    load_status: string;
+    interest_value: number;
+    total_debt: number;
+    remaining_balance: number;
+    next_payment_date: string | null;
+  }
+  

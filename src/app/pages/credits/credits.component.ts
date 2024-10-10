@@ -18,6 +18,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { ClientService } from 'src/app/services/clients/client.service';
 import { CodebtorService } from 'src/app/services/codebtors/codebtor.service';
 import { CreditService } from 'src/app/services/credits/credit.service';
+import { ListComponent } from "./list/list.component";
 
 @Component({
   selector: 'app-credits',
@@ -35,8 +36,9 @@ import { CreditService } from 'src/app/services/credits/credit.service';
     MatNativeDateModule,
     CommonModule,
     MatTabsModule,
-    MatSelectModule
-  ],
+    MatSelectModule,
+    ListComponent
+],
   templateUrl: './credits.component.html',
   styleUrl: './credits.component.scss'
 })
