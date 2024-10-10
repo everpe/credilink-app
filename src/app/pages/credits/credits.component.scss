@@ -2,4 +2,8 @@
     @apply p-3 rounded-lg;
     background-color: #F4F7FB;
   }
-  
+
+  ::ng-deep  .mat-mdc-tab-body-content{
+    overflow-y: hidden !important;
+
+  }

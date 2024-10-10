@@ -1,108 +1,125 @@
 <h2 class="text-2xl font-semibold">Créditos</h2>
 
 <div class="container mx-auto mt-4">
-    <form [formGroup]="creditForm" (ngSubmit)="onSubmit()">
-        <!-- Datos del Cliente -->
-        <mat-card class="mb-0">
-            <mat-card-title class="text-xl font-bold px-6 py-3">Datos del Cliente</mat-card-title>
-            <mat-card-content>
-            <div class="grid grid-cols-2 gap-4">
-                <!-- Autocomplete Cliente -->
-                <mat-form-field class="w-full" appearance="outline">
-                <mat-label>Número de Cédula</mat-label>
-                <input type="text" matInput formControlName="clientDocument" placeholder="Cédula" />
-                <mat-autocomplete>
-                    <mat-option *ngFor="let client of filteredClients | async" [value]="client.document">
-                    {{ client.fullName }}
-                    </mat-option>
-                </mat-autocomplete>
-                </mat-form-field>
-        
-                <!-- Nombres y Apellidos -->
-                <mat-form-field class="w-full" appearance="outline">
-                <mat-label>Nombres y Apellidos</mat-label>
-                <input type="text" matInput formControlName="clientName" placeholder="Nombre del cliente" />
-                </mat-form-field>
-            </div>
-            </mat-card-content>
-        </mat-card>
-        
-        <!-- Datos del Codeudor -->
-        <mat-card class="mb-1">
-            <mat-card-title class="text-xl font-bold px-6 py-3">Datos del Codeudor</mat-card-title>
-            <mat-card-content>
-            <div class="grid grid-cols-2 gap-4">
-                <!-- Autocomplete Codeudor -->
-                <mat-form-field class="w-full" appearance="outline">
-                <mat-label>Cédula</mat-label>
-                <input type="text" matInput formControlName="coDebtorDocument" placeholder="Cédula" />
-                <mat-autocomplete>
-                    <mat-option *ngFor="let coDebtor of filteredCoDebtors | async" [value]="coDebtor.document_number">
-                    {{ coDebtor.first_name }}
-                    </mat-option>
-                </mat-autocomplete>
-                </mat-form-field>
-        
-                <!-- Nombres y Apellidos -->
-                <mat-form-field class="w-full" appearance="outline">
-                <mat-label>Nombres</mat-label>
-                <input type="text" matInput formControlName="coDebtorName" placeholder="Nombre del codeudor" />
-                </mat-form-field>
-        
-                <!-- Empresa Laboral -->
-                <mat-form-field class="w-full" appearance="outline">
-                <mat-label>Empresa Laboral</mat-label>
-                <input type="text" matInput formControlName="coDebtorCompany" placeholder="Empresa Laboral" />
-                </mat-form-field>
-        
-                <!-- Teléfono -->
-                <mat-form-field class="w-full" appearance="outline">
-                <mat-label>Teléfono</mat-label>
-                <input type="text" matInput formControlName="coDebtorPhone" placeholder="Teléfono" />
-                </mat-form-field>
-            </div>
-            </mat-card-content>
-        </mat-card>
-        
-        <!-- Datos del Préstamo -->
-        <mat-card>
-            <mat-card-title class="text-xl font-bold px-6 py-3">Datos del Préstamo</mat-card-title>
-            <mat-card-content>
-            <div class="grid grid-cols-2 gap-4">
-                <!-- Fecha del Crédito -->
-                <mat-form-field class="w-full" appearance="outline">
-                <mat-label>Fecha del Crédito</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="loanDate" placeholder="Fecha" />
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-        
-                <!-- Valor del Préstamo -->
-                <mat-form-field class="w-full" appearance="outline">
-                <mat-label>Valor del Préstamo</mat-label>
-                <input type="number" matInput formControlName="loanAmount" placeholder="Valor del Préstamo" />
-                </mat-form-field>
-        
-                <!-- Cuotas -->
-                <mat-form-field class="w-full" appearance="outline">
-                <mat-label>Cuotas</mat-label>
-                <input type="number" matInput formControlName="loanInstallments" placeholder="Cuotas" />
-                </mat-form-field>
-        
-                <!-- Comentarios -->
-                <mat-form-field class="w-full md:col-span-2" appearance="outline">
-                <mat-label>Comentario</mat-label>
-                <textarea matInput formControlName="comments" placeholder="Comentarios"></textarea>
-                </mat-form-field>
-            </div>
-            </mat-card-content>
-        </mat-card>
-        
-        <!-- Botón de Guardar -->
-        <div class="mt-4 flex justify-end">
-            <button mat-raised-button color="primary" (click)="onSubmit()">Guardar Préstamo</button>
-        </div>
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+        <mat-tab label="Registro crédito">
+            <form [formGroup]="creditForm" (ngSubmit)="onSubmit()" class="mt-4">
+                <!-- Datos del Cliente -->
+                <mat-card class="mb-0">
+                    <mat-card-title class="text-xl font-bold px-6 py-3">Datos del cliente</mat-card-title>
+                    <mat-card-content>
+                        <div class="grid grid-cols-1 gap-4">
+                            <!-- Autocomplete Cliente -->
+                            <mat-form-field class="w-full" appearance="outline">
+                                <mat-label>Buscar cliente</mat-label>
+                                <input type="text" matInput formControlName="clientSearch"
+                                    placeholder="Buscar por nombres, apellidos,  o número documento"
+                                    [matAutocomplete]="auto">
+                                <mat-autocomplete #auto="matAutocomplete"
+                                    (optionSelected)="onClientSelected($event.option.value)"
+                                    [displayWith]="displayClient">
+                                    <mat-option *ngFor="let client of filteredClients | async" [value]="client">
+                                        {{ client.first_name }} {{ client.last_name }} - {{ client.document_number }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
 
-    </form>
+                <!-- Datos del Codeudor -->
+                <mat-card class="mb-1">
+                    <mat-card-title class="text-xl font-bold px-6 py-3">Datos del codeudor</mat-card-title>
+                    <mat-card-content>
+                        <div class="grid grid-cols-1 gap-4">
+                            <!-- Autocomplete Codeudor -->
+                            <mat-form-field class="w-full" appearance="outline">
+                                <mat-label>Buscar codeudor</mat-label>
+                                <input type="text" matInput formControlName="coDebtorSearch"
+                                    placeholder="Buscar por nombres, apellidos, o número documento"
+                                    [matAutocomplete]="autoCoDebtor">
+                                <mat-autocomplete #autoCoDebtor="matAutocomplete"
+                                    (optionSelected)="onCoDebtorSelected($event.option.value)"
+                                    [displayWith]="displayCoDebtor">
+                                    <mat-option *ngFor="let coDebtor of filteredCoDebtors | async" [value]="coDebtor">
+                                        {{ coDebtor.first_name }} {{ coDebtor.last_name }} - {{ coDebtor.document_number
+                                        }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <!-- Datos del Préstamo -->
+                <mat-card>
+                    <mat-card-title class="text-xl font-bold px-6 py-3">Datos del crédito</mat-card-title>
+                    <mat-card-content>
+                      <!-- Ajuste Responsive de los campos -->
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Fecha del Crédito -->
+                        <mat-form-field class="w-full" appearance="outline">
+                          <mat-label>Fecha del crédito</mat-label>
+                          <input matInput [matDatepicker]="loanPicker" formControlName="loan_date"
+                            placeholder="Fecha del crédito" />
+                          <mat-datepicker-toggle matSuffix [for]="loanPicker"></mat-datepicker-toggle>
+                          <mat-datepicker #loanPicker></mat-datepicker>
+                        </mat-form-field>
+                  
+                        <!-- Fecha de Recordatorio -->
+                        <mat-form-field class="w-full" appearance="outline">
+                          <mat-label>Fecha de recordatorio</mat-label>
+                          <input matInput [matDatepicker]="reminderPicker" formControlName="reminder_date"
+                            placeholder="Fecha de recordatorio" />
+                          <mat-datepicker-toggle matSuffix [for]="reminderPicker"></mat-datepicker-toggle>
+                          <mat-datepicker #reminderPicker></mat-datepicker>
+                        </mat-form-field>
+                  
+                        <!-- Valor del Préstamo -->
+                        <mat-form-field class="w-full" appearance="outline">
+                          <mat-label>Valor del crédito</mat-label>
+                          <input type="number" matInput formControlName="loan_amount"
+                            placeholder="Valor del crédito" min="1" />
+                        </mat-form-field>
+                  
+                        <!-- Porcentaje de Interés -->
+                        <mat-form-field class="w-full" appearance="outline">
+                          <mat-label>Porcentaje de interés</mat-label>
+                          <input type="number" min="0" max="100" matInput formControlName="interest_rate"
+                            placeholder="Porcentaje de interés" />
+                        </mat-form-field>
+                  
+                        <!-- Número de Cuotas -->
+                        <mat-form-field class="w-full" appearance="outline">
+                          <mat-label>Número de cuotas</mat-label>
+                          <input type="number" matInput formControlName="number_of_installments"
+                            placeholder="Número de cuotas" min="1" />
+                        </mat-form-field>
+                  
+                        <!-- Tipo de Cuotas -->
+                        <mat-form-field class="w-full" appearance="outline">
+                          <mat-label>Por cuotas</mat-label>
+                          <mat-select formControlName="by_quota">
+                            <mat-option [value]="true">Sí</mat-option>
+                            <mat-option [value]="false">No</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                  
+
+                <!-- Botón de Guardar -->
+                <div class="mt-4 flex justify-end">
+                    <button mat-raised-button color="primary" type="submit">Guardar crédito</button>
+                </div>
+            </form>
+
+
+        </mat-tab>
+        <mat-tab label="Créditos otorgados">Content 2</mat-tab>
+        <!-- <mat-tab label="Third">Content 3</mat-tab> -->
+    </mat-tab-group>
+    <!-- {{this.creditForm.value | json}} -->
 </div>
-
