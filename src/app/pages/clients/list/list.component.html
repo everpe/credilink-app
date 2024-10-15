@@ -30,36 +30,36 @@
       <div class="overflow-x-auto">
         <table mat-table [dataSource]="clientsDatasource" matSort class="min-w-full shadow-md rounded-lg bg-back">
           <ng-container matColumnDef="first_name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Nombre </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="  font-bold p-4"> Nombres </th>
             <td mat-cell *matCellDef="let client"> {{ client.first_name }} </td>
           </ng-container>
 
           <ng-container matColumnDef="last_name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Apellido </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="  font-bold p-4"> Apellidos </th>
             <td mat-cell *matCellDef="let client"> {{ client.last_name }} </td>
           </ng-container>
 
           <ng-container matColumnDef="job_relationship">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Rl. Laboral </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="  font-bold p-4"> Rl. Laboral </th>
             <td mat-cell *matCellDef="let client"> {{ client.job_relationship.name }} </td>
           </ng-container>
 
           <ng-container matColumnDef="document_number">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Documento </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="  font-bold p-4"> Documento </th>
             <td mat-cell *matCellDef="let client"> {{ client.document_number }} </td>
           </ng-container>
 
           <ng-container matColumnDef="created_at">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Fecha de creación </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="  font-bold p-4"> Fecha creación </th>
             <td mat-cell *matCellDef="let client"> {{ client.created_at }} </td>
           </ng-container>
           <ng-container matColumnDef="created_by">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Creado por </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="  font-bold p-4"> Creado por </th>
             <td mat-cell *matCellDef="let client"> {{ client.created_by.username }} </td>
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Estado </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="  font-bold p-4"> Estado </th>
             <td mat-cell *matCellDef="let client">
               <div class="flex items-center">
                 <mat-icon [class.text-green-600]="client.status" [class.text-red-600]="!client.status">
@@ -73,7 +73,7 @@
           </ng-container>
 
           <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef class="bg-gray-800 text-white font-bold p-4"> Acciones </th>
+            <th mat-header-cell *matHeaderCellDef class="  font-bold p-4"> Acciones </th>
             <td mat-cell *matCellDef="let client">
               <button mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>more_vert</mat-icon>

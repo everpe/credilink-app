@@ -36,23 +36,42 @@ $header-height: 70px !default;
 $borderColor: #e5eaef;
 $borderformColor: #dfe5ef;
 
-// custom
-$primary: #5d87ff;
-$accent: #49beff;
-$warning: #ffae1f;
-$error: #fa896b;
-$success: #13deb9;
-$white: #ffffff;
+// // custom
+// $primary: #5d87ff;
+// $accent: #49beff;
+// $warning: #ffae1f;
+// $error: #fa896b;
+// $success: #13deb9;
+// $white: #ffffff;
 
-$light: #f2f6fa;
+// $light: #f2f6fa;
 
-$gray-100:  #7c8fac;
+// $gray-100:  #7c8fac;
 
-$light-primary: #ecf2ff;
-$light-accent: #e8f7ff;
-$light-warning: #fef5e5;
-$light-error: #fdede8;
-$light-success: #e6fffa;
+// $light-primary: #ecf2ff;
+// $light-accent: #e8f7ff;
+// $light-warning: #fef5e5;
+// $light-error: #fdede8;
+// $light-success: #e6fffa;
+// Colores principales
+$primary: #005555; // Color oscuro de la paleta
+$accent: #61C0BF;  // Color más claro de la paleta
+$warning: #FFAE1F; // Manteniendo este color de advertencia
+$error: #FA896B;   // Color de error (sin cambiar)
+$success: #0B7F7F; // Color de éxito tomado de la paleta
+$white: #ffffff;   // Manteniendo el color blanco
+
+// Colores claros
+$light: #EBF6F5;   // Usando un color claro de la paleta
+$light-primary: #C4E3E2; // Color claro del rango primario
+$light-accent: #Ebf6F5;  // Color claro para el rango de acentos
+$light-warning: #fef5e5; // Manteniendo el color claro de advertencia
+$light-error: #fdede8;   // Manteniendo el color claro de error
+$light-success: #E6FFFA; // Manteniendo el color claro de éxito
+
+// Grises
+$gray-100: #78BCBB; // Usando un gris verdoso claro de la paleta
+
 
 // layout
 $boxedWidth: 1200px;

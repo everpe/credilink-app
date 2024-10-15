@@ -1,23 +1,23 @@
-.container {
-    @apply p-3 rounded-lg;
-    background-color: #F4F7FB;
-  }
+// .container {
+//     @apply p-3 rounded-lg;
+//     background-color: #ebf6f5;
+//   }
   
-  table {
-    @apply min-w-full border-collapse;
-  }
+//   table {
+//     @apply min-w-full border-collapse;
+//   }
   
-  td {
-    @apply px-4 py-2 border-b border-gray-200;
-  }
+//   td {
+//     @apply px-4 py-2 border-b border-gray-200;
+//   }
   
-  tr:nth-child(even) {
-    @apply bg-gray-100;
-  }
+//   tr:nth-child(even) {
+//     @apply bg-gray-100;
+//   }
   
-  tr:hover {
-    @apply bg-gray-50;
-  }
+//   tr:hover {
+//     @apply bg-gray-50;
+//   }
 
   .overflow-x-auto {
     overflow-x: auto;
@@ -25,6 +25,7 @@
 
 ::ng-deep .mat-mdc-table .mat-mdc-header-cell
 {
-  background-color: #4c6382   !important; //#5D87FF !important;
+  // background-color: #4c6382   !important; //#5D87FF !important;
+  font-weight: 600;
 
 }

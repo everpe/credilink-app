@@ -1,6 +1,6 @@
 <h2 class="text-2xl font-semibold">Codeudores</h2>
 <div class="container mx-auto mt-4">
-  <mat-card class="mat-elevation-z6 rounded-lg">
+  <mat-card class="mat-elevation-z8 rounded-lg">
     <mat-card-header class="px-4">
       <div class="flex flex-col md:flex-row justify-between items-center w-full gap-4 md:gap-0">
         <!-- Campo de búsqueda -->
@@ -30,36 +30,36 @@
       <div class="overflow-x-auto">
         <table mat-table [dataSource]="coDebtorsDatasource" matSort class="min-w-full shadow-md rounded-lg bg-back">
           <ng-container matColumnDef="first_name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Nombre </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-extrabold p-4"> Nombres </th>
             <td mat-cell *matCellDef="let record"> {{ record.first_name }} </td>
           </ng-container>
 
           <ng-container matColumnDef="last_name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Apellido </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="  font-bold p-4"> Apellidos </th>
             <td mat-cell *matCellDef="let record"> {{ record.last_name }} </td>
           </ng-container>
 
           <ng-container matColumnDef="job_relationship">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Rl. Laboral </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="  font-bold p-4"> Rl. Laboral </th>
             <td mat-cell *matCellDef="let record"> {{ record.job_relationship.name }} </td>
           </ng-container>
 
           <ng-container matColumnDef="document_number">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Documento </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="  font-bold p-4"> Documento </th>
             <td mat-cell *matCellDef="let record"> {{ record.document_number }} </td>
           </ng-container>
 
           <ng-container matColumnDef="created_at">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Fecha de creación </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="  font-bold p-4"> Fecha creación </th>
             <td mat-cell *matCellDef="let record"> {{ record.created_at }} </td>
           </ng-container>
           <ng-container matColumnDef="created_by">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Creado por </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="  font-bold p-4"> Creado por </th>
             <td mat-cell *matCellDef="let record"> {{ record.created_by.username }} </td>
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-800 text-white font-bold p-4"> Estado </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="  font-bold p-4"> Estado </th>
             <td mat-cell *matCellDef="let record">
               <div class="flex items-center">
                 <mat-icon [class.text-green-600]="record.status" [class.text-red-600]="!record.status">
@@ -73,7 +73,7 @@
           </ng-container>
           
           <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef class="bg-gray-800 text-white font-bold p-4"> Acciones </th>
+            <th mat-header-cell *matHeaderCellDef class="  font-bold p-4"> Acciones </th>
             <td mat-cell *matCellDef="let record">
               <button mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>more_vert</mat-icon>
@@ -96,15 +96,13 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
       </div>
+        <mat-paginator 
+          [length]="totalRecords" 
+          [pageSize]="limit" 
+          [pageSizeOptions]="[5, 10, 20]" 
+          (page)="onPageChange($event)">
+        </mat-paginator>
     </mat-card-content>
 
-    <div class="container">
-      <mat-paginator 
-        [length]="totalRecords" 
-        [pageSize]="limit" 
-        [pageSizeOptions]="[5, 10, 20]" 
-        (page)="onPageChange($event)">
-      </mat-paginator>
-    </div>
   </mat-card>
 </div>
