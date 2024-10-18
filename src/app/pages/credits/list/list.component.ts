@@ -16,13 +16,14 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
-import { debounceTime, map, Observable, of, switchMap } from 'rxjs';
+import { debounceTime, filter, map, Observable, of, switchMap } from 'rxjs';
 import { CoDebtor } from 'src/app/interfaces/co-debtor';
 import { GetCreditDto } from 'src/app/interfaces/credit.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ClientService } from 'src/app/services/clients/client.service';
 import { CodebtorService } from 'src/app/services/codebtors/codebtor.service';
 import { CreditService } from 'src/app/services/credits/credit.service';
+import { atLeastOneFieldValidator } from 'src/app/shared/Validators/filterCredito-validator';
 
 @Component({
   selector: 'list-credits',
@@ -80,8 +81,8 @@ export class ListComponent  implements OnInit {
     this.requestForm = this.formBuilder.group({
       load_status: [''],
       dateRange: this.formBuilder.group({
-        start: [new Date('')],
-        end: [new Date('')],
+        start: [''],
+        end: [''],
       }),
       export: [false],
       client: [],
@@ -89,23 +90,16 @@ export class ListComponent  implements OnInit {
       co_debtor: [],
       coDebtorSearch: [''],
       sede: [this.authService.getSedeUser(), Validators.required],
+    },{
+      validators: atLeastOneFieldValidator(['client', 'co_debtor', 'load_status','export', 'dateRange.start', 'dateRange.end'])  // Aplicar el validador
     });
   }
+
+
+
   ngOnInit(): void {
     this.loadCredits();
-    this.filteredClients = this.requestForm.get('clientSearch')?.valueChanges.pipe(
-      debounceTime(300), // Espera a que el usuario deje de escribir
-      switchMap(value => this.clientService.getClients(0, 20, 1, value).pipe(
-        map(response => response?.results || []) // Aquí mapeamos solo los 'results', asegurándonos de que no sea undefined
-      ))
-    ) ?? of([]); 
-
-    this.filteredCoDebtors = this.requestForm.get('coDebtorSearch')?.valueChanges.pipe(
-      debounceTime(300),
-      switchMap(value => this.codebtorService.getCoDebtors(0, 20, 1, value).pipe(
-        map(response => response?.results || [])
-      ))
-    ) ?? of([]);
+    this.subscribeToSearchFields();
   }
 
   credits: GetCreditDto[] = [];
@@ -126,7 +120,7 @@ export class ListComponent  implements OnInit {
 
   applyFilters() {
     if (this.requestForm.invalid) {
-      this.snackBar.error('Por favor completa los campos requeridos', 'Error');
+      this.snackBar.error('Debe seleccionar por lo menos un filtro.', 'Error');
       return;
     }
 
@@ -135,9 +129,15 @@ export class ListComponent  implements OnInit {
       client: this.requestForm.get('client')?.value,
       co_debtor: this.requestForm.get('co_debtor')?.value,
       load_status: this.requestForm.get('load_status')?.value,
-      created_at_after: this.requestForm.get('dateRange.start')?.value.toISOString().split('T')[0], // Formato YYYY-MM-DD
-      created_at_before: this.requestForm.get('dateRange.end')?.value.toISOString().split('T')[0], // Formato YYYY-MM-DD
-      export: this.requestForm.get('export')?.value
+      created_at_after: this.requestForm?.get('dateRange.start')?.value instanceof Date
+      ? this.requestForm?.get('dateRange.start')?.value.toISOString().split('T')[0]
+      : null,
+    
+    created_at_before: this.requestForm?.get('dateRange.end')?.value instanceof Date
+      ? this.requestForm?.get('dateRange.end')?.value.toISOString().split('T')[0]
+      : null,
+  
+    export: this.requestForm.get('export')?.value
     };
 
     this.creditService.filterCredits(filters)?.subscribe(
@@ -158,24 +158,63 @@ export class ListComponent  implements OnInit {
       }
     );
   }
-  resetFilters() {
-    this.loadCredits();
 
+
+
+  resetFilters() {
     this.requestForm.reset({
-      load_status: 'ACTIVO',
+      load_status: '',
       dateRange: {
-        start: new Date(''),
-        end: new Date('')
+        start: '',
+        end: ''
       },
       export: false,
-      client: [],
+      client: '',
       clientSearch: '',
-      co_debtor: [],
+      co_debtor: '',
       coDebtorSearch: '',
-      sede: [this.authService.getSedeUser()]
+      sede: this.authService.getSedeUser()  // Ya no lo pones en un array
     });
+  
+    // Limpiar los observables de clientes y codeudores
+    this.filteredClients = of([]); 
+    this.filteredCoDebtors = of([]);
+  
+    // Volvemos a cargar los créditos sin filtros
+    this.loadCredits();
+  
+    // Vuelve a inicializar la lógica de búsqueda
+    this.subscribeToSearchFields();
   }
-
+  
+  subscribeToSearchFields() {
+    this.filteredClients = this.requestForm.get('clientSearch')?.valueChanges.pipe(
+      debounceTime(300),
+      switchMap(value => {
+        if (value) {  // Verificamos que no sea vacío
+          return this.clientService.getClients(0, 20, 1, value).pipe(
+            map(response => response?.results || [])
+          );
+        } else {
+          return of([]);  // Si está vacío, devolvemos un observable vacío
+        }
+      })
+    ) ?? of([]);
+  
+    this.filteredCoDebtors = this.requestForm.get('coDebtorSearch')?.valueChanges.pipe(
+      debounceTime(300),
+      switchMap(value => {
+        if (value) {  // Verificamos que no sea vacío
+          return this.codebtorService.getCoDebtors(0, 20, 1, value).pipe(
+            map(response => response?.results || [])
+          );
+        } else {
+          return of([]);  // Si está vacío, devolvemos un observable vacío
+        }
+      })
+    ) ?? of([]);
+  }
+  
   displayClient(client: any): string {
     return client ? `${client.first_name} ${client.last_name} - ${client.type_document} ${client.document_number}` : '';
   }

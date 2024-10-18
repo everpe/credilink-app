@@ -33,34 +33,41 @@ export class CreditService {
 
 
   filterCredits(filters: any): Observable<GetCreditDto[]> | void {
-    console.log(filters);      
-    // Crear los parámetros con los filtros
-    let params = new HttpParams()
-      .set('sede', filters.sede.toString())
-      .set('load_status', filters.load_status)
-      .set('created_at_after', filters.created_at_after)
-      .set('created_at_before', filters.created_at_before)
-;
-
-    // Si `client` no está vacío, lo agregamos a los parámetros
+    console.log(filters);
+  
+    // Inicializamos los parámetros
+    let params = new HttpParams();
+  
+    // Agregamos solo los parámetros que tengan valor
+    if (filters.sede) {
+      params = params.set('sede', filters.sede.toString());
+    }
+    if (filters.load_status) {
+      params = params.set('load_status', filters.load_status);
+    }
+    if (filters.created_at_after) {
+      params = params.set('created_at_after', filters.created_at_after);
+    }
+    if (filters.created_at_before) {
+      params = params.set('created_at_before', filters.created_at_before);
+    }
     if (filters.client) {
       params = params.set('client', filters.client);
     }
-
-    // Si `co_debtor` no está vacío, lo agregamos a los parámetros
-    if (filters.co_debtor ) {
+    if (filters.co_debtor) {
       params = params.set('co_debtor', filters.co_debtor);
     }
-
+  
     // Si `export` es true, esperamos un archivo binario (excel) en la respuesta
     if (filters.export) {
-      params = params.set('export', Boolean(filters.export ?? false));
+      params = params.set('export', Boolean(filters.export ?? false).toString());
       return this.exportExcel(params);
     }
-
+  
     // Si `export` es false, retornamos los datos filtrados como siempre
     return this.http.post<GetCreditDto[]>(`${environment.apiUrl}/credits/list_filters/`, params );
   }
+  
 
   private exportExcel(params: HttpParams): void {
     this.http
