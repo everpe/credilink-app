@@ -1,14 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Component, NgModule, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardHeader, MatCardActions, MatCardTitle, MatCardSubtitle, MatCardContent } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MAT_DATE_LOCALE, MatNativeDateModule, MatOptionModule} from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
+import { debounceTime, map, Observable, of, switchMap } from 'rxjs';
+import { CoDebtor } from 'src/app/interfaces/co-debtor';
 import { GetCreditDto } from 'src/app/interfaces/credit.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ClientService } from 'src/app/services/clients/client.service';
@@ -19,6 +28,7 @@ import { CreditService } from 'src/app/services/credits/credit.service';
   selector: 'list-credits',
   standalone: true,
   imports: [
+    CommonModule,
     MatTableModule, 
     MatPaginatorModule,
     MatCard,
@@ -27,12 +37,24 @@ import { CreditService } from 'src/app/services/credits/credit.service';
     MatCardTitle,
     MatCardSubtitle,
     MatCardContent,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatIconModule,
     MatMenuModule,
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
-    CommonModule
+    FormsModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatIconModule,
+    MatAutocompleteModule,
+    MatDividerModule
+  ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' } // Usar los formatos personalizados
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
@@ -44,19 +66,46 @@ export class ListComponent  implements OnInit {
   
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-
-
-
-
+  requestForm: FormGroup;
+  filteredClients: Observable<any[]> = of([]); 
+  filteredCoDebtors: Observable<CoDebtor[]> = of([]);
+  
   constructor(private formBuilder: FormBuilder,
     private clientService: ClientService,
     private codebtorService: CodebtorService,
     private authService: AuthService,
     private creditService: CreditService,
     private snackBar: ToastrService,
-  ) { }
+  ) { 
+    this.requestForm = this.formBuilder.group({
+      load_status: [''],
+      dateRange: this.formBuilder.group({
+        start: [new Date('')],
+        end: [new Date('')],
+      }),
+      export: [false],
+      client: [],
+      clientSearch: [''],
+      co_debtor: [],
+      coDebtorSearch: [''],
+      sede: [this.authService.getSedeUser(), Validators.required],
+    });
+  }
   ngOnInit(): void {
     this.loadCredits();
+    this.filteredClients = this.requestForm.get('clientSearch')?.valueChanges.pipe(
+      debounceTime(300), // Espera a que el usuario deje de escribir
+      switchMap(value => this.clientService.getClients(0, 20, 1, value).pipe(
+        map(response => response?.results || []) // Aquí mapeamos solo los 'results', asegurándonos de que no sea undefined
+      ))
+    ) ?? of([]); 
+
+    this.filteredCoDebtors = this.requestForm.get('coDebtorSearch')?.valueChanges.pipe(
+      debounceTime(300),
+      switchMap(value => this.codebtorService.getCoDebtors(0, 20, 1, value).pipe(
+        map(response => response?.results || [])
+      ))
+    ) ?? of([]);
   }
 
   credits: GetCreditDto[] = [];
@@ -73,4 +122,77 @@ export class ListComponent  implements OnInit {
       }
     );
   }
+
+
+  applyFilters() {
+    if (this.requestForm.invalid) {
+      this.snackBar.error('Por favor completa los campos requeridos', 'Error');
+      return;
+    }
+
+    const filters = {
+      sede: this.requestForm.get('sede')?.value,
+      client: this.requestForm.get('client')?.value,
+      co_debtor: this.requestForm.get('co_debtor')?.value,
+      load_status: this.requestForm.get('load_status')?.value,
+      created_at_after: this.requestForm.get('dateRange.start')?.value.toISOString().split('T')[0], // Formato YYYY-MM-DD
+      created_at_before: this.requestForm.get('dateRange.end')?.value.toISOString().split('T')[0], // Formato YYYY-MM-DD
+      export: this.requestForm.get('export')?.value
+    };
+
+    this.creditService.filterCredits(filters)?.subscribe(
+      (credits) => {
+        if (!filters.export) {
+          // Si `export` es false, manejar los datos de créditos recibidos
+          this.dataSource.data = credits;
+          this.snackBar.success('Créditos filtrados obtenidos correctamente', 'Éxito');
+          console.log(credits); // Aquí puedes manejar los créditos filtrados
+        } else {
+          // Si `export` es true, ya se habrá manejado la descarga en el servicio
+          this.snackBar.success('Exportación en proceso', 'Éxito');
+        }
+      },
+      (error) => {
+        this.snackBar.error('Hubo un error al filtrar los créditos', 'Error');
+        console.error(error);
+      }
+    );
+  }
+  resetFilters() {
+    this.loadCredits();
+
+    this.requestForm.reset({
+      load_status: 'ACTIVO',
+      dateRange: {
+        start: new Date(''),
+        end: new Date('')
+      },
+      export: false,
+      client: [],
+      clientSearch: '',
+      co_debtor: [],
+      coDebtorSearch: '',
+      sede: [this.authService.getSedeUser()]
+    });
+  }
+
+  displayClient(client: any): string {
+    return client ? `${client.first_name} ${client.last_name} - ${client.type_document} ${client.document_number}` : '';
+  }
+  onClientSelected(client: any): void {
+    this.requestForm.get('client')?.setValue( client.id ); // Asigna el ID del cliente al formulario
+  }
+  onCoDebtorSelected(coDebtor: any): void {
+    this.requestForm.get('co_debtor')?.setValue(  coDebtor.id ); // Asigna el ID del codeudor al formulario
+  }
+  displayCoDebtor(coDebtor: any): string {
+    return coDebtor ? `${coDebtor.first_name} ${coDebtor.last_name} - ${coDebtor.type_document} ${coDebtor.document_number}` : '';
+  }
+}
+
+
+export interface CreditFilter {
+  load_status: string;
+  created_at_after: Date;
+  created_at_before: Date;
 }

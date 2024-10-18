@@ -1,129 +1,200 @@
 <div class="container mx-auto mt-4">
-    <mat-card class="mat-elevation-z6 rounded-lg">
-      <mat-card-header class="px-4">
-       
-      </mat-card-header>
+  <mat-card class="mat-elevation-z6 rounded-lg">
+    <mat-card-header class="px-4">
+
+      <form [formGroup]="requestForm" (ngSubmit)="applyFilters()" class="grid grid-cols-1 lg:grid-cols-6 gap-4 w-full">
+        <!-- Primera fila con los dos autocompletes (cada uno ocupa 2 columnas) -->
   
-      <mat-card-content>
-        <div class="overflow-x-auto">
-          <table mat-table [dataSource]="dataSource" matSort class="min-w-full shadow-md rounded-lg bg-back">
-            
-            <!-- Cliente Column -->
-            <ng-container matColumnDef="client">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Cliente </th>
-              <td mat-cell *matCellDef="let credit">
-                {{ credit.client.first_name }} {{ credit.client.last_name }}
-              </td>
-            </ng-container>
-  
-            <!-- Codeudor Column -->
-            <ng-container matColumnDef="co_debtor">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Codeudor </th>
-              <td mat-cell *matCellDef="let credit">
-                {{ credit.co_debtor.first_name }} {{ credit.co_debtor.last_name }}
-              </td>
-            </ng-container>
-  
-            <!-- Loan Date Column -->
-            <ng-container matColumnDef="loan_date">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Fecha crédito </th>
-              <td mat-cell *matCellDef="let credit">
-                {{ credit.loan_date | date: 'dd-MM-yyyy' }}
-              </td>
-            </ng-container>
-  
-            <!-- Reminder Date Column -->
-            <ng-container matColumnDef="reminder_date">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Fecha recordatorio </th>
-              <td mat-cell *matCellDef="let credit">
-                {{ credit.reminder_date | date: 'dd-MM-yyyy' }}
-              </td>
-            </ng-container>
-  
-            <!-- Loan Amount Column -->
-            <ng-container matColumnDef="loan_amount">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Valor crédito (COP)</th>
-              <td mat-cell *matCellDef="let credit"> 
-                {{ credit.loan_amount | currency:'' }} 
-              </td>
-            </ng-container>
-  
-            <!-- Interest Rate Column -->
-            <ng-container matColumnDef="interest_rate">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Interés (%) </th>
-              <td mat-cell *matCellDef="let credit"> 
-                {{ credit.interest_rate }} 
-              </td>
-            </ng-container>
-  
-            <!-- Number of Installments Column -->
-            <ng-container matColumnDef="number_of_installments">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Cuotas </th>
-              <td mat-cell *matCellDef="let credit"> 
-                {{ credit.number_of_installments }} 
-              </td>
-            </ng-container>
-  
-            <ng-container matColumnDef="loan_status">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Estado </th>
-                <td mat-cell *matCellDef="let credit"> 
-                  <div class="flex items-center">
-                    <mat-icon [class.text-green-600]="credit.load_status === 'ACTIVO'" 
-                              [class.text-red-600]="credit.load_status !== 'ACTIVO'">
-                      {{ credit.load_status === 'ACTIVO' ? 'check_circle' : 'cancel' }}
-                    </mat-icon>
-                    <span [class.text-green-600]="credit.load_status === 'ACTIVO'" 
-                          [class.text-red-600]="credit.load_status !== 'ACTIVO'" 
-                          class="ml-2">
-                      {{ credit.load_status === 'ACTIVO' ? 'Activo' : 'Inactivo' }}
-                    </span>
-                  </div>
-                </td>
-              </ng-container>
-              
-  
-            <!-- Interest Value Column -->
-            <ng-container matColumnDef="interest_value">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Valor interés (COP)</th>
-              <td mat-cell *matCellDef="let credit"> 
-                {{ credit.interest_value | currency:'' }} 
-              </td>
-            </ng-container>
-  
-            <!-- Total Debt Column -->
-            <ng-container matColumnDef="total_debt">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Total deuda (COP)</th>
-              <td mat-cell *matCellDef="let credit"> 
-                {{ credit.total_debt | currency:'' }} 
-              </td>
-            </ng-container>
-  
-            <!-- Remaining Balance Column -->
-            <ng-container matColumnDef="remaining_balance">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Saldo pendiente (COP)</th>
-              <td mat-cell *matCellDef="let credit"> 
-                {{ credit.remaining_balance | currency:'' }} 
-              </td>
-            </ng-container>
-  
-            <!-- Next Payment Date Column -->
-            <ng-container matColumnDef="next_payment_date">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Próximo pago </th>
-              <td mat-cell *matCellDef="let credit"> 
-                {{ credit.next_payment_date ? (credit.next_payment_date | date: 'dd-MM-yyyy HH:mm:ss') : 'Sin fecha' }} 
-              </td>
-            </ng-container>
-  
-            <!-- Table Header and Row Definitions -->
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-        </div>
-        <div class="container">
-          <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-        </div>
-      </mat-card-content>
-  
-    </mat-card>
-  </div>
-  
+          <mat-form-field class="col-span-2 lg:col-span-2 w-full" appearance="outline">
+            <mat-label>Buscar cliente</mat-label>
+            <input type="text" matInput formControlName="clientSearch"
+              placeholder="Buscar por nombres, apellidos, o número documento" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onClientSelected($event.option.value)"
+              [displayWith]="displayClient">
+              <mat-option *ngFor="let client of filteredClients | async" [value]="client">
+                {{ client.first_name }} {{ client.last_name }} - {{ client.document_number }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <mat-form-field class="col-span-2 lg:col-span-2 w-full" appearance="outline">
+            <mat-label>Buscar codeudor</mat-label>
+            <input type="text" matInput formControlName="coDebtorSearch"
+              placeholder="Buscar por nombres, apellidos, o número documento" [matAutocomplete]="autoCoDebtor">
+            <mat-autocomplete #autoCoDebtor="matAutocomplete" (optionSelected)="onCoDebtorSelected($event.option.value)"
+              [displayWith]="displayCoDebtor">
+              <mat-option *ngFor="let coDebtor of filteredCoDebtors | async" [value]="coDebtor">
+                {{ coDebtor.first_name }} {{ coDebtor.last_name }} - {{ coDebtor.document_number }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <div class="col-span-2 lg:col-span-2 w-full">
+            <mat-form-field  appearance="outline">
+              <mat-label>Estado del crédito</mat-label>
+              <mat-select formControlName="load_status">
+                <mat-option value="ACTIVO">ACTIVO</mat-option>
+                <mat-option value="PAGADO">PAGADO</mat-option>
+                <mat-option value="MORA">MORA</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-checkbox formControlName="export" >Exportar a Excel</mat-checkbox>
+          </div>
+
+          <mat-form-field class="col-span-2 lg:col-span-2 w-full" appearance="outline">
+            <mat-label>Seleccione el rango de fechas</mat-label>
+            <mat-date-range-input formGroupName="dateRange" [rangePicker]="picker">
+              <input matStartDate placeholder="Fecha de inicio" formControlName="start">
+              <input matEndDate placeholder="Fecha de fin" formControlName="end">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+
+          <div class="flex justify-center items-center col-span-2 lg:col-span-2 space-x-2">
+            <!-- Botón de Aplicar filtros con ícono de búsqueda -->
+            <button mat-raised-button color="primary" type="submit" class="flex items-center">
+              <mat-icon class="mr-2">search</mat-icon> <!-- Ícono de búsqueda -->
+              Filtrar
+            </button>
+          
+            <button mat-raised-button color="secoundary" type="submit" class="flex items-center" (click)="resetFilters()">
+              <mat-icon class="mr-2">clear</mat-icon> <!-- Ícono de búsqueda -->
+              Limpiar
+            </button>
+            <!-- <button mat-icon-button type="button" (click)="resetFilters()" aria-label="Limpiar filtros">
+              <mat-icon>clear</mat-icon> 
+             
+            </button> -->
+          </div>
+          
+
+      </form>
+
+
+
+
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="overflow-x-auto">
+        <table mat-table [dataSource]="dataSource" matSort class="min-w-full shadow-md rounded-lg bg-back">
+
+
+          <!-- Cliente Column -->
+          <ng-container matColumnDef="client">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Cliente </th>
+            <td mat-cell *matCellDef="let credit">
+              {{ credit.client.first_name }} {{ credit.client.last_name }}
+            </td>
+          </ng-container>
+
+          <!-- Codeudor Column -->
+          <ng-container matColumnDef="co_debtor">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Codeudor </th>
+            <td mat-cell *matCellDef="let credit">
+              {{ credit.co_debtor.first_name }} {{ credit.co_debtor.last_name }}
+            </td>
+          </ng-container>
+
+          <!-- Loan Date Column -->
+          <ng-container matColumnDef="loan_date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Fecha crédito </th>
+            <td mat-cell *matCellDef="let credit">
+              {{ credit.loan_date | date: 'dd-MM-yyyy' }}
+            </td>
+          </ng-container>
+
+          <!-- Reminder Date Column -->
+          <ng-container matColumnDef="reminder_date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Fecha recordatorio </th>
+            <td mat-cell *matCellDef="let credit">
+              {{ credit.reminder_date | date: 'dd-MM-yyyy' }}
+            </td>
+          </ng-container>
+
+          <!-- Loan Amount Column -->
+          <ng-container matColumnDef="loan_amount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Valor crédito (COP)</th>
+            <td mat-cell *matCellDef="let credit">
+              {{ credit.loan_amount | currency:'' }}
+            </td>
+          </ng-container>
+
+          <!-- Interest Rate Column -->
+          <ng-container matColumnDef="interest_rate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Interés (%) </th>
+            <td mat-cell *matCellDef="let credit">
+              {{ credit.interest_rate }}
+            </td>
+          </ng-container>
+
+          <!-- Number of Installments Column -->
+          <ng-container matColumnDef="number_of_installments">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Cuotas </th>
+            <td mat-cell *matCellDef="let credit">
+              {{ credit.number_of_installments }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="loan_status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Estado </th>
+            <td mat-cell *matCellDef="let credit">
+              <div class="flex items-center">
+                <mat-icon [class.text-green-600]="credit.load_status === 'ACTIVO'"
+                  [class.text-red-600]="credit.load_status !== 'ACTIVO'">
+                  {{ credit.load_status === 'ACTIVO' ? 'check_circle' : 'cancel' }}
+                </mat-icon>
+                <span [class.text-green-600]="credit.load_status === 'ACTIVO'"
+                  [class.text-red-600]="credit.load_status !== 'ACTIVO'" class="ml-2">
+                  {{ credit.load_status === 'ACTIVO' ? 'Activo' : 'Inactivo' }}
+                </span>
+              </div>
+            </td>
+          </ng-container>
+
+
+          <!-- Interest Value Column -->
+          <ng-container matColumnDef="interest_value">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Valor interés (COP)</th>
+            <td mat-cell *matCellDef="let credit">
+              {{ credit.interest_value | currency:'' }}
+            </td>
+          </ng-container>
+
+          <!-- Total Debt Column -->
+          <ng-container matColumnDef="total_debt">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Total deuda (COP)</th>
+            <td mat-cell *matCellDef="let credit">
+              {{ credit.total_debt | currency:'' }}
+            </td>
+          </ng-container>
+
+          <!-- Remaining Balance Column -->
+          <ng-container matColumnDef="remaining_balance">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Saldo pendiente (COP)</th>
+            <td mat-cell *matCellDef="let credit">
+              {{ credit.remaining_balance | currency:'' }}
+            </td>
+          </ng-container>
+
+          <!-- Next Payment Date Column -->
+          <ng-container matColumnDef="next_payment_date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Próximo pago </th>
+            <td mat-cell *matCellDef="let credit">
+              {{ credit.next_payment_date ? (credit.next_payment_date | date: 'dd-MM-yyyy HH:mm:ss') : 'Sin fecha' }}
+            </td>
+          </ng-container>
+
+          <!-- Table Header and Row Definitions -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+      <div class="container">
+        <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+</div>

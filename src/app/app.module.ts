@@ -26,6 +26,7 @@ import { AppNavItemComponent } from './layouts/full/sidebar/nav-item/nav-item.co
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,13 +46,15 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
     ReactiveFormsModule,
     MaterialModule,
     TablerIconsModule.pick(TablerIcons),
+    MatNativeDateModule 
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi()),
     provideToastr(),
-    {provide: LocationStrategy, useClass: HashLocationStrategy}
+    {provide: LocationStrategy, useClass: HashLocationStrategy},
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
   ],
   exports: [TablerIconsModule],
   bootstrap: [AppComponent],
