@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgModule, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,7 +16,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
-import { debounceTime, filter, map, Observable, of, switchMap } from 'rxjs';
+import { debounceTime, map, Observable, of, switchMap } from 'rxjs';
 import { CoDebtor } from 'src/app/interfaces/co-debtor';
 import { GetCreditDto } from 'src/app/interfaces/credit.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -143,10 +143,8 @@ export class ListComponent  implements OnInit {
     this.creditService.filterCredits(filters)?.subscribe(
       (credits) => {
         if (!filters.export) {
-          // Si `export` es false, manejar los datos de créditos recibidos
           this.dataSource.data = credits;
           this.snackBar.success('Créditos filtrados obtenidos correctamente', 'Éxito');
-          console.log(credits); // Aquí puedes manejar los créditos filtrados
         } else {
           // Si `export` es true, ya se habrá manejado la descarga en el servicio
           this.snackBar.success('Exportación en proceso', 'Éxito');
@@ -191,12 +189,12 @@ export class ListComponent  implements OnInit {
     this.filteredClients = this.requestForm.get('clientSearch')?.valueChanges.pipe(
       debounceTime(300),
       switchMap(value => {
-        if (value) {  // Verificamos que no sea vacío
+        if (value) {  
           return this.clientService.getClients(0, 20, 1, value).pipe(
             map(response => response?.results || [])
           );
         } else {
-          return of([]);  // Si está vacío, devolvemos un observable vacío
+          return of([]); 
         }
       })
     ) ?? of([]);
@@ -204,12 +202,12 @@ export class ListComponent  implements OnInit {
     this.filteredCoDebtors = this.requestForm.get('coDebtorSearch')?.valueChanges.pipe(
       debounceTime(300),
       switchMap(value => {
-        if (value) {  // Verificamos que no sea vacío
+        if (value) { 
           return this.codebtorService.getCoDebtors(0, 20, 1, value).pipe(
             map(response => response?.results || [])
           );
         } else {
-          return of([]);  // Si está vacío, devolvemos un observable vacío
+          return of([]); 
         }
       })
     ) ?? of([]);
@@ -219,10 +217,10 @@ export class ListComponent  implements OnInit {
     return client ? `${client.first_name} ${client.last_name} - ${client.type_document} ${client.document_number}` : '';
   }
   onClientSelected(client: any): void {
-    this.requestForm.get('client')?.setValue( client.id ); // Asigna el ID del cliente al formulario
+    this.requestForm.get('client')?.setValue( client.id ); 
   }
   onCoDebtorSelected(coDebtor: any): void {
-    this.requestForm.get('co_debtor')?.setValue(  coDebtor.id ); // Asigna el ID del codeudor al formulario
+    this.requestForm.get('co_debtor')?.setValue(  coDebtor.id ); 
   }
   displayCoDebtor(coDebtor: any): string {
     return coDebtor ? `${coDebtor.first_name} ${coDebtor.last_name} - ${coDebtor.type_document} ${coDebtor.document_number}` : '';

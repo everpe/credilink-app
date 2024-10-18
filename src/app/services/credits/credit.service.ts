@@ -33,12 +33,8 @@ export class CreditService {
 
 
   filterCredits(filters: any): Observable<GetCreditDto[]> | void {
-    console.log(filters);
-  
-    // Inicializamos los parámetros
     let params = new HttpParams();
-  
-    // Agregamos solo los parámetros que tengan valor
+
     if (filters.sede) {
       params = params.set('sede', filters.sede.toString());
     }
@@ -58,13 +54,13 @@ export class CreditService {
       params = params.set('co_debtor', filters.co_debtor);
     }
   
-    // Si `export` es true, esperamos un archivo binario (excel) en la respuesta
+    //  esperamos un archivo binario (excel) en la respuesta
     if (filters.export) {
       params = params.set('export', Boolean(filters.export ?? false).toString());
       return this.exportExcel(params);
     }
   
-    // Si `export` es false, retornamos los datos filtrados como siempre
+    // retornamos los datos filtrados como siempre
     return this.http.post<GetCreditDto[]>(`${environment.apiUrl}/credits/list_filters/`, params );
   }
   
