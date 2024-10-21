@@ -194,6 +194,7 @@ export class ListComponent  implements OnInit {
             map(response => response?.results || [])
           );
         } else {
+          this.requestForm.get('client')?.setValue(null); 
           return of([]); 
         }
       })
@@ -207,6 +208,7 @@ export class ListComponent  implements OnInit {
             map(response => response?.results || [])
           );
         } else {
+          this.requestForm.get('co_debtor')?.setValue(null); 
           return of([]); 
         }
       })
