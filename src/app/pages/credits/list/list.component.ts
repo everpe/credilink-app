@@ -5,8 +5,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardHeader, MatCardActions, MatCardTitle, MatCardSubtitle, MatCardContent } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MAT_DATE_LOCALE, MatNativeDateModule, MatOptionModule} from '@angular/material/core';
+import { MAT_DATE_LOCALE, MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialog } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -24,13 +25,14 @@ import { ClientService } from 'src/app/services/clients/client.service';
 import { CodebtorService } from 'src/app/services/codebtors/codebtor.service';
 import { CreditService } from 'src/app/services/credits/credit.service';
 import { atLeastOneFieldValidator } from 'src/app/shared/Validators/filterCredito-validator';
+import { DetailCreditComponent } from '../detail-credit/detail-credit.component';
 
 @Component({
   selector: 'list-credits',
   standalone: true,
   imports: [
     CommonModule,
-    MatTableModule, 
+    MatTableModule,
     MatPaginatorModule,
     MatCard,
     MatCardHeader,
@@ -60,24 +62,39 @@ import { atLeastOneFieldValidator } from 'src/app/shared/Validators/filterCredit
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
-export class ListComponent  implements OnInit {
+export class ListComponent implements OnInit {
 
-  displayedColumns: string[] = ['client', 'co_debtor', 'loan_date', 'reminder_date', 'loan_amount', 'interest_rate', 'number_of_installments', 'loan_status', 'interest_value', 'total_debt', 'remaining_balance', 'next_payment_date'];
+  displayedColumns: string[] = [
+    'client', 
+    'co_debtor',
+    'loan_date',
+    // 'reminder_date', 
+    'loan_amount', 
+    // 'interest_rate', 
+    // 'number_of_installments', 
+    'loan_status', 
+    'interest_value', 
+    'total_debt', 
+    'remaining_balance', 
+    'next_payment_date',
+    'actions'
+  ];
   dataSource = new MatTableDataSource<GetCreditDto>([]);
-  
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   requestForm: FormGroup;
-  filteredClients: Observable<any[]> = of([]); 
+  filteredClients: Observable<any[]> = of([]);
   filteredCoDebtors: Observable<CoDebtor[]> = of([]);
-  
+
   constructor(private formBuilder: FormBuilder,
     private clientService: ClientService,
     private codebtorService: CodebtorService,
     private authService: AuthService,
     private creditService: CreditService,
     private snackBar: ToastrService,
-  ) { 
+    private dialog: MatDialog
+  ) {
     this.requestForm = this.formBuilder.group({
       load_status: [''],
       dateRange: this.formBuilder.group({
@@ -90,8 +107,8 @@ export class ListComponent  implements OnInit {
       co_debtor: [],
       coDebtorSearch: [''],
       sede: [this.authService.getSedeUser(), Validators.required],
-    },{
-      validators: atLeastOneFieldValidator(['client', 'co_debtor', 'load_status','export', 'dateRange.start', 'dateRange.end'])  // Aplicar el validador
+    }, {
+      validators: atLeastOneFieldValidator(['client', 'co_debtor', 'load_status', 'export', 'dateRange.start', 'dateRange.end'])  // Aplicar el validador
     });
   }
 
@@ -130,14 +147,14 @@ export class ListComponent  implements OnInit {
       co_debtor: this.requestForm.get('co_debtor')?.value,
       load_status: this.requestForm.get('load_status')?.value,
       created_at_after: this.requestForm?.get('dateRange.start')?.value instanceof Date
-      ? this.requestForm?.get('dateRange.start')?.value.toISOString().split('T')[0]
-      : null,
-    
-    created_at_before: this.requestForm?.get('dateRange.end')?.value instanceof Date
-      ? this.requestForm?.get('dateRange.end')?.value.toISOString().split('T')[0]
-      : null,
-  
-    export: this.requestForm.get('export')?.value
+        ? this.requestForm?.get('dateRange.start')?.value.toISOString().split('T')[0]
+        : null,
+
+      created_at_before: this.requestForm?.get('dateRange.end')?.value instanceof Date
+        ? this.requestForm?.get('dateRange.end')?.value.toISOString().split('T')[0]
+        : null,
+
+      export: this.requestForm.get('export')?.value
     };
 
     this.creditService.filterCredits(filters)?.subscribe(
@@ -173,60 +190,71 @@ export class ListComponent  implements OnInit {
       coDebtorSearch: '',
       sede: this.authService.getSedeUser()  // Ya no lo pones en un array
     });
-  
+
     // Limpiar los observables de clientes y codeudores
-    this.filteredClients = of([]); 
+    this.filteredClients = of([]);
     this.filteredCoDebtors = of([]);
-  
+
     // Volvemos a cargar los créditos sin filtros
     this.loadCredits();
-  
+
     // Vuelve a inicializar la lógica de búsqueda
     this.subscribeToSearchFields();
   }
-  
+
   subscribeToSearchFields() {
     this.filteredClients = this.requestForm.get('clientSearch')?.valueChanges.pipe(
       debounceTime(300),
       switchMap(value => {
-        if (value) {  
+        if (value) {
           return this.clientService.getClients(0, 20, 1, value).pipe(
             map(response => response?.results || [])
           );
         } else {
-          this.requestForm.get('client')?.setValue(null); 
-          return of([]); 
+          this.requestForm.get('client')?.setValue(null);
+          return of([]);
         }
       })
     ) ?? of([]);
-  
+
     this.filteredCoDebtors = this.requestForm.get('coDebtorSearch')?.valueChanges.pipe(
       debounceTime(300),
       switchMap(value => {
-        if (value) { 
+        if (value) {
           return this.codebtorService.getCoDebtors(0, 20, 1, value).pipe(
             map(response => response?.results || [])
           );
         } else {
-          this.requestForm.get('co_debtor')?.setValue(null); 
-          return of([]); 
+          this.requestForm.get('co_debtor')?.setValue(null);
+          return of([]);
         }
       })
     ) ?? of([]);
   }
-  
+
   displayClient(client: any): string {
     return client ? `${client.first_name} ${client.last_name} - ${client.type_document} ${client.document_number}` : '';
   }
   onClientSelected(client: any): void {
-    this.requestForm.get('client')?.setValue( client.id ); 
+    this.requestForm.get('client')?.setValue(client.id);
   }
   onCoDebtorSelected(coDebtor: any): void {
-    this.requestForm.get('co_debtor')?.setValue(  coDebtor.id ); 
+    this.requestForm.get('co_debtor')?.setValue(coDebtor.id);
   }
   displayCoDebtor(coDebtor: any): string {
     return coDebtor ? `${coDebtor.first_name} ${coDebtor.last_name} - ${coDebtor.type_document} ${coDebtor.document_number}` : '';
   }
+
+  createAbono(id: number){
+    console.log(id);
+  }
+  viewDetailCredit(credit: GetCreditDto){
+    this.dialog.open(DetailCreditComponent, {
+      data: credit,
+      width: '600px',
+    });
+  }
+
 }
 
 
