@@ -26,6 +26,7 @@ import { CodebtorService } from 'src/app/services/codebtors/codebtor.service';
 import { CreditService } from 'src/app/services/credits/credit.service';
 import { atLeastOneFieldValidator } from 'src/app/shared/Validators/filterCredito-validator';
 import { DetailCreditComponent } from '../detail-credit/detail-credit.component';
+import { CreatePaymentComponent } from '../../payments/create-payment/create-payment.component';
 
 @Component({
   selector: 'list-credits',
@@ -137,7 +138,7 @@ export class ListComponent implements OnInit {
 
   applyFilters() {
     if (this.requestForm.invalid) {
-      this.snackBar.error('Debe seleccionar por lo menos un filtro.', 'Error');
+      this.snackBar.warning('Debe seleccionar por lo menos un filtro.', 'Advertencia');
       return;
     }
 
@@ -246,7 +247,18 @@ export class ListComponent implements OnInit {
   }
 
   createAbono(id: number){
-    console.log(id);
+    const dialogRef = this.dialog.open(CreatePaymentComponent, {
+      width: '600px', // Ajusta el ancho del modal si es necesario
+      data: {clienteId: id},
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadCredits();
+      }
+    });
+
   }
   viewDetailCredit(credit: GetCreditDto){
     this.dialog.open(DetailCreditComponent, {

@@ -1,0 +1,68 @@
+<h2 mat-dialog-title class="text-xl font-medium  text-center mb-6 mt-4">Abonar a crédito</h2>
+<mat-dialog-content>
+    <form [formGroup]="paymentForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Pago de Interés -->
+        <div class="md:col-span-2">
+            <h3 class="font-bold">Pago a Intereses</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                <!-- Monto de Interés -->
+                <!-- <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Monto (COP)</mat-label>
+                    <input matInput formControlName="interest_amount" placeholder="Monto" type="number" />
+                </mat-form-field> -->
+                <mat-form-field class="w-full" appearance="outline">
+                    <mat-label>Monto (COP)</mat-label>
+                    <input type="text" matInput [value]="formattedAmountPayInteres"
+                        (input)="onAmountPayInteresInput($event)" placeholder="Valor del crédito" />
+                    <mat-icon matSuffix>attach_money</mat-icon>
+                </mat-form-field>
+
+                <!-- Método de Pago de Interés -->
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Método de Pago</mat-label>
+                    <mat-select formControlName="interest_payment_method">
+                        <mat-option value="Efectivo">Efectivo</mat-option>
+                        <mat-option value="Transferencia">Transferencia</mat-option>
+                        <mat-option value="Tarjeta">Tarjeta</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!-- Pago a Capital -->
+        <div class="md:col-span-2 mt-4">
+            <h3 class="font-bold">Pago a Capital</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                <!-- Monto de Capital -->
+                <mat-form-field class="w-full" appearance="outline">
+                    <mat-label>Monto (COP)</mat-label>
+                    <input type="text" matInput [value]="formattedAmountPayCapital"
+                        (input)="onAmountPayCapitalInput($event)" placeholder="Valor del crédito" />
+                    <mat-icon matSuffix>attach_money</mat-icon>
+                </mat-form-field>
+
+                <!-- Método de Pago de Capital -->
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Método de Pago</mat-label>
+                    <mat-select formControlName="capital_payment_method">
+                        <mat-option value="Efectivo">Efectivo</mat-option>
+                        <mat-option value="Transferencia">Transferencia</mat-option>
+                        <mat-option value="Tarjeta">Tarjeta</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+
+
+        <!-- Descripción -->
+        <mat-form-field appearance="outline" class="w-full md:col-span-2">
+            <mat-label>Descripción del abono</mat-label>
+            <input matInput formControlName="description" placeholder="Descripción" />
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="p-4">
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="paymentForm.invalid">Guardar</button>
+</mat-dialog-actions>

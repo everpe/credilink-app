@@ -188,13 +188,17 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="viewDetailCredit(credit)">
+                  <mat-icon>zoom_in</mat-icon>
+                  <span>Detalle</span>
+                </button>
                 <button mat-menu-item (click)="createAbono(credit.id)">
                   <mat-icon color="primary">payments</mat-icon>
                   <span>Abonar</span>
                 </button>
-                <button mat-menu-item (click)="viewDetailCredit(credit)">
-                  <mat-icon>zoom_in</mat-icon>
-                  <span>Detalle</span>
+                <button mat-menu-item (click)="createAbono(credit.id)">
+                  <mat-icon>savings</mat-icon>
+                  <span>Abonos</span>
                 </button>
               </mat-menu>
             </td>
