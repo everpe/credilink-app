@@ -133,9 +133,15 @@
 
         </mat-tab>
         <mat-tab label="Créditos otorgados">
-            <list-credits></list-credits>
+            @defer (on viewport) {
+                <list-credits></list-credits>
+            }@loading {
+                <p>Cargando creditos</p>
+            }
+            @placeholder {
+                <p>Lista de creditos realizados</p>
+            }
         </mat-tab>
-        <!-- <mat-tab label="Third">Content 3</mat-tab> -->
     </mat-tab-group>
     <!-- {{this.creditForm.value | json}} -->
 </div>

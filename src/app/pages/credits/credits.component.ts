@@ -19,6 +19,7 @@ import { ClientService } from 'src/app/services/clients/client.service';
 import { CodebtorService } from 'src/app/services/codebtors/codebtor.service';
 import { CreditService } from 'src/app/services/credits/credit.service';
 import { ListComponent } from "./list/list.component";
+import { SharedService } from 'src/app/services/shared/shared.service';
 
 @Component({
   selector: 'app-credits',
@@ -55,6 +56,7 @@ export class CreditsComponent implements OnInit {
     private authService: AuthService,
     private creditService: CreditService,
     private snackBar: ToastrService,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit(): void {
@@ -64,10 +66,10 @@ export class CreditsComponent implements OnInit {
       clientSearch: ['', Validators.required],
       co_debtor: ['', Validators.required],
       coDebtorSearch: ['', Validators.required],
-      loan_date: ['', Validators.required],
+      loan_date: [new Date(), Validators.required],
       reminder_date: ['', Validators.required],
       loan_amount: [0, Validators.required],
-      interest_rate: [, [Validators.required, Validators.min(0), Validators.max(100)]],
+      interest_rate: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
       number_of_installments: [0, Validators.required],
       sede: [this.authService.getSedeUser(), Validators.required],
       by_quota: [false, Validators.required]
@@ -122,7 +124,21 @@ export class CreditsComponent implements OnInit {
       this.creditService.createCredit(formValue).subscribe(
         response => {
           this.snackBar.success(response.message);
-          this.creditForm.reset();
+          this.creditForm.reset(
+            {
+              client: '',
+              clientSearch: '',
+              co_debtor: '', 
+              coDebtorSearch: '',
+              loan_date: new Date(), 
+              reminder_date: '', 
+              loan_amount: 0,
+              interest_rate: '',
+              number_of_installments: 0,
+              sede: this.authService.getSedeUser(),
+              by_quota: false,
+            }
+          );
           this.formattedLoanAmount = ""; 
           this.monthlyInterest = 0;
           Object.keys(this.creditForm.controls).forEach(key => {
@@ -130,6 +146,7 @@ export class CreditsComponent implements OnInit {
             this.creditForm.get(key)?.markAsPristine(); // Marca el control como limpio
             this.creditForm.get(key)?.markAsUntouched(); // Marca el control como no tocado
           });
+          this.sharedService.triggerReloadCredits();
         },
         error => {
           this.snackBar.error(error.error.error);

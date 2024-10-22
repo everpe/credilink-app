@@ -26,7 +26,7 @@ import { PaymentService } from 'src/app/services/payments/payment.service';
     MatSelectModule,
     MatError,
     MatDialogModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './create-payment.component.html',
   styleUrl: './create-payment.component.scss'

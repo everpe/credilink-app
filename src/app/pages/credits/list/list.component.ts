@@ -17,7 +17,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
-import { debounceTime, map, Observable, of, switchMap } from 'rxjs';
+import { debounceTime, map, Observable, of, Subscription, switchMap } from 'rxjs';
 import { CoDebtor } from 'src/app/interfaces/co-debtor';
 import { GetCreditDto } from 'src/app/interfaces/credit.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -27,6 +27,8 @@ import { CreditService } from 'src/app/services/credits/credit.service';
 import { atLeastOneFieldValidator } from 'src/app/shared/Validators/filterCredito-validator';
 import { DetailCreditComponent } from '../detail-credit/detail-credit.component';
 import { CreatePaymentComponent } from '../../payments/create-payment/create-payment.component';
+import { PaymentsCreditListComponent } from '../../payments/payments-credit-list/payments-credit-list.component';
+import { SharedService } from 'src/app/services/shared/shared.service';
 
 @Component({
   selector: 'list-credits',
@@ -81,12 +83,11 @@ export class ListComponent implements OnInit {
     'actions'
   ];
   dataSource = new MatTableDataSource<GetCreditDto>([]);
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
   requestForm: FormGroup;
   filteredClients: Observable<any[]> = of([]);
   filteredCoDebtors: Observable<CoDebtor[]> = of([]);
+  private reloadSubscription!: Subscription;
 
   constructor(private formBuilder: FormBuilder,
     private clientService: ClientService,
@@ -94,7 +95,8 @@ export class ListComponent implements OnInit {
     private authService: AuthService,
     private creditService: CreditService,
     private snackBar: ToastrService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private sharedService: SharedService
   ) {
     this.requestForm = this.formBuilder.group({
       load_status: [''],
@@ -116,6 +118,12 @@ export class ListComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.reloadSubscription = this.sharedService.reloadCredits$.subscribe((shouldReload) => {
+      if (shouldReload) {
+        this.loadCredits(); // Vuelve a cargar la lista de créditos
+      }
+    });
+
     this.loadCredits();
     this.subscribeToSearchFields();
   }
@@ -264,6 +272,16 @@ export class ListComponent implements OnInit {
     this.dialog.open(DetailCreditComponent, {
       data: credit,
       width: '600px',
+      disableClose: true
+    });
+  }
+
+
+  openListPayments(idCredito:number){
+    this.dialog.open(PaymentsCreditListComponent, {
+      width: '800px', 
+      data: { creditId: idCredito }, 
+      disableClose: true
     });
   }
 

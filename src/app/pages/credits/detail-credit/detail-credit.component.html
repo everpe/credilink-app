@@ -27,7 +27,7 @@
       <!-- Valor del Crédito -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Valor Crédito (COP)</mat-label>
-        <input matInput [value]="credit?.loan_amount | currency:'COP'" readonly />
+        <input matInput [value]="credit?.loan_amount | currency:''" readonly />
       </mat-form-field>
   
       <!-- Tasa de Interés (interest_rate) -->
@@ -51,19 +51,19 @@
       <!-- Valor Interés (interest_value) -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Valor Interés (COP)</mat-label>
-        <input matInput [value]="credit?.interest_value | currency:'COP'" readonly />
+        <input matInput [value]="credit?.interest_value | currency:''" readonly />
       </mat-form-field>
   
       <!-- Total Deuda (total_debt) -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Total Deuda (COP)</mat-label>
-        <input matInput [value]="credit?.total_debt | currency:'COP'" readonly />
+        <input matInput [value]="credit?.total_debt | currency:''" readonly />
       </mat-form-field>
   
       <!-- Saldo Pendiente (remaining_balance) -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Saldo Pendiente (COP)</mat-label>
-        <input matInput [value]="credit?.remaining_balance | currency:'COP'" readonly />
+        <input matInput [value]="credit?.remaining_balance | currency:''" readonly />
       </mat-form-field>
   
       <!-- Próximo Pago (next_payment_date) -->
