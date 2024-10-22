@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AppSideLoginComponent {
   loginForm!: FormGroup;  
-
+  hide = true; // Variable para alternar la visibilidad de la contraseña
   constructor(
     private fb: FormBuilder,      
     private authService: AuthService,  

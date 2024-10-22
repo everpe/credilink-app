@@ -1,82 +1,83 @@
-<div class="blank-layout-container justify-content-center align-items-center bg-light-primary">
-  <div
-    class="position-relative row w-100 h-100 bg-gredient justify-content-center"
-  >
-    <div class="col-lg-4 d-flex align-items-center">
-      <mat-card class="cardWithShadow boxed-auth">
-        <mat-card-content class="p-32">
-          <div class="text-center">
-            <a [routerLink]="['/dashboard']">
-              <img
-                src="./assets/images/logos/logo_credilink.png"
-                class="align-middle m-2 max-w-80"
-                alt="logo"
-              />
+<div class="flex justify-center items-center min-h-screen bg-light-primary">
+  <div class="w-full max-w-md">
+    <mat-card class="shadow-lg rounded-lg p-6">
+      <mat-card-content>
+        <!-- Logo -->
+        <div class="text-center mb-6">
+          <a [routerLink]="['/dashboard']">
+            <img
+              src="./assets/images/logos/logoC.png"
+              class="mx-auto imagen-logo"
+              alt="logo"
+            />
+          </a>
+        </div>
+
+        <!-- Título de la sesión -->
+        <mat-card-title class="text-center text-2xl font-bold text-primary mb-4">INICIAR SESIÓN</mat-card-title>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <!-- Usuario -->
+          <mat-form-field appearance="outline" class="w-full mb-4" color="primary">
+            <mat-label>Usuario</mat-label>
+            <input matInput formControlName="username" placeholder="Ingresa tu usuario" />
+          </mat-form-field>
+          
+          <!-- Contraseña -->
+          <mat-form-field appearance="outline" class="w-full mb-2" color="primary">
+            <mat-label>Contraseña</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" placeholder="Ingresa tu contraseña" />
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Mostrar contraseña'">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </mat-form-field>
+          
+          <small class="block text-center mb-4 text-gray-500">
+            Haga clic en el ojo para alternar la visibilidad.
+          </small>
+
+          <!-- Recordarme y olvidé mi contraseña -->
+          <div class="flex items-center justify-between mb-6">
+            <mat-checkbox color="primary" formControlName="rememberMe">Acuérdate de mí</mat-checkbox>
+            <a [routerLink]="['/forgot-password']" class="text-primary font-medium text-sm">
+              ¿Has olvidado tu contraseña?
             </a>
           </div>
 
-          <div class="row m-t-24 custom-row">
-            <div class="col-12 col-sm-6">
-              <button mat-stroked-button class="w-100">
-                <div class="d-flex align-items-center">
-                  <img
-                    src="/assets/images/svgs/google-icon.svg"
-                    alt="google"
-                    width="16"
-                    class="m-r-8"
-                  />
-                  Sign in with Google
-                </div>
-              </button>
-            </div>
-            <div class="col-12 col-sm-6">
-              <button
-                mat-stroked-button
-                class="w-100 d-flex align-items-center"
-              >
-                <div class="d-flex align-items-center">
-                  <img
-                    src="/assets/images/svgs/facebook-icon.svg"
-                    alt="facebook"
-                    width="40"
-                    class="m-r-4"
-                  />
-                  Sign in with FB
-                </div>
-              </button>
-            </div>
-          </div>
+          <!-- Botón de acceso -->
+          <button mat-flat-button color="primary" class="w-full py-2 text-white font-bold bg-primary hover:bg-primary-dark" type="submit" [disabled]="loginForm.invalid">
+            ACCESO
+          </button>
+        </form>
 
-          <div class="or-border m-t-30">or sign in with</div>
-
-          <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="m-t-30">
-            <!-- Username -->
-            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Usuario</mat-label>
-            <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input matInput formControlName="username" placeholder="Ingresa tu usuario" />
-            </mat-form-field>
-            
-            <!-- Password -->
-            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Contraseña</mat-label>
-            <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input matInput type="password" formControlName="password" placeholder="Ingresa tu contraseña" />
-            </mat-form-field>
-          
-            <!-- Remember me -->
-            <div class="d-flex align-items-center m-b-12">
-              <!-- <mat-checkbox color="primary" formControlName="rememberMe">Remember this Device</mat-checkbox> -->
-              <a [routerLink]="['/forgot-password']" class="text-primary f-w-600 text-decoration-none m-l-auto f-s-14">
-                ¿Olvidaste tu contraseña?
-              </a>
-            </div>
-          
-            <!-- Submit Button -->
-            <button mat-flat-button color="primary" class="w-100" type="submit" [disabled]="loginForm.invalid">
-              Iniciar sesión
-            </button>
-          </form>
-        </mat-card-content>
-      </mat-card>
-    </div>
+        <!-- Crear cuenta -->
+        <div class="text-center mt-6">
+          <p class="text-gray-600">¿No tienes una cuenta?</p>
+          <a [routerLink]="['/register']" class="text-primary font-medium">Haz click aquí para crear una</a>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>
+
+<style>
+  .imagen-logo {
+    max-width: 25%;
+  }
+
+  .text-primary {
+    color: #014737;
+  }
+
+  .bg-primary {
+    background-color: #014737;
+  }
+
+  .hover\:bg-primary-dark:hover {
+    background-color: #016950;
+  }
+
+  .bg-light-primary {
+    background-color: #d9f3ee;
+  }
+</style>
