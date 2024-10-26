@@ -43,3 +43,8 @@ export interface GetCreditDto {
     next_payment_date: string | null;
   }
   
+
+  export interface ConcepCredit{
+    concept: string
+    amount: number
+  }

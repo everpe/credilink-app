@@ -14,8 +14,28 @@ export interface PaymentCreateDto {
 
   export interface PaymentDto {
     id: number;
-    payment_type: string;
-    credit_id: number;
+    type: string;
+    paymentType: string;
+    credit: number;
     amount: number;
-    payment_date: string;
+    paymentDate: Date;
+    interestPayment: number;
+    capitalPayment: number;
+    lateInterest: number;
+    currentCapital: number;
+    remainingCapital: number;
+    currentInterest: number;
   }
+
+
+  // export interface PaymentDto {
+  //   id: number;
+  //   type: string;
+  //   paymentType: string;
+  //   credit: number;
+  //   amount: number;
+  //   paymentDate: Date;
+  //   currentCapital: number;
+  //   pendingCapital: number;
+  //   currentInterest: number;
+  // }

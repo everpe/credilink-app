@@ -278,15 +278,10 @@ export class ListComponent implements OnInit {
   }
 
 
-  openListPayments(idCredito:number){
-    // this.dialog.open(PaymentsCreditListComponent, {
-    //   width: '800px', 
-    //   data: { creditId: idCredito }, 
-    //   disableClose: true
-    // });
+  openListPayments(credito: GetCreditDto){
     this.dialog.open(HistoryPaymentsComponent, {
       width: '1000px', 
-      data: { creditId: idCredito }, 
+      data: { credit: credito }, 
       disableClose: true
     });
   }

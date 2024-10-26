@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { ConcepCredit } from 'src/app/interfaces/credit.interface';
+import { PaymentDto } from 'src/app/interfaces/payment.interface';
 import { PaymentService } from 'src/app/services/payments/payment.service';
 
 @Component({
@@ -21,45 +23,91 @@ import { PaymentService } from 'src/app/services/payments/payment.service';
   templateUrl: './history-payments.component.html',
   styleUrl: './history-payments.component.scss'
 })
-export class HistoryPaymentsComponent implements AfterViewInit{
-  startDate = '2024-10-01'; // Formato YYYY-MM-DD
-  reportDate = '2024-10-06';
-
+export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
+  infoCredito: any;
+  currentDate: Date = new Date();
   displayedColumnsStateCredit: string[] = ['concept', 'amount'];
 
-  // Datos de ejemplo para mostrar en la tabla
-  creditData = [
-    { concept: 'Capital original del crédito', amount: 1000000 },
-    { concept: 'Capital pendiente', amount: 800000 },
-    { concept: 'Total de capital pagado', amount: 200000 },
-    { concept: 'Intereses pagados hasta la fecha', amount: 240100 },
-    { concept: 'Intereses acumulados pendientes', amount: 40000 },
-    { concept: 'Interés moratorio aplicado', amount: 3100 },
-    { concept: 'Total pagado hasta la fecha', amount: 643100 },
+
+  conceptsCredit: ConcepCredit[] = [];
+
+
+
+  payments: PaymentDto[] = [];
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  displayedColumns: string[] = [
+    'paymentDate',
+    'currentInterest',
+    'capitalPayment',
+    'interestPayment',
+    'lateInterest',
+    'amount',
+    'currentCapital',
+    'pendingCapital'
   ];
 
 
 
-  displayedColumns: string[] = ['paymentDate', 'interest', 'capitalPayment', 'interestPayment', 'lateInterest', 'totalPayment', 'currentCapital', 'remainingCapital'];
-  movementData = new MatTableDataSource([
-    { paymentDate: new Date('2024-10-02'), interest: 50000, capitalPayment: 0, interestPayment: 50000, lateInterest: 0, totalPayment: 50000, currentCapital: 1000000, remainingCapital: 1000000 },
-    { paymentDate: new Date('2024-11-01'), interest: 50000, capitalPayment: 0, interestPayment: 50000, lateInterest: 0, totalPayment: 50000, currentCapital: 1000000, remainingCapital: 1000000 },
-    { paymentDate: new Date('2024-12-01'), interest: 50000, capitalPayment: 0, interestPayment: 0, lateInterest: 0, totalPayment: 0, currentCapital: 1000000, remainingCapital: 1000000 },
-    { paymentDate: new Date('2025-01-01'), interest: 100000, capitalPayment: 0, interestPayment: 0, lateInterest: 3100, totalPayment: 103100, currentCapital: 1000000, remainingCapital: 1000000 },
-    { paymentDate: new Date('2025-02-01'), interest: 50000, capitalPayment: 0, interestPayment: 100000, lateInterest: 3100, totalPayment: 103100, currentCapital: 1000000, remainingCapital: 1000000 },
-    { paymentDate: new Date('2025-03-01'), interest: 40000, capitalPayment: 200000, interestPayment: 40000, lateInterest: 0, totalPayment: 240000, currentCapital: 1000000, remainingCapital: 800000 },
-  ]);
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  historyPayments = new MatTableDataSource<PaymentDto>([]);
 
 
 
   ngAfterViewInit() {
-    this.movementData.paginator = this.paginator;
+    this.historyPayments.paginator = this.paginator;
   }
 
+  ngOnInit() {
+    this.getPayments();
+
+  }
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any, // Datos pasados al modal
     private creditPaymentService: PaymentService
-  ) { }
+  ) {
+    this.infoCredito = data.credit;
+  }
+
+
+
+
+  getPayments(): void {
+    this.creditPaymentService.getCreditPayments(this.infoCredito.id).subscribe(
+      (response: any) => {
+
+        this.conceptsCredit = [
+          { concept: 'Capital original del crédito', amount: response.data.loan_amount },
+          { concept: 'Capital pendiente', amount: response.data.remaining_balance },
+          { concept: 'Total de capital pagado', amount: response.data.total_paid_capital },
+          { concept: 'Intereses pagados hasta la fecha', amount: response.data.total_interest_paid },
+          { concept: 'Intereses acumulados pendientes', amount: response.data.current_interest_debt },
+          { concept: 'Interés moratorio aplicado', amount: response.data.late_interest },
+          { concept: 'Total pagado hasta la fecha', amount: response.data.total_paid },
+        ];
+
+        this.payments = response.data.payments.map((payment: any) => ({
+          id: payment.id,
+          type: payment.type,
+          paymentType: payment.payment_type,
+          credit: payment.credit,
+          amount: parseFloat(payment.amount),
+          paymentDate: new Date(payment.payment_date.split('/').reverse().join('-')),
+          interestPayment: parseFloat(payment.interest_payment),
+          capitalPayment: parseFloat(payment.capital_payment),
+          lateInterest: parseFloat(payment.late_interest),
+          currentCapital: parseFloat(payment.current_capital),
+          remainingCapital: parseFloat(payment.pendient_capital),
+          currentInterest: parseFloat(payment.current_interest)
+        }));
+
+        this.historyPayments.data = this.payments;
+      },
+      (error) => {
+        console.error('Error al obtener los pagos', error);
+      }
+    );
+  }
+
 }
