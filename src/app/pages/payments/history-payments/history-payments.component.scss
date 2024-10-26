@@ -1,0 +1,13 @@
+// .container{
+//   height: 90vh;
+// }
+  
+  /* Bordes redondeados solo en las esquinas del encabezado */
+.mat-mdc-cell{
+  border: solid 2px #BFBFBF;
+  text-align: center;
+  } 
+
+  .mdc-data-table__row:last-child .mat-mdc-cell{
+    border: solid 2px #BFBFBF;
+  }

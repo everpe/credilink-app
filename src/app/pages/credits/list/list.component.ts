@@ -29,6 +29,7 @@ import { DetailCreditComponent } from '../detail-credit/detail-credit.component'
 import { CreatePaymentComponent } from '../../payments/create-payment/create-payment.component';
 import { PaymentsCreditListComponent } from '../../payments/payments-credit-list/payments-credit-list.component';
 import { SharedService } from 'src/app/services/shared/shared.service';
+import { HistoryPaymentsComponent } from '../../payments/history-payments/history-payments.component';
 
 @Component({
   selector: 'list-credits',
@@ -278,8 +279,13 @@ export class ListComponent implements OnInit {
 
 
   openListPayments(idCredito:number){
-    this.dialog.open(PaymentsCreditListComponent, {
-      width: '800px', 
+    // this.dialog.open(PaymentsCreditListComponent, {
+    //   width: '800px', 
+    //   data: { creditId: idCredito }, 
+    //   disableClose: true
+    // });
+    this.dialog.open(HistoryPaymentsComponent, {
+      width: '1000px', 
       data: { creditId: idCredito }, 
       disableClose: true
     });

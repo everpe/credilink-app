@@ -1,0 +1,139 @@
+<div class="container mx-auto p-6">
+    <div mat-dialog-title>
+        <h1 class="text-3xl font-semibold mb-6 text-black">HISTORIAL DE ABONOS</h1>
+      </div>
+      <mat-dialog-content>
+          <!-- Información del cliente -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div class="text-black">
+                  <p class="font-semibold ">Cliente: <span class="font-normal">Juan Pérez</span></p>
+                  <p class="font-semibold">Identificación: <span class="font-normal">123456789</span></p>
+                  <p class="font-semibold">Fecha inicio crédito:
+                      <span class="font-normal">{{ startDate | date: 'dd/MM/yyyy' }}</span> <!-- Aplicando DatePipe -->
+                  </p>
+                  <p class="font-semibold">Monto de crédito: <span class="font-normal">$ 1.000.000,00</span></p>
+              
+
+                  <p class="font-semibold">Tasa de interés corriente: <span class="font-normal">5 mensual</span></p>
+                  <p class="font-semibold">Tasa de interés moratorio: <span class="font-normal">3.10 mensual</span></p>
+                  <p class="font-semibold">Fecha de emisión del reporte:
+                      <span class="font-normal">{{ reportDate | date: 'dd/MM/yyyy' }}</span> <!-- Aplicando DatePipe -->
+                  </p>
+
+              </div>
+
+              <div>
+                  <div class="flex justify-end gap-4">
+                
+                      <button mat-raised-button color="primary" class="bg-primary flex items-center space-x-2">
+                          <mat-icon>add_circle_outline</mat-icon>
+                          <span>Registrar Abono</span>
+                      </button>
+                      <button mat-raised-button color="primary" class="bg-primary flex items-center space-x-2">
+                          <mat-icon>print</mat-icon>
+                          <span>Imprimir Kardex</span>
+                      </button>
+                  </div>
+              </div>
+          </div>
+      
+
+
+          <h2 class="text-2xl font-semibold mb-4 text-gray-950">Estado Actual del Crédito:</h2>
+          <!-- Tabla con Material Design -->
+          <div class="overflow-x-auto ">
+              <table mat-table [dataSource]="creditData" class="w-full border-collapse mb-4">
+                  <!-- Concepto Column -->
+                  <ng-container matColumnDef="concept">
+                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-6 py-3 text-center rounded-tl-lg text-center">
+                          Concepto</th>
+                      <td mat-cell *matCellDef="let element" class="px-6 py-4 border-b border-gray-200 text-gray-700 text-center">{{
+                          element.concept }}</td>
+                  </ng-container>
+      
+                  <!-- Monto Column -->
+                  <ng-container matColumnDef="amount">
+                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-6 py-3 text-center rounded-tr-lg text-center">
+                          Monto</th>
+                      <td mat-cell *matCellDef="let element"
+                          class="px-6 py-4 border-b border-gray-200  text-gray-700 text-center">{{ element.amount |
+                          currency:'':'symbol':'1.2-2' }}</td>
+                  </ng-container>
+      
+                  <!-- Header and Row Declarations -->
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsStateCredit"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsStateCredit;"></tr>
+              </table>
+              <br>
+          </div>
+
+
+
+          <div class="container mx-auto p-6">
+            <h2 class="text-2xl font-semibold text-gray-950 mb-4">Historial de Movimientos (Mensual):</h2>
+            <!-- Tabla con Material Design y Tailwind -->
+            <div class="overflow-x-auto">
+              <table mat-table [dataSource]="movementData" class="w-full border-collapse bg-white">
+                <!-- Fecha del abono Column -->
+                <ng-container matColumnDef="paymentDate">
+                  <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Fecha del abono</th>
+                  <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200">{{ element.paymentDate | date: 'dd/MM/yyyy' }}</td>
+                </ng-container>
+          
+                <!-- Interés Corriente Column -->
+                <ng-container matColumnDef="interest">
+                  <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Interés Corriente</th>
+                  <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.interest | currency:'' }}</td>
+                </ng-container>
+          
+                <!-- Abono a Capital Column -->
+                <ng-container matColumnDef="capitalPayment">
+                  <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Abono a Capital</th>
+                  <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.capitalPayment | currency:'' }}</td>
+                </ng-container>
+          
+                <!-- Abono a Interés Column -->
+                <ng-container matColumnDef="interestPayment">
+                  <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Abono a Interés</th>
+                  <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.interestPayment | currency:'' }}</td>
+                </ng-container>
+          
+                <!-- Interés Moratorio Column -->
+                <ng-container matColumnDef="lateInterest">
+                  <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Interés Moratorio</th>
+                  <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.lateInterest | currency:'' }}</td>
+                </ng-container>
+          
+                <!-- Pago Total Column -->
+                <ng-container matColumnDef="totalPayment">
+                  <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Pago Total</th>
+                  <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.totalPayment | currency:'' }}</td>
+                </ng-container>
+          
+                <!-- Capital Actual Column -->
+                <ng-container matColumnDef="currentCapital">
+                  <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Capital Actual</th>
+                  <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.currentCapital | currency:'' }}</td>
+                </ng-container>
+          
+                <!-- Capital Pendiente Column -->
+                <ng-container matColumnDef="remainingCapital">
+                  <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left rounded-tr-lg">Capital pendiente</th>
+                  <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.remainingCapital | currency:'' }}</td>
+                </ng-container>
+          
+                <!-- Header and Row Declarations -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <!-- Paginación -->
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+              </table>
+            </div>
+          </div>
+      </mat-dialog-content>
+
+
+      <mat-dialog-actions align="center" class="p-4">
+        <button mat-raised-button mat-dialog-close color="primary">Cerrar</button>
+      </mat-dialog-actions>
+</div>
