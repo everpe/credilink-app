@@ -2,7 +2,8 @@
     <div mat-dialog-title>
         <h1 class="text-3xl font-semibold mb-6 text-black">HISTORIAL DE ABONOS</h1>
     </div>
-    <mat-dialog-content>
+    <mat-dialog-content >
+      <div id="history-content">
         <!-- Información del cliente -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div class="text-black grid grid-cols-2 gap-y-2">
@@ -59,7 +60,7 @@
                       <mat-icon>add_circle_outline</mat-icon>
                       <span>Registrar Abono</span>
                     </button>
-                    <button mat-raised-button color="primary" class="bg-primary flex items-center space-x-2">
+                    <button mat-raised-button color="primary" class="bg-primary flex items-center space-x-2" (click)="generatePDF()">
                         <mat-icon>print</mat-icon>
                         <span>Imprimir Kardex</span>
                     </button>
@@ -162,6 +163,7 @@
                   </table>
             </div>
         </div>
+      </div>
     </mat-dialog-content>
 
 

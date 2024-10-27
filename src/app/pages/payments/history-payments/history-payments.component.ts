@@ -9,7 +9,8 @@ import { ConcepCredit, GetCreditDto } from 'src/app/interfaces/credit.interface'
 import { PaymentDto } from 'src/app/interfaces/payment.interface';
 import { PaymentService } from 'src/app/services/payments/payment.service';
 import { CreatePaymentComponent } from '../create-payment/create-payment.component';
-
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 @Component({
   selector: 'app-history-payments',
   standalone: true,
@@ -133,4 +134,85 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
     });
 
   }
+
+
+
+  generatePDF(): void {
+    const pdf = new jsPDF('p', 'pt', 'a4');
+
+    // Agregar título
+    pdf.setTextColor(0, 0, 0);
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(18);
+    pdf.text('KARDEX DIGITAL', pdf.internal.pageSize.getWidth() / 2, 30, { align: 'center' });
+    pdf.setFontSize(12);
+    pdf.text('Datos del Cliente y Detalles del Crédito:', 40, 60);
+
+    // Información del cliente
+    const clientData = [
+        ['Cliente:', `${this.infoCredito.client.first_name?.toUpperCase()} ${this.infoCredito.client.last_name?.toUpperCase()}`],
+        ['Identificación:', this.infoCredito.client.document_number],
+        ['Fecha inicio crédito:', this.infoCredito.loan_date],
+        ['Monto de crédito:', this.infoCredito.loan_amount.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })],
+        ['Tasa de interés corriente:', `${this.infoCredito.interest_rate}% mensual`],
+        ['Tasa de interés moratorio:', '3.10 mensual'],
+        ['Fecha de emisión del reporte:', new Date().toLocaleDateString()]
+    ];
+
+    // Generar tabla para datos del cliente
+    autoTable(pdf, {
+        body: clientData,
+        startY: 80,
+        theme: 'plain',
+        styles: { fontSize: 10 },
+    });
+
+    // Agregar subtítulo para el estado del crédito
+    const lastYClientTable = (pdf as any).lastAutoTable.finalY + 20;
+    pdf.text('Estado Actual del Crédito:', 40, lastYClientTable);
+
+    // Datos de ejemplo para la tabla de estado del crédito
+    const creditStatusData = this.conceptsCredit.map(item => [
+      item.concept, 
+      item.amount.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })
+    ]);
+
+    // Generar tabla para estado del crédito
+ autoTable(pdf, {
+    head: [['Concepto', 'Monto']],
+    body: creditStatusData,
+    startY: lastYClientTable + 10,
+    theme: 'grid',
+    styles: { fontSize: 10 },
+    headStyles: { fillColor: [0, 85, 85], textColor: [255, 255, 255] },
+  });
+
+    // Historial de movimientos
+    const lastYCreditStatusTable = (pdf as any).lastAutoTable.finalY + 20;
+    pdf.text('Historial de Movimientos (Mensual):', 40, lastYCreditStatusTable);
+
+    const movementData = this.historyPayments.data.map((payment: any) => [
+        payment.paymentDate.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+        payment.currentInterest,
+        payment.capitalPayment,
+        payment.interestPayment,
+        payment.lateInterest,
+        payment.amount,
+        payment.currentCapital,
+        payment.pendingCapital ?? 0,
+    ]);
+
+    autoTable(pdf, {
+        head: [['Fecha', 'Interés Corriente', 'Pago a Capital', 'Pago a Interés', 'Interés Moratorio', 'Pago Total', 'Capital Actual', 'Capital pendiente']],
+        body: movementData,
+        startY: lastYCreditStatusTable + 20,
+        theme: 'grid',
+        styles: { fontSize: 10 },
+        headStyles: { fillColor: [0, 85, 85], textColor: [255, 255, 255] },
+    });
+
+    // Abrir el PDF en una nueva pestaña
+    pdf.output('dataurlnewwindow');
+  }
+
 }
