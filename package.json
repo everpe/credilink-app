@@ -24,7 +24,6 @@
     "@angular/router": "^17.3.7",
     "angular-tabler-icons": "^3.1.0",
     "apexcharts": "^3.49.0",
-    "html2canvas": "^1.4.1",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.4",
     "ng-apexcharts": "1.10.0",
