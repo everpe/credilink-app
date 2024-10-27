@@ -255,20 +255,6 @@ export class ListComponent implements OnInit {
     return coDebtor ? `${coDebtor.first_name} ${coDebtor.last_name} - ${coDebtor.type_document} ${coDebtor.document_number}` : '';
   }
 
-  createAbono(id: number){
-    const dialogRef = this.dialog.open(CreatePaymentComponent, {
-      width: '600px', // Ajusta el ancho del modal si es necesario
-      data: {clienteId: id},
-      disableClose: true
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.loadCredits();
-      }
-    });
-
-  }
   viewDetailCredit(credit: GetCreditDto){
     this.dialog.open(DetailCreditComponent, {
       data: credit,

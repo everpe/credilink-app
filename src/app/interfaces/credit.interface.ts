@@ -41,6 +41,7 @@ export interface GetCreditDto {
     total_debt: number;
     remaining_balance: number;
     next_payment_date: string | null;
+    current_interest_debt: number;
   }
   
 

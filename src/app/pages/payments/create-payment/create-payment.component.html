@@ -1,49 +1,85 @@
-<h2 mat-dialog-title class="text-xl font-medium  text-center mb-6 mt-4">Abonar a crédito</h2>
-<mat-dialog-content>
-    <form [formGroup]="paymentForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Pago de Interés -->
-        <div class="md:col-span-2">
-            <h3 class="font-bold">Pago a Intereses</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                <!-- Monto de Interés -->
-                <!-- <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Monto (COP)</mat-label>
-                    <input matInput formControlName="interest_amount" placeholder="Monto" type="number" />
-                </mat-form-field> -->
-                <mat-form-field class="w-full" appearance="outline">
-                    <mat-label>Monto (COP)</mat-label>
-                    <input type="text" matInput [value]="formattedAmountPayInteres"
-                        (input)="onAmountPayInteresInput($event)" placeholder="Valor del crédito" />
-                    <mat-icon matSuffix>attach_money</mat-icon>
-                </mat-form-field>
+<div mat-dialog-title>
+    <h1 class="text-2xl font-bold text-center mb-6 mt-4 text-black">ABONO DE CRÉDITO</h1>
+</div>
 
-                <!-- Método de Pago de Interés -->
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Método de Pago</mat-label>
+<mat-dialog-content>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-center">
+        <!-- Tarjeta de Capital Pendiente -->
+        <div class="border rounded-md shadow-md">
+            <div class="bg-primary text-white py-3 rounded-t-md">
+                <p class="font-semibold text-center">CAPITAL PENDIENTE</p>
+            </div>
+            <div class="bg-white py-3">
+                <p class="text-xl font-bold text-center text-black">{{ dataCredit.capitalPendiente | currency: '' }}</p>
+            </div>
+        </div>
+
+        <!-- Tarjeta de Intereses Acumulados Pendientes -->
+        <div class="border rounded-md shadow-md">
+            <div class="bg-primary text-white py-3 rounded-t-md">
+                <p class="font-semibold text-center">INTERESES ACUMULADOS PENDIENTES</p>
+            </div>
+            <div class="bg-white py-3">
+                <p class="text-xl font-bold text-center text-black">{{ dataCredit.interesAcumuladoPediente  | currency: '' }}</p>
+            </div>
+        </div>
+
+        <!-- Tarjeta de Intereses Moratorios Pendientes -->
+        <div class="border rounded-md shadow-md">
+            <div class="bg-primary text-white py-3 rounded-t-md">
+                <p class="font-semibold text-center">INTERESES MORATORIOS PENDIENTES</p>
+            </div>
+            <div class="bg-white py-3">
+                <p class="text-xl font-bold text-center text-black">{{ dataCredit.interesMoratorioPendiente  | currency: '' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <form [formGroup]="paymentForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+
+        <!-- Fecha de Pago -->
+        <mat-form-field appearance="outline" class="w-full md:col-span-2 lg:w-1/3">
+            <mat-label>Fecha</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="payment_date" placeholder="Fecha" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <!-- Pago a Intereses -->
+        <div class="md:col-span-3">
+            <h3 class="font-semibold text-lg text-black mb-4">Pago a intereses</h3>
+            <div class="flex items-center gap-4">
+                <mat-form-field class="w-full" appearance="outline">
+                    <mat-label>Valor</mat-label>
+                    <input type="text" matInput [value]="formattedAmountPayInteres"
+                        (input)="onAmountPayInteresInput($event)" placeholder="Valor pago interes" />
+                    <span matPrefix>$&nbsp;</span>
+                </mat-form-field>
+                <mat-form-field class="w-full" appearance="outline">
+                    <mat-label>Método de pago</mat-label>
                     <mat-select formControlName="interest_payment_method">
                         <mat-option value="Efectivo">Efectivo</mat-option>
                         <mat-option value="Transferencia">Transferencia</mat-option>
                         <mat-option value="Tarjeta">Tarjeta</mat-option>
                     </mat-select>
                 </mat-form-field>
+                <mat-checkbox formControlName="includeLateInterest">¿Incluye mora?</mat-checkbox>
             </div>
         </div>
 
         <!-- Pago a Capital -->
-        <div class="md:col-span-2 mt-4">
-            <h3 class="font-bold">Pago a Capital</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                <!-- Monto de Capital -->
+        <div class="md:col-span-2">
+            <h3 class="font-semibold text-lg text-black mb-4">Pago a capital</h3>
+            <div class="flex items-center gap-4">
                 <mat-form-field class="w-full" appearance="outline">
-                    <mat-label>Monto (COP)</mat-label>
+                    <mat-label>Valor</mat-label>
                     <input type="text" matInput [value]="formattedAmountPayCapital"
-                        (input)="onAmountPayCapitalInput($event)" placeholder="Valor del crédito" />
-                    <mat-icon matSuffix>attach_money</mat-icon>
+                        (input)="onAmountPayCapitalInput($event)" placeholder="Pago a capital" />
+                    <span matPrefix>$&nbsp;</span>
                 </mat-form-field>
-
-                <!-- Método de Pago de Capital -->
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Método de Pago</mat-label>
+                <mat-form-field class="w-full" appearance="outline">
+                    <mat-label>Método de pago</mat-label>
                     <mat-select formControlName="capital_payment_method">
                         <mat-option value="Efectivo">Efectivo</mat-option>
                         <mat-option value="Transferencia">Transferencia</mat-option>
@@ -53,16 +89,29 @@
             </div>
         </div>
 
+        <!-- Resumen de Valores -->
+        <div class="md:col-span-1 flex justify-end items-center mt-4 flex justify-center">
+            <div class="text-right space-y-2 text-black">
+                <div class="flex justify-between ">
+                    <p>Intereses:</p>
+                    <p class="font-semibold">{{ interestTotal | currency: '' }}</p>
+                </div>
+                <div class="flex justify-between">
+                    <p>Capital:</p>
+                    <p class="font-semibold">{{ capitalTotal | currency: '' }}</p>
+                </div>
+                <div class="flex justify-between pt-2 linea">
+                    <p class="font-bold">Total:</p>
+                    <p class="font-bold">{{ totalAmount | currency: '' }}</p>
+                </div>
+            </div>
+        </div>
 
-        <!-- Descripción -->
-        <mat-form-field appearance="outline" class="w-full md:col-span-2">
-            <mat-label>Descripción del abono</mat-label>
-            <input matInput formControlName="description" placeholder="Descripción" />
-        </mat-form-field>
+
     </form>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end" class="p-4">
-    <button mat-raised-button mat-dialog-close>Cancelar</button>
-    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="paymentForm.invalid">Guardar</button>
+<mat-dialog-actions align="center" class="p-4">
+    <button mat-raised-button mat-dialog-close>Volver</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="paymentForm.invalid">Abonar</button>
 </mat-dialog-actions>

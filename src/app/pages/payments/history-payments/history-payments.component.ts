@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ConcepCredit } from 'src/app/interfaces/credit.interface';
+import { ConcepCredit, GetCreditDto } from 'src/app/interfaces/credit.interface';
 import { PaymentDto } from 'src/app/interfaces/payment.interface';
 import { PaymentService } from 'src/app/services/payments/payment.service';
+import { CreatePaymentComponent } from '../create-payment/create-payment.component';
 
 @Component({
   selector: 'app-history-payments',
@@ -24,7 +25,7 @@ import { PaymentService } from 'src/app/services/payments/payment.service';
   styleUrl: './history-payments.component.scss'
 })
 export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
-  infoCredito: any;
+  infoCredito: GetCreditDto;
   currentDate: Date = new Date();
   displayedColumnsStateCredit: string[] = ['concept', 'amount'];
 
@@ -65,7 +66,8 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any, // Datos pasados al modal
-    private creditPaymentService: PaymentService
+    private creditPaymentService: PaymentService,
+    private dialog: MatDialog,
   ) {
     this.infoCredito = data.credit;
   }
@@ -110,4 +112,25 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
     );
   }
 
+
+
+  createAbono(){
+    const dialogRef = this.dialog.open(CreatePaymentComponent, {
+      width: '900px', // Ajusta el ancho del modal si es necesario
+      data: { 
+        clienteId: this.infoCredito.id,
+        capitalPendiente: this.infoCredito.remaining_balance,
+        interesAcumuladoPediente: this.infoCredito.current_interest_debt,
+        interesMoratorioPendiente : 0
+      },
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.getPayments();
+      }
+    });
+
+  }
 }

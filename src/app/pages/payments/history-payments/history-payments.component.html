@@ -51,9 +51,13 @@
             <div>
                 <div class="flex justify-end gap-4">
 
-                    <button mat-raised-button color="primary" class="bg-primary flex items-center space-x-2">
-                        <mat-icon>add_circle_outline</mat-icon>
-                        <span>Registrar Abono</span>
+                    <button 
+                      mat-raised-button color="primary" 
+                      class="bg-primary flex items-center space-x-2" 
+                      (click)="createAbono()"
+                    >
+                      <mat-icon>add_circle_outline</mat-icon>
+                      <span>Registrar Abono</span>
                     </button>
                     <button mat-raised-button color="primary" class="bg-primary flex items-center space-x-2">
                         <mat-icon>print</mat-icon>

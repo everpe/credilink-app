@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule, MatError } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,6 +29,8 @@ import { PaymentService } from 'src/app/services/payments/payment.service';
     MatError,
     MatDialogModule,
     MatIconModule,
+    MatDatepickerModule,
+    MatCheckboxModule
   ],
   templateUrl: './create-payment.component.html',
   styleUrl: './create-payment.component.scss'
@@ -38,28 +42,44 @@ export class CreatePaymentComponent {
   formattedAmountPayInteres: string = '';
 
 
+
+  interestTotal: number = 0;
+  capitalTotal: number = 0;
+  totalAmount: number = 0;
   constructor(
     private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<CreatePaymentComponent>,
     private creditPaymentService: PaymentService,
     private toastr: ToastrService,
     private authService: AuthService,
-    @Inject(MAT_DIALOG_DATA) public data: any // Puedes pasar datos adicionales si es necesario
+    @Inject(MAT_DIALOG_DATA) public dataCredit: any // Puedes pasar datos adicionales si es necesario
   ) {
     this.paymentForm = this.formBuilder.group({
-      credit: [this.data.clienteId, Validators.required],
+      credit: [this.dataCredit.clienteId, Validators.required],
+      payment_date: [new Date()],
       description: [''],
       interest_amount: [''], // Campo opcional para monto de intereses
       interest_payment_method: [''], // Método opcional para intereses
       capital_amount: [''], // Campo opcional para monto de capital
       capital_payment_method: [''], // Método opcional para capital
+      includeLateInterest: [false],
       sede: [this.authService.getSedeUser(), Validators.required],
     },
     {
       validators: [this.paymentMethodValidator], // Añadimos la validación personalizada
-    }
-  );
+    });
+    this.paymentForm.valueChanges.subscribe(() => {
+      this.calculateTotals();
+    });
   }
+
+  calculateTotals(): void {
+    this.interestTotal = this.paymentForm.get('interest_amount')?.value || 0;
+    this.capitalTotal = this.paymentForm.get('capital_amount')?.value || 0;
+    this.totalAmount = this.interestTotal + this.capitalTotal;
+  }
+
+
 
   // Método para validar si al menos uno de los pagos (interés o capital) es válido
   validateAtLeastOnePayment(): boolean {
