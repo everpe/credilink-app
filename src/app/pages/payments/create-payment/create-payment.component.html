@@ -35,80 +35,88 @@
         </div>
     </div>
 
-    <form [formGroup]="paymentForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-
-        <!-- Fecha de Pago -->
-        <mat-form-field appearance="outline" class="w-full md:col-span-2 lg:w-1/3">
-            <mat-label>Fecha</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="payment_date" placeholder="Fecha" />
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-
-        <!-- Pago a Intereses -->
-        <div class="md:col-span-3">
-            <h3 class="font-semibold text-lg text-black mb-4">Pago a intereses</h3>
-            <div class="flex items-center gap-4">
-                <mat-form-field class="w-full" appearance="outline">
-                    <mat-label>Valor</mat-label>
-                    <input type="text" matInput [value]="formattedAmountPayInteres"
+    <div class="payment-container">
+        <!-- Formulario a la izquierda -->
+        <form [formGroup]="paymentForm" class="form-content">
+            <!-- Fecha de Pago -->
+            <div class="form-row">
+                <mat-form-field appearance="outline" class="field">
+                    <mat-label>Fecha:</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="payment_date" placeholder="Fecha" />
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </div>
+    
+            <!-- Pago a Intereses -->
+            <div class="form-section">
+                <h3 class="section-title">Pago a intereses</h3>
+                <div class="form-row">
+                    <mat-form-field appearance="outline" class="field">
+                        <mat-label>Valor:</mat-label>
+                        <input type="text" matInput [value]="formattedAmountPayInteres"
                         (input)="onAmountPayInteresInput($event)" placeholder="Valor pago interes" />
-                    <span matPrefix>$&nbsp;</span>
-                </mat-form-field>
-                <mat-form-field class="w-full" appearance="outline">
-                    <mat-label>Método de pago</mat-label>
-                    <mat-select formControlName="interest_payment_method">
-                        <mat-option value="Efectivo">Efectivo</mat-option>
-                        <mat-option value="Transferencia">Transferencia</mat-option>
-                        <mat-option value="Tarjeta">Tarjeta</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-checkbox formControlName="includeLateInterest">¿Incluye mora?</mat-checkbox>
+                        <span matPrefix>$&nbsp;</span>
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline" class="field">
+                        <mat-label>Método de pago:</mat-label>
+                        <mat-select formControlName="interest_payment_method">
+                            <mat-option value="Efectivo">Efectivo</mat-option>
+                            <mat-option value="Transferencia">Transferencia</mat-option>
+                            <mat-option value="Tarjeta">Tarjeta</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+    
+                    <mat-checkbox formControlName="includeLateInterest">¿Incluye mora?</mat-checkbox>
+                </div>
             </div>
-        </div>
-
-        <!-- Pago a Capital -->
-        <div class="md:col-span-2">
-            <h3 class="font-semibold text-lg text-black mb-4">Pago a capital</h3>
-            <div class="flex items-center gap-4">
-                <mat-form-field class="w-full" appearance="outline">
-                    <mat-label>Valor</mat-label>
-                    <input type="text" matInput [value]="formattedAmountPayCapital"
+    
+            <!-- Pago a Capital -->
+            <div class="form-section">
+                <h3 class="section-title">Pago a capital</h3>
+                <div class="form-row">
+                    <mat-form-field appearance="outline" class="field">
+                        <mat-label>Valor:</mat-label>
+                        <input type="text" matInput [value]="formattedAmountPayCapital"
                         (input)="onAmountPayCapitalInput($event)" placeholder="Pago a capital" />
-                    <span matPrefix>$&nbsp;</span>
-                </mat-form-field>
-                <mat-form-field class="w-full" appearance="outline">
-                    <mat-label>Método de pago</mat-label>
-                    <mat-select formControlName="capital_payment_method">
-                        <mat-option value="Efectivo">Efectivo</mat-option>
-                        <mat-option value="Transferencia">Transferencia</mat-option>
-                        <mat-option value="Tarjeta">Tarjeta</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-        </div>
-
-        <!-- Resumen de Valores -->
-        <div class="md:col-span-1 flex justify-end items-center mt-4 flex justify-center">
-            <div class="text-right space-y-2 text-black">
-                <div class="flex justify-between ">
-                    <p>Intereses:</p>
-                    <p class="font-semibold">{{ interestTotal | currency: '' }}</p>
-                </div>
-                <div class="flex justify-between">
-                    <p>Capital:</p>
-                    <p class="font-semibold">{{ capitalTotal | currency: '' }}</p>
-                </div>
-                <div class="flex justify-between pt-2 linea">
-                    <p class="font-bold">Total:</p>
-                    <p class="font-bold">{{ totalAmount | currency: '' }}</p>
+                        <span matPrefix>$&nbsp;</span>
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline" class="field">
+                        <mat-label>Método de pago:</mat-label>
+                        <mat-select formControlName="capital_payment_method">
+                            <mat-option value="Efectivo">Efectivo</mat-option>
+                            <mat-option value="Transferencia">Transferencia</mat-option>
+                            <mat-option value="Tarjeta">Tarjeta</mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
             </div>
+        </form>
+    
+        <!-- Sección de totales a la derecha -->
+        <div class="summary-section">
+            <div class="summary-row">
+                <span>Intereses:</span>
+                <span class="summary-value">{{ interestTotal | currency: '' }}</span>
+            </div>
+    
+            <div class="summary-row">
+                <span>Capital:</span>
+                <span class="summary-value">{{ capitalTotal | currency: '' }}</span>
+            </div>
+    
+            <div class="summary-row total">
+                <span>Total a pagar:</span>
+                <span class="summary-value">{{ totalAmount | currency: '' }}</span>
+            </div>
         </div>
-
-
-    </form>
+    </div>
+    
+    
+    
+    
 </mat-dialog-content>
 
 <mat-dialog-actions align="center" class="p-4">
