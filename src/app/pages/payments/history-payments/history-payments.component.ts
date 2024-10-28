@@ -33,9 +33,6 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
 
   conceptsCredit: ConcepCredit[] = [];
 
-
-
-  payments: PaymentDto[] = [];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   displayedColumns: string[] = [
@@ -81,16 +78,19 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
       (response: any) => {
 
         this.conceptsCredit = [
-          { concept: 'Capital original del crédito', amount: response.data.loan_amount },
-          { concept: 'Capital pendiente', amount: response.data.remaining_balance },
-          { concept: 'Total de capital pagado', amount: response.data.total_paid_capital },
-          { concept: 'Intereses pagados hasta la fecha', amount: response.data.total_interest_paid },
-          { concept: 'Intereses acumulados pendientes', amount: response.data.current_interest_debt },
-          { concept: 'Interés moratorio aplicado', amount: response.data.late_interest },
-          { concept: 'Total pagado hasta la fecha', amount: response.data.total_paid },
+          { concept: 'Capital original del crédito', amount: Number(response.data.loan_amount) },
+          { concept: 'Capital pendiente', amount: Number(response.data.remaining_balance) },
+          { concept: 'Total de capital pagado', amount: Number(response.data.total_paid_capital) },
+          { concept: 'Intereses pagados hasta la fecha', amount: Number(response.data.total_interest_paid) },
+          { concept: 'Intereses acumulados pendientes', amount: Number(response.data.current_interest_debt) },
+          { concept: 'Interés moratorio aplicado', amount: Number(response.data.late_interest) },
+          { concept: 'Total pagado hasta la fecha', amount: Number(response.data.total_paid) },
         ];
+        
 
-        this.payments = response.data.payments.map((payment: any) => ({
+
+
+        this.historyPayments.data = response.data.payments.map((payment: any) => ({
           id: payment.id,
           type: payment.type,
           paymentType: payment.payment_type,
@@ -104,8 +104,6 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
           remainingCapital: parseFloat(payment.pendient_capital),
           currentInterest: parseFloat(payment.current_interest)
         }));
-
-        this.historyPayments.data = this.payments;
       },
       (error) => {
         console.error('Error al obtener los pagos', error);
@@ -137,82 +135,83 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
 
 
 
-  generatePDF(): void {
-    const pdf = new jsPDF('p', 'pt', 'a4');
+generatePDF(): void {
+  const pdf = new jsPDF('p', 'pt', 'a4');
 
-    // Agregar título
-    pdf.setTextColor(0, 0, 0);
-    pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(18);
-    pdf.text('KARDEX DIGITAL', pdf.internal.pageSize.getWidth() / 2, 30, { align: 'center' });
-    pdf.setFontSize(12);
-    pdf.text('Datos del Cliente y Detalles del Crédito:', 40, 60);
+  // Agregar título
+  pdf.setTextColor(0, 0, 0);
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(18);
+  pdf.text('KARDEX DIGITAL', pdf.internal.pageSize.getWidth() / 2, 30, { align: 'center' });
+  pdf.setFontSize(12);
+  pdf.text('Datos del Cliente y Detalles del Crédito:', 40, 60);
 
-    // Información del cliente
-    const clientData = [
-        ['Cliente:', `${this.infoCredito.client.first_name?.toUpperCase()} ${this.infoCredito.client.last_name?.toUpperCase()}`],
-        ['Identificación:', this.infoCredito.client.document_number],
-        ['Fecha inicio crédito:', this.infoCredito.loan_date],
-        ['Monto de crédito:', this.infoCredito.loan_amount.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })],
-        ['Tasa de interés corriente:', `${this.infoCredito.interest_rate}% mensual`],
-        ['Tasa de interés moratorio:', '3.10 mensual'],
-        ['Fecha de emisión del reporte:', new Date().toLocaleDateString()]
-    ];
+  // Información del cliente
+  const clientData = [
+      ['Cliente:', `${this.infoCredito.client.first_name?.toUpperCase()} ${this.infoCredito.client.last_name?.toUpperCase()}`],
+      ['Identificación:', this.infoCredito.client.document_number],
+      ['Fecha inicio crédito:', this.infoCredito.loan_date],
+      ['Monto de crédito:', Number(this.infoCredito.loan_amount).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })],
+      ['Tasa de interés corriente:', `${this.infoCredito.interest_rate}% mensual`],
+      ['Tasa de interés moratorio:', '3.10 mensual'],
+      ['Fecha de emisión del reporte:', new Date().toLocaleDateString()]
+  ];
 
-    // Generar tabla para datos del cliente
-    autoTable(pdf, {
-        body: clientData,
-        startY: 80,
-        theme: 'plain',
-        styles: { fontSize: 10 },
-    });
-
-    // Agregar subtítulo para el estado del crédito
-    const lastYClientTable = (pdf as any).lastAutoTable.finalY + 20;
-    pdf.text('Estado Actual del Crédito:', 40, lastYClientTable);
-
-    // Datos de ejemplo para la tabla de estado del crédito
-    const creditStatusData = this.conceptsCredit.map(item => [
-      item.concept, 
-      item.amount.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })
-    ]);
-
-    // Generar tabla para estado del crédito
- autoTable(pdf, {
-    head: [['Concepto', 'Monto']],
-    body: creditStatusData,
-    startY: lastYClientTable + 10,
-    theme: 'grid',
-    styles: { fontSize: 10 },
-    headStyles: { fillColor: [0, 85, 85], textColor: [255, 255, 255] },
+  // Generar tabla para datos del cliente
+  autoTable(pdf, {
+      body: clientData,
+      startY: 80,
+      theme: 'plain',
+      styles: { fontSize: 10 },
   });
 
-    // Historial de movimientos
-    const lastYCreditStatusTable = (pdf as any).lastAutoTable.finalY + 20;
-    pdf.text('Historial de Movimientos (Mensual):', 40, lastYCreditStatusTable);
+  // Agregar subtítulo para el estado del crédito
+  const lastYClientTable = (pdf as any).lastAutoTable.finalY + 20;
+  pdf.text('Estado Actual del Crédito:', 40, lastYClientTable);
 
-    const movementData = this.historyPayments.data.map((payment: any) => [
-        payment.paymentDate.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }),
-        payment.currentInterest,
-        payment.capitalPayment,
-        payment.interestPayment,
-        payment.lateInterest,
-        payment.amount,
-        payment.currentCapital,
-        payment.pendingCapital ?? 0,
-    ]);
+  // Datos de la tabla de estado del crédito con formato de moneda
+  const creditStatusData = this.conceptsCredit.map(item => [
+    item.concept, 
+     item.amount ? item.amount.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }) : '$ 0,00'
+  ]);
 
-    autoTable(pdf, {
-        head: [['Fecha', 'Interés Corriente', 'Pago a Capital', 'Pago a Interés', 'Interés Moratorio', 'Pago Total', 'Capital Actual', 'Capital pendiente']],
-        body: movementData,
-        startY: lastYCreditStatusTable + 20,
-        theme: 'grid',
-        styles: { fontSize: 10 },
-        headStyles: { fillColor: [0, 85, 85], textColor: [255, 255, 255] },
-    });
+  // Generar tabla para estado del crédito
+  autoTable(pdf, {
+      head: [['Concepto', 'Monto']],
+      body: creditStatusData,
+      startY: lastYClientTable + 10,
+      theme: 'grid',
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [0, 85, 85], textColor: [255, 255, 255] },
+  });
 
-    // Abrir el PDF en una nueva pestaña
-    pdf.output('dataurlnewwindow');
-  }
+  // Historial de movimientos
+  const lastYCreditStatusTable = (pdf as any).lastAutoTable.finalY + 20;
+  pdf.text('Historial de Movimientos (Mensual):', 40, lastYCreditStatusTable);
+
+  const movementData = this.historyPayments.data.map((payment: any) => [
+      payment.paymentDate.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+      payment.currentInterest.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
+      payment.capitalPayment.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
+      payment.interestPayment.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
+      payment.lateInterest.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
+      payment.amount.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
+      payment.currentCapital.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
+      (payment.remainingCapital ?? 0).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })
+  ]);
+
+  autoTable(pdf, {
+      head: [['Fecha', 'Interés Corriente', 'Pago a Capital', 'Pago a Interés', 'Interés Moratorio', 'Pago Total', 'Capital Actual', 'Capital pendiente']],
+      body: movementData,
+      startY: lastYCreditStatusTable + 20,
+      theme: 'grid',
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [0, 85, 85], textColor: [255, 255, 255] },
+  });
+
+  // Abrir el PDF en una nueva pestaña
+  pdf.output('dataurlnewwindow');
+}
+
 
 }
