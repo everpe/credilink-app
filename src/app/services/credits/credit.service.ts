@@ -84,6 +84,9 @@ export class CreditService {
       });
   }
 
-
+  getCreditDetails(creditId: number): Observable<GetCreditDto> {
+    const url = `${environment.apiUrl}/credits/${creditId}/`;
+    return this.http.get<any>(url);
+  }
   
 }

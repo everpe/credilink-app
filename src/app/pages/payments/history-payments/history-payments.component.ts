@@ -11,6 +11,8 @@ import { PaymentService } from 'src/app/services/payments/payment.service';
 import { CreatePaymentComponent } from '../create-payment/create-payment.component';
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
+import { CreditService } from 'src/app/services/credits/credit.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-history-payments',
   standalone: true,
@@ -26,6 +28,7 @@ import autoTable from 'jspdf-autotable'
   styleUrl: './history-payments.component.scss'
 })
 export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   infoCredito: GetCreditDto;
   currentDate: Date = new Date();
   displayedColumnsStateCredit: string[] = ['concept', 'amount'];
@@ -33,7 +36,6 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
 
   conceptsCredit: ConcepCredit[] = [];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   displayedColumns: string[] = [
     'paymentDate',
@@ -45,9 +47,6 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
     'currentCapital',
     'pendingCapital'
   ];
-
-
-
 
   historyPayments = new MatTableDataSource<PaymentDto>([]);
 
@@ -66,6 +65,8 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
     @Inject(MAT_DIALOG_DATA) public data: any, // Datos pasados al modal
     private creditPaymentService: PaymentService,
     private dialog: MatDialog,
+    private creditService: CreditService,
+    private snackbar: ToastrService
   ) {
     this.infoCredito = data.credit;
   }
@@ -87,9 +88,6 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
           { concept: 'Total pagado hasta la fecha', amount: Number(response.data.total_paid) },
         ];
         
-
-
-
         this.historyPayments.data = response.data.payments.map((payment: any) => ({
           id: payment.id,
           type: payment.type,
@@ -128,11 +126,19 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.getPayments();
+        this.getCreditDetailById();
       }
     });
-
   }
 
+
+  getCreditDetailById(){
+    this.creditService.getCreditDetails(this.infoCredito.id).subscribe( (resp:any) => {
+      this.infoCredito = resp.data;
+    },error=>{
+      this.snackbar.error(error.error.error);
+    });
+  }
 
 
 generatePDF(): void {
