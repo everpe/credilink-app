@@ -64,7 +64,8 @@ export class UpdateCreditComponent implements OnInit{
       clientSearch: [this.data.client, Validators.required],
       co_debtor: [this.data.co_debtor || null, Validators.required], // Usa el objeto completo
       coDebtorSearch: [this.data.co_debtor || '', Validators.required], // Usa el objeto completo
-      loan_date: [this.data.loan_date || new Date(), Validators.required],
+      // loan_date: [this.data.loan_date || new Date(), Validators.required],
+      loan_date: this.convertToLocalDate(this.data.loan_date),
       reminder_date: [this.data.reminder_date || '', Validators.required],
       loan_amount: [this.data.loan_amount || 0, Validators.required],
       interest_rate	:[this.data.interest_rate,],
@@ -82,8 +83,8 @@ export class UpdateCreditComponent implements OnInit{
         client: this.data.client,
         co_debtor: this.data.co_debtor, // Pasa el objeto completo
         coDebtorSearch: this.data.co_debtor, // También usa el objeto completo
-        loan_date: this.data.loan_date,
-        reminder_date: this.data.reminder_date,
+        loan_date: this.convertToLocalDate(this.data.loan_date),
+        reminder_date: this.convertToLocalDate(this.data.reminder_date),
         loan_amount: this.data.loan_amount,
         interest_rate: this.data.interest_rate,
         pin: '' 
@@ -92,6 +93,13 @@ export class UpdateCreditComponent implements OnInit{
       this.formattedLoanAmount = this.formatNumberWithCommas(parseFloat(this.data.loan_amount+""));
     }
   }
+  
+  private convertToLocalDate(dateString: string): Date {
+    if (!dateString) return new Date();
+    const date = new Date(dateString);
+    return new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+  }
+  
   
   
   private setupCoDebtorSearch(): void {
