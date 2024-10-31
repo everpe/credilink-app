@@ -96,4 +96,15 @@ export class CreditService {
     });
     return this.http.patch<any>(url, creditData, { headers });
   }
+
+  validatePinUser(pin: string): Observable<any> {
+    const url = `${environment.apiUrl}/users/validate_pin/`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const body = { pin };
+
+    return this.http.post<any>(url, body, { headers });
+  }
 }

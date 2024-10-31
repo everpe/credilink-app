@@ -66,7 +66,8 @@ export class UpdateCreditComponent implements OnInit{
       loan_date: [this.data.loan_date || new Date(), Validators.required],
       reminder_date: [this.data.reminder_date || '', Validators.required],
       loan_amount: [this.data.loan_amount || 0, Validators.required],
-      interest_rate	:[this.data.interest_rate,]
+      interest_rate	:[this.data.interest_rate,],
+      pin: ['', Validators.required] 
     });
   
     this.patchFormValues();
@@ -145,32 +146,46 @@ export class UpdateCreditComponent implements OnInit{
   
   updateCredit(): void {
     if (this.creditForm.valid) {
-      const formatDate = (date: any): string => {
-        if (date) {
-          const d = new Date(date);
-          const year = d.getFullYear();
-          const month = ('0' + (d.getMonth() + 1)).slice(-2); // Asegurarse de que el mes tenga dos dígitos
-          const day = ('0' + d.getDate()).slice(-2); // Asegurarse de que el día tenga dos dígitos
-          return `${year}-${month}-${day}`;
-        }
-        return "";
-      };
-      this.creditService.updateCredit(this.data.id, {
-        loan_amount: this.creditForm.get('loan_amount')?.value ,
-        loan_date:  formatDate(this.creditForm.get('loan_date')?.value) ,
-        co_debtor: this.creditForm.get('co_debtor')?.value.id,
-        client: this.creditForm.get('client')?.value.id,
-        reminder_date: formatDate(this.creditForm.get('reminder_date')?.value), 
-      }).subscribe(
-        () => {
-          this.snackBar.success('Crédito actualizado exitosamente');
-          this.dialogRef.close(true);
-        },
-        (error) => {
-          this.snackBar.error('Error al actualizar el crédito');
-          console.error(error);
-        }
+
+      const pin = this.creditForm.get('pin')?.value;
+      this.creditService.validatePinUser(pin).subscribe(
+        response => {
+          if(response){
+            const formatDate = (date: any): string => {
+              if (date) {
+                const d = new Date(date);
+                const year = d.getFullYear();
+                const month = ('0' + (d.getMonth() + 1)).slice(-2); // Asegurarse de que el mes tenga dos dígitos
+                const day = ('0' + d.getDate()).slice(-2); // Asegurarse de que el día tenga dos dígitos
+                return `${year}-${month}-${day}`;
+              }
+              return "";
+            };
+            this.creditService.updateCredit(this.data.id, {
+              loan_amount: this.creditForm.get('loan_amount')?.value ,
+              loan_date:  formatDate(this.creditForm.get('loan_date')?.value) ,
+              co_debtor: this.creditForm.get('co_debtor')?.value.id,
+              client: this.creditForm.get('client')?.value.id,
+              reminder_date: formatDate(this.creditForm.get('reminder_date')?.value), 
+            }).subscribe(
+              () => {
+                this.snackBar.success('Crédito actualizado exitosamente');
+                this.dialogRef.close(true);
+              },
+              (error) => {
+                this.snackBar.error('Error al actualizar el crédito');
+                console.error(error);
+              }
+            );
+
+          }
+        },error => {
+          this.snackBar.error(error.error.error);
+         }
       );
+
+
+  
     }
   }
 }
