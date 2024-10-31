@@ -49,3 +49,11 @@ export interface GetCreditDto {
     concept: string
     amount: number
   }
+
+  export interface UpdateCredit{
+    loan_amount: number;
+    loan_date: string;
+    co_debtor: number;
+    client: number;
+    reminder_date: string;
+  }

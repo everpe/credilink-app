@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreditDto, GetCreditDto } from 'src/app/interfaces/credit.interface';
+import { CreditDto, GetCreditDto, UpdateCredit } from 'src/app/interfaces/credit.interface';
 import { environment } from 'src/environments/environment';
 
 
@@ -89,4 +89,11 @@ export class CreditService {
     return this.http.get<any>(url);
   }
   
+  updateCredit(creditId: number, creditData: UpdateCredit): Observable<any> {
+    const url = `${environment.apiUrl}/credits/${creditId}/`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    return this.http.patch<any>(url, creditData, { headers });
+  }
 }

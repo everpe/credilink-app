@@ -30,6 +30,7 @@ import { CreatePaymentComponent } from '../../payments/create-payment/create-pay
 import { PaymentsCreditListComponent } from '../../payments/payments-credit-list/payments-credit-list.component';
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { HistoryPaymentsComponent } from '../../payments/history-payments/history-payments.component';
+import { UpdateCreditComponent } from '../update-credit/update-credit.component';
 
 @Component({
   selector: 'list-credits',
@@ -272,6 +273,20 @@ export class ListComponent implements OnInit {
     });
   }
 
+
+  openUpdateCreditModal(creditData: any): void {
+    const dialogRef = this.dialog.open(UpdateCreditComponent, {
+      width: '600px',
+      data: creditData,
+      disableClose: true
+    });
+  
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadCredits();
+      }
+    });
+  }
 }
 
 

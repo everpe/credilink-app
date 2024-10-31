@@ -150,13 +150,13 @@
                   <mat-icon>zoom_in</mat-icon>
                   <span>Detalle</span>
                 </button>
-                <!-- <button mat-menu-item (click)="createAbono(credit.id)">
-                  <mat-icon color="primary">payments</mat-icon>
-                  <span>Abonar</span>
-                </button> -->
                 <button mat-menu-item (click)="openListPayments(credit)">
                   <mat-icon color="primary">savings</mat-icon>
                   <span>Abonos</span>
+                </button>
+                <button mat-menu-item (click)="openUpdateCreditModal(credit)">
+                  <mat-icon color="primary">edit</mat-icon>
+                  <span>Modificar</span>
                 </button>
               </mat-menu>
             </td>
