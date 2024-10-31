@@ -58,9 +58,10 @@
       
               <mat-form-field class="w-full" appearance="outline">
                 <mat-label>Valor del crédito</mat-label>
-                <input type="text" matInput formControlName="loan_amount" placeholder="Valor del crédito" />
+                <input type="text" matInput [value]="formattedLoanAmount"
+                    (input)="onLoanAmountInput($event)" placeholder="Valor del crédito" />
                 <mat-icon matSuffix>attach_money</mat-icon>
-              </mat-form-field>
+            </mat-form-field>
       
               <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Tasa interés %</mat-label>

@@ -45,7 +45,8 @@ export class UpdateCreditComponent implements OnInit{
   creditForm!: FormGroup;
   filteredClients: Observable<any[]> = of([]);
   filteredCoDebtors: Observable<any[]> = of([]);
-  monthlyInterest: number = 0;
+  formattedLoanAmount: string = '';
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -85,7 +86,10 @@ export class UpdateCreditComponent implements OnInit{
         reminder_date: this.data.reminder_date,
         loan_amount: this.data.loan_amount,
         interest_rate: this.data.interest_rate,
+        pin: '' 
+
       });
+      this.formattedLoanAmount = this.formatNumberWithCommas(parseFloat(this.data.loan_amount+""));
     }
   }
   
@@ -145,6 +149,7 @@ export class UpdateCreditComponent implements OnInit{
   }
   
   updateCredit(): void {
+    this.creditForm.markAllAsTouched();
     if (this.creditForm.valid) {
 
       const pin = this.creditForm.get('pin')?.value;
@@ -187,5 +192,20 @@ export class UpdateCreditComponent implements OnInit{
 
   
     }
+  }
+
+
+  onLoanAmountInput(event: any): void {
+    const input = event.target.value.replace(/,/g, ''); // Remover comas para obtener el valor real
+    const numericValue = parseFloat(input) || 0;
+
+    // Actualiza el valor formateado con comas
+    this.formattedLoanAmount = this.formatNumberWithCommas(numericValue);
+
+    // Actualiza el valor del formulario sin las comas
+    this.creditForm.patchValue({ loan_amount: numericValue });
+  }
+  formatNumberWithCommas(value: number): string {
+    return value.toLocaleString('en-US'); // Formatear en inglés para separar con comas
   }
 }
