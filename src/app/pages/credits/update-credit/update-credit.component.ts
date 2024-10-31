@@ -186,7 +186,7 @@ export class UpdateCreditComponent implements OnInit{
                 this.dialogRef.close(true);
               },
               (error) => {
-                this.snackBar.error('Error al actualizar el crédito');
+                this.snackBar.error(error.error.error);
                 console.error(error);
               }
             );
