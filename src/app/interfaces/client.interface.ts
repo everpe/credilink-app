@@ -34,7 +34,7 @@ export interface JobRelationship {
     id: number;
     name: string;
     sede: number;
-    company: number;
+    company?: number;
 }
 
 export interface UpdateClientDto {

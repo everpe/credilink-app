@@ -54,4 +54,13 @@ export class ClientService {
       console.error('Error al descargar el reporte:', error);
     });
   }
+
+
+  addJobRelationship(sede: number, name: string): Observable<any> {
+    const body = {
+      sede: sede,
+      name: name
+    };
+    return this.http.post<any>(`${environment.apiUrl}/job_relationships/`, body);
+  }
 }

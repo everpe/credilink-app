@@ -34,9 +34,12 @@
       <!-- Número de Documento -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Número de Documento</mat-label>
-        <input matInput formControlName="document_number" />
+        <input matInput formControlName="document_number"/>
         <mat-error *ngIf="clientForm.get('document_number')?.hasError('required')">
           El número de documento es requerido
+        </mat-error>
+        <mat-error *ngIf="clientForm.get('document_number')?.hasError('pattern')">
+          Número de documento debe tener diez dígitos
         </mat-error>
       </mat-form-field>
 
@@ -78,6 +81,9 @@
         <mat-error *ngIf="clientForm.get('mobile')?.hasError('required')">
           El móvil es requerido
         </mat-error>
+        <mat-error *ngIf="clientForm.get('mobile')?.hasError('pattern')">
+          Móvil debe tener diez dígitos numéricos
+        </mat-error>
       </mat-form-field>
 
       <!-- Teléfono -->
@@ -87,6 +93,9 @@
         <mat-error *ngIf="clientForm.get('phone')?.hasError('required')">
           El teléfono es requerido
         </mat-error>
+        <mat-error *ngIf="clientForm.get('phone')?.hasError('pattern')">
+          Debe contener entre 7 y 10 dígitos
+        </mat-error>
       </mat-form-field>
 
        <!-- Teléfono de Oficina -->
@@ -95,6 +104,9 @@
         <input matInput formControlName="office_phone" />
         <mat-error *ngIf="clientForm.get('office_phone')?.hasError('required')">
           El teléfono de oficina es requerido
+        </mat-error>
+        <mat-error *ngIf="clientForm.get('office_phone')?.hasError('pattern')">
+          Debe contener entre 7 y 10 dígitos
         </mat-error>
       </mat-form-field>
 
@@ -137,17 +149,46 @@
       </mat-form-field>
 
       <!-- Relación de Trabajo -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Relación de Trabajo</mat-label>
-        <mat-select formControlName="job_relationship">
-          <mat-option *ngFor="let relationship of lisJobRelationShips" [value]="relationship.id">
-            {{ relationship.name }}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="clientForm.get('job_relationship')?.hasError('required')">
-          La relación de trabajo es requerida
-        </mat-error>
-      </mat-form-field>
+      @if(!addingNewRelationship){
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Relación de Trabajo</mat-label>
+          <mat-select formControlName="job_relationship">
+            <mat-option *ngFor="let relationship of lisJobRelationShips" [value]="relationship.id">
+              {{ relationship.name }}
+            </mat-option>
+            <mat-option *ngIf="!addingNewRelationship" (click)="toggleAddNewRelationship()" >
+          
+
+              <!-- <button mat-icon-button color="primary"> -->
+                <mat-icon color="primary">add</mat-icon>
+              <!-- </button> -->
+              Agregar relación
+            </mat-option>
+          </mat-select>
+        
+          <mat-error *ngIf="clientForm.get('job_relationship')?.hasError('required')">
+            La relación de trabajo es requerida
+          </mat-error>
+
+        </mat-form-field>
+      }@else{
+        <!-- Campo para agregar una nueva relación de trabajo -->
+        <div  class="add-new-relationship">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Nombre nueva relación</mat-label>
+            <input matInput formControlName="newRelationshipName" placeholder="Nombre relación de trabajo" />
+
+            <mat-error *ngIf="clientForm.get('newRelationshipName')?.hasError('maxlength')">
+              Máximo 255 carcteres
+            </mat-error>
+          </mat-form-field>
+          <div class="action-buttons">
+            <button mat-button (click)="saveNewRelationship()">Guardar</button>
+            <button mat-button (click)="cancelAddNewRelationship()">Cancelar</button>
+          </div>
+        </div>
+      }
+      
       
 
       <!-- Observaciones -->
