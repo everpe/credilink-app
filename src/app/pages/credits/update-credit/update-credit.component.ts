@@ -65,10 +65,10 @@ export class UpdateCreditComponent implements OnInit{
       co_debtor: [this.data.co_debtor || null, Validators.required], // Usa el objeto completo
       coDebtorSearch: [this.data.co_debtor || '', Validators.required], // Usa el objeto completo
       // loan_date: [this.data.loan_date || new Date(), Validators.required],
-      loan_date: this.convertToLocalDate(this.data.loan_date),
+      loan_date: [this.convertToLocalDate(this.data.loan_date), Validators.required],
       reminder_date: [this.data.reminder_date || '', Validators.required],
       loan_amount: [this.data.loan_amount || 0, Validators.required],
-      interest_rate	:[this.data.interest_rate, Validators.required],
+      interest_rate	:[this.data.interest_rate, [Validators.required, Validators.pattern(/^[0-9]+([.,][0-9]{1,2})?$/)]],
       pin: ['', Validators.required] 
     });
   
@@ -138,9 +138,6 @@ export class UpdateCreditComponent implements OnInit{
       clientSearch: client // También actualiza el campo de búsqueda
     });
   }
-  // onCoDebtorSelected(coDebtor: any): void {
-  //   this.creditForm.patchValue({ co_debtor: coDebtor.id }); // Asigna el ID del codeudor al formulario
-  // }
   onCoDebtorSelected(coDebtor: any): void {
     this.creditForm.patchValue({ 
       co_debtor: coDebtor, // Pasa el objeto completo al campo de formulario
@@ -180,7 +177,7 @@ export class UpdateCreditComponent implements OnInit{
               co_debtor: this.creditForm.get('co_debtor')?.value.id,
               client: this.creditForm.get('client')?.value.id,
               reminder_date: formatDate(this.creditForm.get('reminder_date')?.value), 
-              interest_rate: this.creditForm.get('interest_rate')?.value
+              interest_rate: this.creditForm.get('interest_rate')?.value.replace(',','.')
             }).subscribe(
               () => {
                 this.snackBar.success('Crédito actualizado exitosamente');
@@ -214,6 +211,7 @@ export class UpdateCreditComponent implements OnInit{
     // Actualiza el valor del formulario sin las comas
     this.creditForm.patchValue({ loan_amount: numericValue });
   }
+
   formatNumberWithCommas(value: number): string {
     return value.toLocaleString('en-US'); // Formatear en inglés para separar con comas
   }

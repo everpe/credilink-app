@@ -1,90 +1,124 @@
-<mat-dialog-content >
-    <h2 mat-dialog-title class="text-center"> Actualizar crédito   </h2>
-    <form [formGroup]="creditForm" class="mt-4">
-        <!-- Datos del Cliente -->
-        <mat-card class="mb-0">
-          <mat-card-title class="text-xl font-bold px-6 py-3">Datos del cliente</mat-card-title>
-          <mat-card-content>
-            <div class="grid grid-cols-1 gap-4">
-              <mat-form-field class="w-full" appearance="outline">
-                <mat-label>Buscar cliente</mat-label>
-                <input type="text" matInput formControlName="clientSearch" placeholder="Buscar por nombres, apellidos, o número documento" [matAutocomplete]="auto">
-                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onClientSelected($event.option.value)" [displayWith]="displayClient">
-                  <mat-option *ngFor="let client of filteredClients | async" [value]="client">
-                    {{ client.first_name }} {{ client.last_name }} - {{ client.document_number }}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      
-        <!-- Datos del Codeudor -->
-        <mat-card class="mb-1">
-          <mat-card-title class="text-xl font-bold px-6 py-3">Datos del codeudor</mat-card-title>
-          <mat-card-content>
-            <div class="grid grid-cols-1 gap-4">
-              <mat-form-field class="w-full" appearance="outline">
-                <mat-label>Buscar codeudor</mat-label>
-                <input type="text" matInput formControlName="coDebtorSearch" placeholder="Buscar por nombres, apellidos, o número documento" [matAutocomplete]="autoCoDebtor">
-                <mat-autocomplete #autoCoDebtor="matAutocomplete" (optionSelected)="onCoDebtorSelected($event.option.value)" [displayWith]="displayCoDebtor">
-                  <mat-option *ngFor="let coDebtor of filteredCoDebtors | async" [value]="coDebtor">
-                    {{ coDebtor.first_name }} {{ coDebtor.last_name }} - {{ coDebtor.document_number }}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      
-        <!-- Datos del Préstamo -->
-        <mat-card>
-          <mat-card-title class="text-xl font-bold px-6 py-3">Datos del crédito</mat-card-title>
-          <mat-card-content>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <mat-form-field class="w-full" appearance="outline">
-                <mat-label>Fecha del crédito</mat-label>
-                <input matInput [matDatepicker]="loanPicker" formControlName="loan_date" placeholder="Fecha del crédito" />
-                <mat-datepicker-toggle matSuffix [for]="loanPicker"></mat-datepicker-toggle>
-                <mat-datepicker #loanPicker></mat-datepicker>
-              </mat-form-field>
-      
-              <mat-form-field class="w-full" appearance="outline">
-                <mat-label>Fecha de recordatorio</mat-label>
-                <input matInput [matDatepicker]="reminderPicker" formControlName="reminder_date" placeholder="Fecha de recordatorio" />
-                <mat-datepicker-toggle matSuffix [for]="reminderPicker"></mat-datepicker-toggle>
-                <mat-datepicker #reminderPicker></mat-datepicker>
-              </mat-form-field>
-      
-              <mat-form-field class="w-full" appearance="outline">
+<mat-dialog-content>
+  <h2 mat-dialog-title class="text-center"> Actualizar crédito </h2>
+  <form [formGroup]="creditForm" class="mt-4">
+    <!-- Datos del Cliente -->
+    <mat-card class="mb-0">
+      <mat-card-title class="text-xl font-bold px-6 py-3">Datos del cliente</mat-card-title>
+      <mat-card-content>
+        <div class="grid grid-cols-1 gap-4">
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Buscar cliente</mat-label>
+            <input type="text" matInput formControlName="clientSearch"
+              placeholder="Buscar por nombres, apellidos, o número documento" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onClientSelected($event.option.value)"
+              [displayWith]="displayClient">
+              <mat-option *ngFor="let client of filteredClients | async" [value]="client">
+                {{ client.first_name }} {{ client.last_name }} - {{ client.document_number }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="creditForm.get('clientSearch')?.hasError('required')">
+              Cliente es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Datos del Codeudor -->
+    <mat-card class="mb-1">
+      <mat-card-title class="text-xl font-bold px-6 py-3">Datos del codeudor</mat-card-title>
+      <mat-card-content>
+        <div class="grid grid-cols-1 gap-4">
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Buscar codeudor</mat-label>
+            <input type="text" matInput formControlName="coDebtorSearch"
+              placeholder="Buscar por nombres, apellidos, o número documento" [matAutocomplete]="autoCoDebtor">
+            <mat-autocomplete #autoCoDebtor="matAutocomplete" (optionSelected)="onCoDebtorSelected($event.option.value)"
+              [displayWith]="displayCoDebtor">
+              <mat-option *ngFor="let coDebtor of filteredCoDebtors | async" [value]="coDebtor">
+                {{ coDebtor.first_name }} {{ coDebtor.last_name }} - {{ coDebtor.document_number }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="creditForm.get('coDebtorSearch')?.hasError('required')">
+              Codeudor es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Datos del Préstamo -->
+    <mat-card>
+      <mat-card-title class="text-xl font-bold px-6 py-3">Datos del crédito</mat-card-title>
+      <mat-card-content>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Fecha del crédito</mat-label>
+            <input matInput [matDatepicker]="loanPicker" formControlName="loan_date" placeholder="Fecha del crédito" />
+            <mat-datepicker-toggle matSuffix [for]="loanPicker"></mat-datepicker-toggle>
+            <mat-datepicker #loanPicker></mat-datepicker>
+            <mat-error *ngIf="creditForm.get('loan_date')?.hasError('required')">
+              Fecha crédito es requerida
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Fecha de recordatorio</mat-label>
+            <input matInput [matDatepicker]="reminderPicker" formControlName="reminder_date"
+              placeholder="Fecha de recordatorio" />
+            <mat-datepicker-toggle matSuffix [for]="reminderPicker"></mat-datepicker-toggle>
+            <mat-datepicker #reminderPicker></mat-datepicker>
+            <mat-error *ngIf="creditForm.get('reminder_date')?.hasError('required')">
+              Fecha recordatorio es requerida
+            </mat-error>
+          </mat-form-field>
+
+          <!-- <mat-form-field class="w-full" appearance="outline">
                 <mat-label>Valor del crédito</mat-label>
                 <input type="text" matInput [value]="formattedLoanAmount"
                     (input)="onLoanAmountInput($event)" placeholder="Valor del crédito" />
                 <mat-icon matSuffix>attach_money</mat-icon>
+            </mat-form-field> -->
+          <div>
+            <mat-form-field class="w-full new-relation" appearance="outline">
+              <mat-label>Valor del crédito</mat-label>
+              <input type="text" matInput [value]="formattedLoanAmount" (input)="onLoanAmountInput($event)"
+                placeholder="Valor del crédito" />
+              <mat-icon matSuffix>attach_money</mat-icon>
             </mat-form-field>
-      
-              <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Tasa interés %</mat-label>
-                <input matInput formControlName="interest_rate"/>
-              </mat-form-field>
-      
-              <mat-form-field class="w-full" appearance="outline">
-                <mat-label>PIN de seguridad</mat-label>
-                <input matInput formControlName="pin" placeholder="Ingrese su PIN para validar">
-              </mat-form-field>
-      
-
+            <div class="red block"
+              *ngIf="formattedLoanAmount == '' || !formattedLoanAmount || formattedLoanAmount == '0'">
+              Valor crédito es requerido
             </div>
-          </mat-card-content>
-        </mat-card>
-      
-        <!-- Botón de Guardar -->
-    </form>
+          </div>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Tasa interés %</mat-label>
+            <input matInput formControlName="interest_rate" />
+            <mat-error *ngIf="creditForm.get('interest_rate')?.hasError('required')">
+              Tasa interés requerida
+            </mat-error>
+            <mat-error *ngIf="creditForm.get('interest_rate')?.hasError('pattern')">
+              Solo se permiten números, enteros o decimales
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>PIN de seguridad</mat-label>
+            <input matInput formControlName="pin" placeholder="Ingrese su PIN para validar">
+            <mat-error *ngIf="creditForm.get('pin')?.hasError('required')">
+              Pin de seguridad es requerido
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end" class="p-4">
-    <div class="mt-4 flex justify-end">
-        <button mat-raised-button mat-dialog-close>Cancelar</button>
-        <button mat-raised-button color="primary" (click)="updateCredit()">Guardar</button>
-    </div>
-  </mat-dialog-actions>
-  
+  <div class="mt-4 flex justify-end">
+    <button mat-raised-button mat-dialog-close>Cancelar</button>
+    <button mat-raised-button color="primary" (click)="updateCredit()">Guardar</button>
+  </div>
+</mat-dialog-actions>
