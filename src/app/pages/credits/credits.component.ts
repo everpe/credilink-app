@@ -69,7 +69,7 @@ export class CreditsComponent implements OnInit {
       loan_date: [new Date(), Validators.required],
       reminder_date: ['', Validators.required],
       loan_amount: [0, Validators.required],
-      interest_rate: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      interest_rate: ['', [Validators.required, Validators.pattern(/^[0-9]+([.,][0-9]{1,2})?$/)]],
       number_of_installments: [0, Validators.required],
       sede: [this.authService.getSedeUser(), Validators.required],
       by_quota: [false, Validators.required],
@@ -127,7 +127,7 @@ export class CreditsComponent implements OnInit {
             if (formValue.reminder_date) {
               formValue.reminder_date = formatDate(formValue.reminder_date); // Convertimos la fecha de recordatorio
             }
-      
+            formValue.interest_rate = Number(formValue.interest_rate?.replace(',','.'))
             this.creditService.createCredit(formValue).subscribe(
               response => {
                 this.snackBar.success(response.message);
@@ -196,7 +196,7 @@ export class CreditsComponent implements OnInit {
   // Método para calcular el interés mensual
   calculateInterest(): void {
     const loanAmount = this.creditForm.get('loan_amount')?.value || 0;
-    const interestRate = this.creditForm.get('interest_rate')?.value || 0;
+    const interestRate = Number(this.creditForm.get('interest_rate')?.value?.replace(',','.')) || 0;
 
     // Calcular el interés mensual
     this.monthlyInterest = (loanAmount * (interestRate / 100)) || 0;

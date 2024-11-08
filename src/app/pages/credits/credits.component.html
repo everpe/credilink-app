@@ -22,6 +22,9 @@
                                         {{ client.first_name }} {{ client.last_name }} - {{ client.document_number }}
                                     </mat-option>
                                 </mat-autocomplete>
+                                <mat-error *ngIf="creditForm.get('clientSearch')?.hasError('required')">
+                                    Cliente es requerido
+                                </mat-error>
                             </mat-form-field>
                         </div>
                     </mat-card-content>
@@ -46,6 +49,9 @@
                                         }}
                                     </mat-option>
                                 </mat-autocomplete>
+                                <mat-error *ngIf="creditForm.get('coDebtorSearch')?.hasError('required')">
+                                    Codeudor es requerido
+                                </mat-error>
                             </mat-form-field>
 
                         </div>
@@ -65,6 +71,9 @@
                                     placeholder="Fecha del crédito" />
                                 <mat-datepicker-toggle matSuffix [for]="loanPicker"></mat-datepicker-toggle>
                                 <mat-datepicker #loanPicker></mat-datepicker>
+                                <mat-error *ngIf="creditForm.get('loan_date')?.hasError('required')">
+                                    Fecha crédito es requerida
+                                </mat-error>
                             </mat-form-field>
 
                             <!-- Fecha de Recordatorio -->
@@ -74,37 +83,40 @@
                                     placeholder="Fecha de recordatorio" />
                                 <mat-datepicker-toggle matSuffix [for]="reminderPicker"></mat-datepicker-toggle>
                                 <mat-datepicker #reminderPicker></mat-datepicker>
+                                <mat-error *ngIf="creditForm.get('reminder_date')?.hasError('required')">
+                                    Fecha recordatorio es requerida
+                                </mat-error>
                             </mat-form-field>
 
-                            <!-- Valor del Préstamo -->
-                            <!-- <mat-form-field class="w-full" appearance="outline">
-                                <mat-label>Valor del crédito</mat-label>
-                                <input type="text" matInput [value]="formattedLoanAmount"
-                                    (input)="onLoanAmountInput($event)" placeholder="Valor del crédito" />
-                                <mat-icon matSuffix>attach_money</mat-icon>
-                            </mat-form-field> -->
-
-                            <mat-form-field class="w-full " appearance="outline">
-                                <mat-label>Valor del crédito</mat-label>
-                                <input
-                                  type="text"
-                                  matInput
-                                  [value]="formattedLoanAmount"
-                                  (input)="onLoanAmountInput($event)"
-                                  (keydown)="restrictToNumbers($event)"
-                                  placeholder="Valor del crédito"
-                                />
-                                <mat-icon matSuffix>attach_money</mat-icon>
-                              </mat-form-field>
+                            <!-- Valor Credito -->
+                            <div>
+                                <mat-form-field class="w-full new-relation" appearance="outline">
+                                    <mat-label>Valor del crédito</mat-label>
+                                    <input type="text" matInput [value]="formattedLoanAmount"
+                                        (input)="onLoanAmountInput($event)" (keydown)="restrictToNumbers($event)"
+                                        placeholder="Valor del crédito" required=""/>
+                                    <mat-icon matSuffix>attach_money</mat-icon>
+                                </mat-form-field>
+                                <div class="red block"
+                                    *ngIf=" !formattedLoanAmount || formattedLoanAmount == '0'">
+                                    Valor crédito es requerido
+                                </div>
+                            </div>
 
 
 
                             <!-- Porcentaje de Interés -->
                             <mat-form-field class="w-full" appearance="outline">
-                                <mat-label>Porcentaje de interés</mat-label>
-                                <input matInput type="number" formControlName="interest_rate"
+                                <mat-label>Tasa de interés</mat-label>
+                                <input matInput formControlName="interest_rate"
                                     placeholder="Porcentaje de interés" (input)="calculateInterest()" />
                                 <mat-icon matSuffix>percent</mat-icon>
+                                <mat-error *ngIf="creditForm.get('interest_rate')?.hasError('required')">
+                                    Porcentaje interés es requerido
+                                </mat-error>
+                                <mat-error *ngIf="creditForm.get('interest_rate')?.hasError('pattern')">
+                                    Solo se permiten números, enteros o decimales
+                                  </mat-error>
                             </mat-form-field>
 
 
@@ -134,7 +146,10 @@
                             <mat-form-field class="w-full" appearance="outline">
                                 <mat-label>PIN de seguridad</mat-label>
                                 <input matInput formControlName="pin" placeholder="Ingrese su PIN para validar">
-                              </mat-form-field>
+                                <mat-error *ngIf="creditForm.get('pin')?.hasError('required')">
+                                    Pin seguridad es requerido
+                                </mat-error>
+                            </mat-form-field>
                         </div>
                     </mat-card-content>
                 </mat-card>
@@ -150,12 +165,12 @@
         </mat-tab>
         <mat-tab label="Créditos otorgados">
             @defer (on viewport) {
-                <list-credits></list-credits>
+            <list-credits></list-credits>
             }@loading {
-                <p>Cargando creditos</p>
+            <p>Cargando creditos</p>
             }
             @placeholder {
-                <p>Lista de creditos realizados</p>
+            <p>Lista de creditos realizados</p>
             }
         </mat-tab>
     </mat-tab-group>

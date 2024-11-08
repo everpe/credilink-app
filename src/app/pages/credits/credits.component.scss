@@ -3,3 +3,11 @@
   overflow-y: hidden !important;
 
 }
+.red{
+  font-size: 0.6rem;
+  color: #fa896b;
+}
+::ng-deep .new-relation .mat-mdc-form-field-subscript-wrapper{
+  border:  1px solid red ;
+  display: none;
+}
