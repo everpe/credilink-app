@@ -68,7 +68,7 @@ export class UpdateCreditComponent implements OnInit{
       loan_date: this.convertToLocalDate(this.data.loan_date),
       reminder_date: [this.data.reminder_date || '', Validators.required],
       loan_amount: [this.data.loan_amount || 0, Validators.required],
-      interest_rate	:[this.data.interest_rate,],
+      interest_rate	:[this.data.interest_rate, Validators.required],
       pin: ['', Validators.required] 
     });
   
@@ -180,6 +180,7 @@ export class UpdateCreditComponent implements OnInit{
               co_debtor: this.creditForm.get('co_debtor')?.value.id,
               client: this.creditForm.get('client')?.value.id,
               reminder_date: formatDate(this.creditForm.get('reminder_date')?.value), 
+              interest_rate: this.creditForm.get('interest_rate')?.value
             }).subscribe(
               () => {
                 this.snackBar.success('Crédito actualizado exitosamente');

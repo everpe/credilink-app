@@ -56,4 +56,5 @@ export interface GetCreditDto {
     co_debtor: number;
     client: number;
     reminder_date: string;
+    interest_rate: string;
   }

@@ -220,4 +220,22 @@ export class CreditsComponent implements OnInit {
   formatNumberWithCommas(value: number): string {
     return value.toLocaleString('en-US'); // Formatear en inglés para separar con comas
   }
+  // Método para restringir la entrada a solo números y el punto decimal
+
+
+  restrictToNumbers(event: KeyboardEvent): void {
+    const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'];
+    const key = event.key;
+  
+    if (
+      allowedKeys.includes(key) ||
+      (key >= '0' && key <= '9') 
+      // (key === '.' && event.target && !(event.target as HTMLInputElement).value.includes('.'))
+    ) {
+      return;
+    } else {
+      event.preventDefault();
+    }
+  }
+  
 }

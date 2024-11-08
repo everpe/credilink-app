@@ -77,14 +77,25 @@
                             </mat-form-field>
 
                             <!-- Valor del Préstamo -->
-                            <mat-form-field class="w-full" appearance="outline">
+                            <!-- <mat-form-field class="w-full" appearance="outline">
                                 <mat-label>Valor del crédito</mat-label>
-                                <!-- <span matPrefix>COP&nbsp;</span>  -->
                                 <input type="text" matInput [value]="formattedLoanAmount"
                                     (input)="onLoanAmountInput($event)" placeholder="Valor del crédito" />
                                 <mat-icon matSuffix>attach_money</mat-icon>
+                            </mat-form-field> -->
 
-                            </mat-form-field>
+                            <mat-form-field class="w-full" appearance="outline">
+                                <mat-label>Valor del crédito</mat-label>
+                                <input
+                                  type="text"
+                                  matInput
+                                  [value]="formattedLoanAmount"
+                                  (input)="onLoanAmountInput($event)"
+                                  (keydown)="restrictToNumbers($event)"
+                                  placeholder="Valor del crédito"
+                                />
+                                <mat-icon matSuffix>attach_money</mat-icon>
+                              </mat-form-field>
 
 
 
