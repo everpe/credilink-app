@@ -1,18 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, Inject, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormFieldModule, MatError } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { TypeDocument, Gender, JobRelationship } from 'src/app/interfaces/client.interface';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { TypeDocument, Gender, JobRelationship, TypeLinkage } from 'src/app/interfaces/client.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ClientService } from 'src/app/services/clients/client.service';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
 import { NewClientFormComponent } from '../../clients/new-client-form/new-client-form.component';
 import { CodebtorService } from 'src/app/services/codebtors/codebtor.service';
 import { ToastrService } from 'ngx-toastr';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-new-codebtor-form',
@@ -26,20 +27,28 @@ import { ToastrService } from 'ngx-toastr';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatError
+    MatError,
+    MatIconModule
   ],
   templateUrl: './new-codebtor-form.component.html',
   styleUrl: './new-codebtor-form.component.scss'
 })
 export class NewCodebtorFormComponent {
+  @ViewChild('jobRelationshipSelect') jobRelationshipSelect!: MatSelect;
+  @ViewChild('typeLinkageSelect') typeLinkageSelect!: MatSelect;
   codebtorForm: FormGroup;
   documentTypes = Object.values(TypeDocument);
   genders = Object.values(Gender);
   lisJobRelationShips: JobRelationship[] = [];
+  lisTypeLinkages: TypeLinkage[] = [];
+  addingNewRelationship = false; // Controla si se está agregando un nueva RL
+  addingNewLinkage = false; // Controla si se está agregando TipoVinculacion
   isEditMode: boolean = false;
   codebtorData: any;  // Contendrá los datos del cliente si es modo edición
 
-
+  newRelationshipNameControl = new FormControl('', [Validators.required, Validators.maxLength(70)]);
+  newLinkageNameControl = new FormControl('', [Validators.required, Validators.maxLength(70)]);
+  
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<NewClientFormComponent>,
@@ -54,26 +63,26 @@ export class NewCodebtorFormComponent {
       this.codebtorData = data?.client || {};  // Carga los datos del cliente o un objeto vacío
 
       this.codebtorForm = this.fb.group({
-        first_name: [this.codebtorData.first_name || '', Validators.required],
-        last_name: [this.codebtorData.last_name || '', Validators.required],
+        first_name: [this.codebtorData.first_name || '', [Validators.required, Validators.maxLength(70)]],
+        last_name: [this.codebtorData.last_name || '', [Validators.required, Validators.maxLength(70)]],
         type_document: [this.codebtorData.type_document || '', Validators.required],
         document_number: [
           this.codebtorData.document_number || '', 
           [Validators.required, Validators.pattern('^[0-9]{10}$')]
         ],
         email: [this.codebtorData.email || '', [Validators.required, Validators.email]],
-        place_of_issue: [this.codebtorData.place_of_issue || '', Validators.required],
+        place_of_issue: [this.codebtorData.place_of_issue || '',[Validators.required, Validators.maxLength(70)]],
         gender: [this.codebtorData.gender || '', Validators.required],
         phone: [this.codebtorData.phone || '', [Validators.required, Validators.pattern('^[0-9]{7,10}$')]],
         mobile: [this.codebtorData.mobile || '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-        address: [this.codebtorData.address || '', Validators.required],
-        neighborhood: [this.codebtorData.neighborhood || '', Validators.required],
-        city: [this.codebtorData.city || '', Validators.required],
+        address: [this.codebtorData.address || '', [Validators.required, Validators.maxLength(70)]],
+        neighborhood: [this.codebtorData.neighborhood || '', [Validators.required, Validators.maxLength(70)]],
+        city: [this.codebtorData.city || '', [Validators.required, Validators.maxLength(70)]],
         office_phone: [this.codebtorData.office_phone || '', [Validators.required, Validators.pattern('^[0-9]{7,10}$')]],
-        type_of_linkage: [this.codebtorData.type_of_linkage || '', Validators.required],
+        type_linkage: [this.codebtorData.type_linkage?.id || '', Validators.required],
         sede: [this.codebtorData.sede || this.authService.getSedeUser(), Validators.required],
         job_relationship: [this.codebtorData.job_relationship?.id || '', Validators.required],
-        observations: [this.codebtorData.observations || '']
+        observations: [this.codebtorData.observations || '', Validators.maxLength(255)]
       });
   }
 
@@ -84,6 +93,14 @@ export class NewCodebtorFormComponent {
       },
       (error) => {
         console.error('Error fetching job relationships:', error);
+      }
+    );
+    this.clientService.getTypesLinkages(Number(this.authService.getSedeUser()) ?? 0).subscribe(
+      (data: TypeLinkage[]) => {
+        this.lisTypeLinkages = data;
+      },
+      (error) => {
+        console.error('Error fetching type_lynkages:', error);
       }
     );
   }
@@ -133,5 +150,71 @@ export class NewCodebtorFormComponent {
 
   onCancel(): void {
     this.dialogRef.close();
+  }
+
+
+
+
+  // Relacion Trabajo
+  toggleAddNewRelationship(): void {
+    this.addingNewRelationship = true;
+    this.newRelationshipNameControl?.reset('');
+  }
+
+  saveNewRelationship(): void {
+    if (this.newRelationshipNameControl?.valid) {
+
+      this.clientService.addJobRelationship(Number(this.authService.getSedeUser()), this.newRelationshipNameControl?.value ?? '')
+        .subscribe( response =>{
+          this.lisJobRelationShips.push(response.data);
+          this.codebtorForm.get('job_relationship')?.setValue(response.data.id);
+         this.jobRelationshipSelect.close();
+
+        }, error=>{
+          this.snackBar.error(error.error.error);
+        });
+
+      this.addingNewRelationship = false;
+      this.newRelationshipNameControl?.reset();
+    }else{
+      this.newRelationshipNameControl?.markAsTouched()
+    }
+  }
+
+  cancelAddNewRelationship(): void {
+    this.addingNewRelationship = false;
+    this.newRelationshipNameControl?.reset();
+  }
+
+
+
+  //Tipos  Vinculacion
+  toggleAddNewLinkage() {
+    this.addingNewLinkage = !this.addingNewLinkage;
+    if (!this.addingNewLinkage) {
+      this.newLinkageNameControl?.reset();
+    }
+  }
+
+  saveNewLinkage() {
+    if (this.newLinkageNameControl?.valid) {
+      this.clientService.addTypeOfLink( Number(this.authService.getSedeUser()) ?? 0, this.newLinkageNameControl?.value ??  '')
+      .subscribe( response => {
+        this.lisTypeLinkages.push(response.data);
+        this.codebtorForm.get('type_linkage')?.setValue(response.data.id);
+        this.typeLinkageSelect.close();
+      },error => {
+        this.snackBar.error(error.error.error)
+      });
+      this.addingNewLinkage = false;
+      this.newLinkageNameControl?.reset();
+    } else {
+      this.newLinkageNameControl?.markAsTouched();
+    }
+  }
+
+  cancelAddNewLinkage() {
+    this.addingNewLinkage = false;
+    this.newLinkageNameControl?.reset();
   }
 }

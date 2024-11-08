@@ -9,6 +9,9 @@
         <mat-error *ngIf="codebtorForm.get('first_name')?.hasError('required')">
           El nombre es requerido
         </mat-error>
+        <mat-error *ngIf="codebtorForm.get('first_name')?.hasError('maxlength')">
+          Máximo 70 caracteres permitidos
+        </mat-error>
       </mat-form-field>
 
       <!-- Apellido -->
@@ -17,6 +20,9 @@
         <input matInput formControlName="last_name" />
         <mat-error *ngIf="codebtorForm.get('last_name')?.hasError('required')">
           El apellido es requerido
+        </mat-error>
+        <mat-error *ngIf="codebtorForm.get('last_name')?.hasError('maxlength')">
+          Máximo 70 caracteres permitidos
         </mat-error>
       </mat-form-field>
 
@@ -39,7 +45,7 @@
           El número de documento es requerido
         </mat-error>
         <mat-error *ngIf="codebtorForm.get('document_number')?.hasError('pattern')">
-          Número de documento debe tener diez dígitos
+          N° documento requiere 10 dígitos
         </mat-error>
       </mat-form-field>
 
@@ -49,6 +55,9 @@
         <input matInput formControlName="place_of_issue" />
         <mat-error *ngIf="codebtorForm.get('place_of_issue')?.hasError('required')">
           El lugar de expedición es requerido
+        </mat-error>
+        <mat-error *ngIf="codebtorForm.get('place_of_issue')?.hasError('maxlength')">
+          Máximo 70 caracteres permitidos
         </mat-error>
       </mat-form-field>
 
@@ -117,6 +126,9 @@
         <mat-error *ngIf="codebtorForm.get('address')?.hasError('required')">
           La dirección es requerida
         </mat-error>
+        <mat-error *ngIf="codebtorForm.get('address')?.hasError('maxlength')">
+          Máximo 70 caracteres permitidos
+        </mat-error>
       </mat-form-field>
 
       <!-- Barrio -->
@@ -125,6 +137,9 @@
         <input matInput formControlName="neighborhood" />
         <mat-error *ngIf="codebtorForm.get('neighborhood')?.hasError('required')">
           El barrio es requerido
+        </mat-error>
+        <mat-error *ngIf="codebtorForm.get('neighborhood')?.hasError('maxlength')">
+          Máximo 70 caracteres permitidos
         </mat-error>
       </mat-form-field>
 
@@ -135,25 +150,96 @@
         <mat-error *ngIf="codebtorForm.get('city')?.hasError('required')">
           La ciudad es requerida
         </mat-error>
+        <mat-error *ngIf="codebtorForm.get('city')?.hasError('maxlength')">
+          Máximo 70 caracteres permitidos
+        </mat-error>
       </mat-form-field>
 
     
       <!-- Tipo de Vinculación -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Tipo de Vinculación</mat-label>
-        <input matInput formControlName="type_of_linkage" />
-        <mat-error *ngIf="codebtorForm.get('type_of_linkage')?.hasError('required')">
+        <mat-select formControlName="type_linkage" #typeLinkageSelect>
+          <mat-option *ngFor="let linkage of lisTypeLinkages" [value]="linkage.id">
+            {{ linkage.name }}
+          </mat-option>
+  
+          @if(!addingNewLinkage){
+            <div class="flex justify-center">
+              <button mat-stroked-button class="ml-3 mt-4" color="primary" aria-label="Agregar nuevo"
+                (click)="toggleAddNewLinkage()">
+                <mat-icon>add_circle</mat-icon>
+                Nuevo
+              </button>
+            </div>
+          }@else { 
+            <div class="p-6">
+              <mat-form-field appearance="fill" class="w-full mb-0 new-linkage">
+                <mat-label>Nombre tipo vinculación</mat-label>
+                <input matInput [formControl]="newLinkageNameControl" placeholder="Nombre tipo vinculación" />
+  
+                <mat-error *ngIf="newLinkageNameControl?.hasError('required')">
+                  Nombre requerido
+                </mat-error>
+                <mat-error *ngIf="newLinkageNameControl?.hasError('maxlength')">
+                  Máximo 70 caracteres
+                </mat-error>
+              </mat-form-field>
+  
+              <div class="flex justify-center">
+                <button mat-icon-button color="primary" aria-label="agregar" (click)="saveNewLinkage()">
+                  <mat-icon>save</mat-icon>
+                </button>
+                <button mat-icon-button color="secondary" aria-label="cerrar" (click)="cancelAddNewLinkage()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </div>
+          }
+        </mat-select>
+        <mat-error *ngIf="codebtorForm.get('type_linkage')?.hasError('required')">
           El tipo de vinculación es requerido
         </mat-error>
       </mat-form-field>
 
+
       <!-- Relación de Trabajo -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Relación de Trabajo</mat-label>
-        <mat-select formControlName="job_relationship">
+        <mat-select formControlName="job_relationship" #jobRelationshipSelect>
           <mat-option *ngFor="let relationship of lisJobRelationShips" [value]="relationship.id">
             {{ relationship.name }}
           </mat-option>
+          @if(!addingNewRelationship) {
+            <div class="flex justify-center">
+              <button mat-stroked-button class="ml-3 mt-4" color="primary" aria-label="Agregar nuevo"
+                (click)="toggleAddNewRelationship()">
+                <mat-icon>add_circle</mat-icon>
+                Nuevo
+              </button>
+            </div>
+          }@else {
+            <div class="p-6">
+              <mat-form-field appearance="fill" class="w-full mb-0 new-relation">
+                <mat-label>Nombre relación laboral</mat-label>
+                <input matInput [formControl]="newRelationshipNameControl" placeholder="Nombre relación laboral" />
+                <mat-error *ngIf="newRelationshipNameControl?.hasError('required')">
+                  Nombre requerido
+                </mat-error>
+                <mat-error *ngIf="newRelationshipNameControl?.hasError('maxlength')">
+                  Máximo 70 caracteres
+                </mat-error>
+              </mat-form-field>
+              <div class="flex justify-center">
+                <button mat-icon-button color="primary" aria-label="agregar" (click)="saveNewRelationship()">
+                  <mat-icon>save</mat-icon>
+                </button>
+                <button mat-icon-button color="secoundary" aria-label="cerrar" (click)="cancelAddNewRelationship()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </div>
+          }
         </mat-select>
         <mat-error *ngIf="codebtorForm.get('job_relationship')?.hasError('required')">
           La relación de trabajo es requerida
@@ -164,15 +250,15 @@
       <mat-form-field appearance="outline" class="w-full md:col-span-3">
         <mat-label>Observaciones</mat-label>
         <textarea matInput formControlName="observations"></textarea>
-        <mat-error *ngIf="codebtorForm.get('observations')?.hasError('required')">
-          Las observaciones son requeridas
+        <mat-error *ngIf="codebtorForm.get('observations')?.hasError('maxlength')">
+          Máximo 255 caracteres permitidos
         </mat-error>
       </mat-form-field>
 
       <!-- Botones -->
       <div class="flex justify-end md:col-span-2 space-x-4">
         <button mat-raised-button  (click)="onCancel()" type="button">Cancelar</button>
-        <button mat-raised-button color="primary" [disabled]="codebtorForm.invalid">Guardar</button>
+        <button mat-raised-button color="primary">Guardar</button>
       </div>
     </form>
 </div>

@@ -13,7 +13,10 @@ export interface CoDebtor {
     city: string;
     observations: string;
     office_phone: string;
-    type_of_linkage: string;
+    type_linkage: {
+      id: number;
+      name: string;
+    };
     job_relationship: {
       id: number;
       name: string;
@@ -41,7 +44,7 @@ export interface CoDebtor {
     city: string;
     observations: string;
     office_phone: string;
-    type_of_linkage: string;
+    type_linkage: number;
     sede: number;
     job_relationship: number;
     email: string;
@@ -61,7 +64,7 @@ export interface CoDebtor {
     city: string;
     observations: string;
     office_phone: string;
-    type_of_linkage: string;
+    type_linkage: number;
     sede: number;
     job_relationship: number;
     email: string;

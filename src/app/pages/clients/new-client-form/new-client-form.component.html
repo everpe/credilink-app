@@ -156,14 +156,13 @@
       </mat-error>
     </mat-form-field>
 
-
+<!-- //Tipo vinculación -->
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Tipo de Vinculación</mat-label>
       <mat-select formControlName="type_linkage" #typeLinkageSelect>
         <mat-option *ngFor="let linkage of lisTypeLinkages" [value]="linkage.id">
           {{ linkage.name }}
         </mat-option>
-
         @if(!addingNewLinkage){
           <div class="flex justify-center">
             <button mat-stroked-button class="ml-3 mt-4" color="primary" aria-label="Agregar nuevo"
