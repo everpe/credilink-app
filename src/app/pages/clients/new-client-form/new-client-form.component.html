@@ -1,210 +1,267 @@
 <div class="contenedor p-11 py-1">
 
-    <h2 mat-dialog-title class="text-xl font-medium  text-center mb-6 mt-4">{{ !isEditMode ? 'Registrar nuevo' : 'Modificar'}} cliente</h2>
-    <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <!-- Nombre -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Nombre</mat-label>
-        <input matInput formControlName="first_name" />
-        <mat-error *ngIf="clientForm.get('first_name')?.hasError('required')">
-          El nombre es requerido
-        </mat-error>
-      </mat-form-field>
+  <h2 mat-dialog-title class="text-xl font-medium  text-center mb-6 mt-4">{{ !isEditMode ? 'Registrar nuevo' :
+    'Modificar'}} cliente</h2>
+  <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Nombre -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="first_name" />
+      <mat-error *ngIf="clientForm.get('first_name')?.hasError('required')">
+        El nombre es requerido
+      </mat-error>
+      <mat-error *ngIf="clientForm.get('first_name')?.hasError('maxlength')">
+        Máximo 70 caracteres permitidos
+      </mat-error>
+    </mat-form-field>
 
-      <!-- Apellido -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Apellido</mat-label>
-        <input matInput formControlName="last_name" />
-        <mat-error *ngIf="clientForm.get('last_name')?.hasError('required')">
-          El apellido es requerido
-        </mat-error>
-      </mat-form-field>
+    <!-- Apellido -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Apellido</mat-label>
+      <input matInput formControlName="last_name" />
+      <mat-error *ngIf="clientForm.get('last_name')?.hasError('required')">
+        El apellido es requerido
+      </mat-error>
+      <mat-error *ngIf="clientForm.get('last_name')?.hasError('maxlength')">
+        Máximo 70 caracteres permitidos
+      </mat-error>
+    </mat-form-field>
 
-      <!-- Tipo de Documento -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Tipo de Documento</mat-label>
-        <mat-select formControlName="type_document">
-          <mat-option *ngFor="let type of documentTypes" [value]="type">{{ type }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="clientForm.get('type_document')?.hasError('required')">
-          El tipo de documento es requerido
-        </mat-error>
-      </mat-form-field>
+    <!-- Tipo de Documento -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Tipo de Documento</mat-label>
+      <mat-select formControlName="type_document">
+        <mat-option *ngFor="let type of documentTypes" [value]="type">{{ type }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="clientForm.get('type_document')?.hasError('required')">
+        El tipo de documento es requerido
+      </mat-error>
+    </mat-form-field>
 
-      <!-- Número de Documento -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Número de Documento</mat-label>
-        <input matInput formControlName="document_number"/>
-        <mat-error *ngIf="clientForm.get('document_number')?.hasError('required')">
-          El número de documento es requerido
-        </mat-error>
-        <mat-error *ngIf="clientForm.get('document_number')?.hasError('pattern')">
-          Número de documento debe tener diez dígitos
-        </mat-error>
-      </mat-form-field>
+    <!-- Número de Documento -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Número de Documento</mat-label>
+      <input matInput formControlName="document_number" />
+      <mat-error *ngIf="clientForm.get('document_number')?.hasError('required')">
+        El número documento es requerido
+      </mat-error>
+      <mat-error *ngIf="clientForm.get('document_number')?.hasError('pattern')">
+        N° documento requiere 10 dígitos
+      </mat-error>
+    </mat-form-field>
 
-      <!-- Lugar de Expedición -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Lugar de Expedición</mat-label>
-        <input matInput formControlName="place_of_issue" />
-        <mat-error *ngIf="clientForm.get('place_of_issue')?.hasError('required')">
-          El lugar de expedición es requerido
-        </mat-error>
-      </mat-form-field>
+    <!-- Lugar de Expedición -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Lugar de Expedición</mat-label>
+      <input matInput formControlName="place_of_issue" />
+      <mat-error *ngIf="clientForm.get('place_of_issue')?.hasError('required')">
+        El lugar de expedición es requerido
+      </mat-error>
+      <mat-error *ngIf="clientForm.get('place_of_issue')?.hasError('maxlength')">
+        Máximo 70 caracteres permitidos
+      </mat-error>
+    </mat-form-field>
 
-      <!-- Género -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Género</mat-label>
-        <mat-select formControlName="gender">
-          <mat-option *ngFor="let gender of genders" [value]="gender">{{ gender }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="clientForm.get('gender')?.hasError('required')">
-          El género es requerido
-        </mat-error>
-      </mat-form-field>
+    <!-- Género -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Género</mat-label>
+      <mat-select formControlName="gender">
+        <mat-option *ngFor="let gender of genders" [value]="gender">{{ gender }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="clientForm.get('gender')?.hasError('required')">
+        El género es requerido
+      </mat-error>
+    </mat-form-field>
 
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Correo</mat-label>
-        <input matInput formControlName="email" />
-        <mat-error *ngIf="clientForm.get('email')?.hasError('required')">
-          El correo electrónico es requerido
-        </mat-error>
-        <mat-error *ngIf="clientForm.get('email')?.hasError('email') && !clientForm.get('email')?.hasError('required')">
-          Formato correo electrónico incorrecto
-        </mat-error>
-      </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Correo</mat-label>
+      <input matInput formControlName="email" />
+      <mat-error *ngIf="clientForm.get('email')?.hasError('required')">
+        El correo electrónico es requerido
+      </mat-error>
+      <mat-error *ngIf="clientForm.get('email')?.hasError('email') && !clientForm.get('email')?.hasError('required')">
+        Formato correo electrónico incorrecto
+      </mat-error>
+    </mat-form-field>
 
-      <!-- Móvil -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Móvil</mat-label>
-        <input matInput formControlName="mobile" />
-        <mat-error *ngIf="clientForm.get('mobile')?.hasError('required')">
-          El móvil es requerido
-        </mat-error>
-        <mat-error *ngIf="clientForm.get('mobile')?.hasError('pattern')">
-          Móvil debe tener diez dígitos numéricos
-        </mat-error>
-      </mat-form-field>
+    <!-- Móvil -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Móvil</mat-label>
+      <input matInput formControlName="mobile" />
+      <mat-error *ngIf="clientForm.get('mobile')?.hasError('required')">
+        El móvil es requerido
+      </mat-error>
+      <mat-error *ngIf="clientForm.get('mobile')?.hasError('pattern')">
+        Debe contener 10 dígitos numéricos
+      </mat-error>
+    </mat-form-field>
 
-      <!-- Teléfono -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Teléfono</mat-label>
-        <input matInput formControlName="phone" />
-        <mat-error *ngIf="clientForm.get('phone')?.hasError('required')">
-          El teléfono es requerido
-        </mat-error>
-        <mat-error *ngIf="clientForm.get('phone')?.hasError('pattern')">
-          Debe contener entre 7 y 10 dígitos
-        </mat-error>
-      </mat-form-field>
+    <!-- Teléfono -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Teléfono</mat-label>
+      <input matInput formControlName="phone" />
+      <mat-error *ngIf="clientForm.get('phone')?.hasError('required')">
+        El teléfono es requerido
+      </mat-error>
+      <mat-error *ngIf="clientForm.get('phone')?.hasError('pattern')">
+        Debe contener entre 7 y 10 dígitos
+      </mat-error>
+    </mat-form-field>
 
-       <!-- Teléfono de Oficina -->
-       <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Teléfono de Oficina</mat-label>
-        <input matInput formControlName="office_phone" />
-        <mat-error *ngIf="clientForm.get('office_phone')?.hasError('required')">
-          El teléfono de oficina es requerido
-        </mat-error>
-        <mat-error *ngIf="clientForm.get('office_phone')?.hasError('pattern')">
-          Debe contener entre 7 y 10 dígitos
-        </mat-error>
-      </mat-form-field>
+    <!-- Teléfono de Oficina -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Teléfono de Oficina</mat-label>
+      <input matInput formControlName="office_phone" />
+      <mat-error *ngIf="clientForm.get('office_phone')?.hasError('required')">
+        El teléfono de oficina es requerido
+      </mat-error>
+      <mat-error *ngIf="clientForm.get('office_phone')?.hasError('pattern')">
+        Debe contener entre 7 y 10 dígitos
+      </mat-error>
+    </mat-form-field>
 
-      <!-- Dirección -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Dirección</mat-label>
-        <input matInput formControlName="address" />
-        <mat-error *ngIf="clientForm.get('address')?.hasError('required')">
-          La dirección es requerida
-        </mat-error>
-      </mat-form-field>
+    <!-- Dirección -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Dirección</mat-label>
+      <input matInput formControlName="address" />
+      <mat-error *ngIf="clientForm.get('address')?.hasError('required')">
+        La dirección es requerida
+      </mat-error>
+      <mat-error *ngIf="clientForm.get('address')?.hasError('maxlength')">
+        Máximo 70 caracteres permitidos
+      </mat-error>
+    </mat-form-field>
 
-      <!-- Barrio -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Barrio</mat-label>
-        <input matInput formControlName="neighborhood" />
-        <mat-error *ngIf="clientForm.get('neighborhood')?.hasError('required')">
-          El barrio es requerido
-        </mat-error>
-      </mat-form-field>
+    <!-- Barrio -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Barrio</mat-label>
+      <input matInput formControlName="neighborhood" />
+      <mat-error *ngIf="clientForm.get('neighborhood')?.hasError('required')">
+        El barrio es requerido
+      </mat-error>
+      <mat-error *ngIf="clientForm.get('neighborhood')?.hasError('maxlength')">
+        Máximo 70 caracteres permitidos
+      </mat-error>
+    </mat-form-field>
 
-      <!-- Ciudad -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Ciudad</mat-label>
-        <input matInput formControlName="city" />
-        <mat-error *ngIf="clientForm.get('city')?.hasError('required')">
-          La ciudad es requerida
-        </mat-error>
-      </mat-form-field>
+    <!-- Ciudad -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Ciudad</mat-label>
+      <input matInput formControlName="city" />
+      <mat-error *ngIf="clientForm.get('city')?.hasError('required')">
+        La ciudad es requerida
+      </mat-error>
+      <mat-error *ngIf="clientForm.get('city')?.hasError('maxlength')">
+        Máximo 70 caracteres permitidos
+      </mat-error>
+    </mat-form-field>
 
-     
 
-      <!-- Tipo de Vinculación -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Tipo de Vinculación</mat-label>
-        <input matInput formControlName="type_of_linkage" />
-        <mat-error *ngIf="clientForm.get('type_of_linkage')?.hasError('required')">
-          El tipo de vinculación es requerido
-        </mat-error>
-      </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Tipo de Vinculación</mat-label>
+      <mat-select formControlName="type_linkage" #typeLinkageSelect>
+        <mat-option *ngFor="let linkage of lisTypeLinkages" [value]="linkage.id">
+          {{ linkage.name }}
+        </mat-option>
 
-      <!-- Relación de Trabajo -->
-      @if(!addingNewRelationship){
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Relación de Trabajo</mat-label>
-          <mat-select formControlName="job_relationship">
-            <mat-option *ngFor="let relationship of lisJobRelationShips" [value]="relationship.id">
-              {{ relationship.name }}
-            </mat-option>
-            <mat-option *ngIf="!addingNewRelationship" (click)="toggleAddNewRelationship()" >
-          
-
-              <!-- <button mat-icon-button color="primary"> -->
-                <mat-icon color="primary">add</mat-icon>
-              <!-- </button> -->
-              Agregar relación
-            </mat-option>
-          </mat-select>
-        
-          <mat-error *ngIf="clientForm.get('job_relationship')?.hasError('required')">
-            La relación de trabajo es requerida
-          </mat-error>
-
-        </mat-form-field>
-      }@else{
-        <!-- Campo para agregar una nueva relación de trabajo -->
-        <div  class="add-new-relationship">
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Nombre nueva relación</mat-label>
-            <input matInput formControlName="newRelationshipName" placeholder="Nombre relación de trabajo" />
-
-            <mat-error *ngIf="clientForm.get('newRelationshipName')?.hasError('maxlength')">
-              Máximo 255 carcteres
-            </mat-error>
-          </mat-form-field>
-          <div class="action-buttons">
-            <button mat-button (click)="saveNewRelationship()">Guardar</button>
-            <button mat-button (click)="cancelAddNewRelationship()">Cancelar</button>
+        @if(!addingNewLinkage){
+          <div class="flex justify-center">
+            <button mat-stroked-button class="ml-3 mt-4" color="primary" aria-label="Agregar nuevo"
+              (click)="toggleAddNewLinkage()">
+              <mat-icon>add_circle</mat-icon>
+              Nuevo
+            </button>
           </div>
-        </div>
-      }
-      
-      
+        }@else { 
+          <div class="p-6">
+            <mat-form-field appearance="fill" class="w-full mb-0 new-linkage">
+              <mat-label>Nombre tipo vinculación</mat-label>
+              <input matInput [formControl]="newLinkageNameControl" placeholder="Nombre tipo vinculación" />
 
-      <!-- Observaciones -->
-      <mat-form-field appearance="outline" class="w-full md:col-span-3">
-        <mat-label>Observaciones</mat-label>
-        <textarea matInput formControlName="observations"></textarea>
-        <mat-error *ngIf="clientForm.get('observations')?.hasError('required')">
-          Las observaciones son requeridas
-        </mat-error>
-      </mat-form-field>
+              <mat-error *ngIf="newLinkageNameControl?.hasError('required')">
+                Nombre requerido
+              </mat-error>
+              <mat-error *ngIf="newLinkageNameControl?.hasError('maxlength')">
+                Máximo 70 caracteres
+              </mat-error>
+            </mat-form-field>
 
-      <!-- Botones -->
-      <div class="flex justify-end md:col-span-2 space-x-4">
-        <button mat-raised-button  (click)="onCancel()" type="button">Cancelar</button>
+            <div class="flex justify-center">
+              <button mat-icon-button color="primary" aria-label="agregar" (click)="saveNewLinkage()">
+                <mat-icon>save</mat-icon>
+              </button>
+              <button mat-icon-button color="secondary" aria-label="cerrar" (click)="cancelAddNewLinkage()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </div>
+        }
+      </mat-select>
+      <mat-error *ngIf="clientForm.get('type_linkage')?.hasError('required')">
+        El tipo de vinculación es requerido
+      </mat-error>
+    </mat-form-field>
 
-        <button mat-raised-button color="primary" [disabled]="clientForm.invalid">Guardar</button>
-      </div>
-    </form>
+
+    <!-- Relación de Trabajo -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Relación de Trabajo</mat-label>
+      <mat-select formControlName="job_relationship" #jobRelationshipSelect>
+        <mat-option *ngFor="let relationship of lisJobRelationShips" [value]="relationship.id">
+          {{ relationship.name }}
+        </mat-option>
+        @if(!addingNewRelationship) {
+          <div class="flex justify-center">
+            <button mat-stroked-button class="ml-3 mt-4" color="primary" aria-label="Agregar nuevo"
+              (click)="toggleAddNewRelationship()">
+              <mat-icon>add_circle</mat-icon>
+              Nuevo
+            </button>
+          </div>
+        }@else {
+          <div class="p-6">
+            <mat-form-field appearance="fill" class="w-full mb-0 new-relation">
+              <mat-label>Nombre relación laboral</mat-label>
+              <input matInput [formControl]="newRelationshipNameControl" placeholder="Nombre relación laboral" />
+              <mat-error *ngIf="newRelationshipNameControl?.hasError('required')">
+                Nombre requerido
+              </mat-error>
+              <mat-error *ngIf="newRelationshipNameControl?.hasError('maxlength')">
+                Máximo 70 caracteres
+              </mat-error>
+            </mat-form-field>
+            <div class="flex justify-center">
+              <button mat-icon-button color="primary" aria-label="agregar" (click)="saveNewRelationship()">
+                <mat-icon>save</mat-icon>
+              </button>
+              <button mat-icon-button color="secoundary" aria-label="cerrar" (click)="cancelAddNewRelationship()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </div>
+        }
+      </mat-select>
+      <mat-error *ngIf="clientForm.get('job_relationship')?.hasError('required')">
+        La relación de trabajo es requerida
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Observaciones -->
+    <mat-form-field appearance="outline" class="w-full md:col-span-3">
+      <mat-label>Observaciones</mat-label>
+      <textarea matInput formControlName="observations"></textarea>
+      <mat-error *ngIf="clientForm.get('observations')?.hasError('maxlength')">
+        Máximo 255 caracteres permitidos
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Botones -->
+    <div class="flex justify-end md:col-span-2 space-x-4">
+      <button mat-raised-button (click)="onCancel()" type="button">Cancelar</button>
+
+      <button mat-raised-button color="primary">Guardar</button>
+    </div>
+  </form>
 </div>
+
+<!-- {{clientForm.value| json}} -->

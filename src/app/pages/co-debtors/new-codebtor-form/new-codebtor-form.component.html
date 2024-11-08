@@ -38,6 +38,9 @@
         <mat-error *ngIf="codebtorForm.get('document_number')?.hasError('required')">
           El número de documento es requerido
         </mat-error>
+        <mat-error *ngIf="codebtorForm.get('document_number')?.hasError('pattern')">
+          Número de documento debe tener diez dígitos
+        </mat-error>
       </mat-form-field>
 
       <!-- Lugar de Expedición -->
@@ -78,6 +81,9 @@
         <mat-error *ngIf="codebtorForm.get('mobile')?.hasError('required')">
           El móvil es requerido
         </mat-error>
+        <mat-error *ngIf="codebtorForm.get('mobile')?.hasError('pattern')">
+          Móvil debe tener diez dígitos numéricos
+        </mat-error>
       </mat-form-field>
 
       <!-- Teléfono -->
@@ -87,6 +93,9 @@
         <mat-error *ngIf="codebtorForm.get('phone')?.hasError('required')">
           El teléfono es requerido
         </mat-error>
+        <mat-error *ngIf="codebtorForm.get('phone')?.hasError('pattern')">
+          Debe contener entre 7 y 10 dígitos
+        </mat-error>
       </mat-form-field>
 
        <!-- Teléfono de Oficina -->
@@ -95,6 +104,9 @@
         <input matInput formControlName="office_phone" />
         <mat-error *ngIf="codebtorForm.get('office_phone')?.hasError('required')">
           El teléfono de oficina es requerido
+        </mat-error>
+        <mat-error *ngIf="codebtorForm.get('office_phone')?.hasError('pattern')">
+          Debe contener entre 7 y 10 dígitos
         </mat-error>
       </mat-form-field>
 

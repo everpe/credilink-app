@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, NgModule, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, Inject, NgModule, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { ToastrService } from 'ngx-toastr';
-import { Gender, JobRelationship, TypeDocument } from 'src/app/interfaces/client.interface';
+import { Gender, JobRelationship, TypeDocument, TypeLinkage } from 'src/app/interfaces/client.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ClientService } from 'src/app/services/clients/client.service';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
@@ -32,13 +32,20 @@ import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.comp
   styleUrl: './new-client-form.component.scss'
 })
 export class NewClientFormComponent implements OnInit {
+  @ViewChild('jobRelationshipSelect') jobRelationshipSelect!: MatSelect;
+  @ViewChild('typeLinkageSelect') typeLinkageSelect!: MatSelect;
   clientForm: FormGroup;
   documentTypes = Object.values(TypeDocument);
   genders = Object.values(Gender);
   lisJobRelationShips: JobRelationship[] = [];
+  lisTypeLinkages: TypeLinkage[] = [];
   addingNewRelationship = false; // Controla si se está agregando un nueva RL
+  addingNewLinkage = false; // Controla si se está agregando TipoVinculacion
   isEditMode: boolean = false;
   clientData: any;  // Contendrá los datos del cliente si es modo edición
+
+  newRelationshipNameControl = new FormControl('', [Validators.required, Validators.maxLength(70)]);
+  newLinkageNameControl = new FormControl('', [Validators.required, Validators.maxLength(70)]);
 
   constructor(
     private fb: FormBuilder,
@@ -53,37 +60,42 @@ export class NewClientFormComponent implements OnInit {
     this.clientData = data?.client || {};  // Carga los datos del cliente o un objeto vacío
 
     this.clientForm = this.fb.group({
-      first_name: [this.clientData.first_name || '', Validators.required],
-      last_name: [this.clientData.last_name || '', Validators.required],
+      first_name: [this.clientData.first_name || '', [Validators.required, Validators.maxLength(70)]],
+      last_name: [this.clientData.last_name || '', [Validators.required, Validators.maxLength(70)]],
       type_document: [this.clientData.type_document || '', Validators.required],
       document_number: [
-        this.clientData.document_number || '',
-        [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+        this.clientData.document_number || '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       email: [this.clientData.email || '', [Validators.required, Validators.email]],
-      place_of_issue: [this.clientData.place_of_issue || '', Validators.required],
+      place_of_issue: [this.clientData.place_of_issue || '', [Validators.required, Validators.maxLength(70)]],
       gender: [this.clientData.gender || '', Validators.required],
       phone: [this.clientData.phone || '', [Validators.required, Validators.pattern('^[0-9]{7,10}$')]],
-      mobile: [this.clientData.mobile || '',
-      [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      address: [this.clientData.address || '', Validators.required],
-      neighborhood: [this.clientData.neighborhood || '', Validators.required],
-      city: [this.clientData.city || '', Validators.required],
+      mobile: [this.clientData.mobile || '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      address: [this.clientData.address || '', [Validators.required, Validators.maxLength(70)]],
+      neighborhood: [this.clientData.neighborhood || '', [Validators.required, Validators.maxLength(70)]],
+      city: [this.clientData.city || '', [Validators.required, Validators.maxLength(70)]],
       office_phone: [this.clientData.office_phone || '', [Validators.required, Validators.pattern('^[0-9]{7,10}$')]],
-      type_of_linkage: [this.clientData.type_of_linkage || '', Validators.required],
+      type_linkage: [this.clientData.type_linkage?.id || '', Validators.required],
       sede: [this.clientData.sede || this.authService.getSedeUser(), Validators.required],
       job_relationship: [this.clientData.job_relationship?.id || '', Validators.required],
-      newRelationshipName: ['', Validators.maxLength(250)],
-      observations: [this.clientData.observations || '']
+      observations: [this.clientData.observations || '', Validators.maxLength(255)]
     });
   }
 
   ngOnInit(): void {
-    this.clientService.getJobRelationships(1).subscribe(
+    this.clientService.getJobRelationships(Number(this.authService.getSedeUser()) ?? 0).subscribe(
       (data: JobRelationship[]) => {
         this.lisJobRelationShips = data;
       },
       (error) => {
         console.error('Error fetching job relationships:', error);
+      }
+    );
+    this.clientService.getTypesLinkages(Number(this.authService.getSedeUser()) ?? 0).subscribe(
+      (data: TypeLinkage[]) => {
+        this.lisTypeLinkages = data;
+      },
+      (error) => {
+        console.error('Error fetching type_lynkages:', error);
       }
     );
   }
@@ -131,7 +143,6 @@ export class NewClientFormComponent implements OnInit {
       this.openConfirmDialog();
     }
   }
-
   onCancel(): void {
     this.dialogRef.close();
   }
@@ -139,42 +150,66 @@ export class NewClientFormComponent implements OnInit {
 
 
 
-   // Método para mostrar el campo de entrada de la nueva relación
+// Relacion Trabajo
    toggleAddNewRelationship(): void {
     this.addingNewRelationship = true;
-    this.clientForm.get('newRelationshipName')?.setValue('');
+    this.newRelationshipNameControl?.reset('');
   }
 
-  // Método para guardar la nueva relación de trabajo
   saveNewRelationship(): void {
-    if (this.clientForm.get('newRelationshipName')?.value.trim()) {
-      // Crear un nuevo objeto de relación de trabajo con un ID temporal
-      // const newRelationship: JobRelationship =  {
-      //   id: this.lisJobRelationShips.length + 1, // Genera un ID temporal
-      //   name: this.clientForm.get('newRelationshipName')?.value,
-      //   sede: Number(this.authService.getSedeUser())
-      // };
-      this.clientService.addJobRelationship(Number(this.authService.getSedeUser()), this.clientForm.get('newRelationshipName')?.value)
+    if (this.newRelationshipNameControl?.valid) {
+
+      this.clientService.addJobRelationship(Number(this.authService.getSedeUser()), this.newRelationshipNameControl?.value ?? '')
         .subscribe( response =>{
-          this.lisJobRelationShips.push(response);
-          this.clientForm.get('job_relationship')?.setValue(response.id);
+          this.lisJobRelationShips.push(response.data);
+          this.clientForm.get('job_relationship')?.setValue(response.data.id);
+         this.jobRelationshipSelect.close();
+
         }, error=>{
           this.snackBar.error(error.error.error);
         });
 
-      // Agrega la nueva relación a la lista y selecciona la opción
-      // this.lisJobRelationShips.push(newRelationship);
-      // this.clientForm.get('job_relationship')?.setValue(newRelationship.id);
-
-      // Reinicia los valores
       this.addingNewRelationship = false;
-      this.clientForm.get('newRelationshipName')?.setValue('');
+      this.newRelationshipNameControl?.reset();
+    }else{
+      this.newRelationshipNameControl?.markAsTouched()
     }
   }
 
-  // Método para cancelar la adición de una nueva relación de trabajo
   cancelAddNewRelationship(): void {
     this.addingNewRelationship = false;
-    this.clientForm.get('newRelationshipName')?.setValue('');
+    this.newRelationshipNameControl?.reset();
+  }
+
+
+
+  //Tipos  Vinculacion
+  toggleAddNewLinkage() {
+    this.addingNewLinkage = !this.addingNewLinkage;
+    if (!this.addingNewLinkage) {
+      this.newLinkageNameControl?.reset();
+    }
+  }
+
+  saveNewLinkage() {
+    if (this.newLinkageNameControl?.valid) {
+      this.clientService.addTypeOfLink( Number(this.authService.getSedeUser()) ?? 0, this.newLinkageNameControl?.value ??  '')
+      .subscribe( response => {
+        this.lisTypeLinkages.push(response.data);
+        this.clientForm.get('type_linkage')?.setValue(response.data.id);
+        this.typeLinkageSelect.close();
+      },error => {
+        this.snackBar.error(error.error.error)
+      });
+      this.addingNewLinkage = false;
+      this.newLinkageNameControl?.reset();
+    } else {
+      this.newLinkageNameControl?.markAsTouched();
+    }
+  }
+
+  cancelAddNewLinkage() {
+    this.addingNewLinkage = false;
+    this.newLinkageNameControl?.reset();
   }
 }

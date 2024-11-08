@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateClientDto, JobRelationship, UpdateClientDto } from 'src/app/interfaces/client.interface';
+import { CreateClientDto, JobRelationship, TypeLinkage, UpdateClientDto } from 'src/app/interfaces/client.interface';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -26,6 +26,9 @@ export class ClientService {
 
   getJobRelationships(sede: number): Observable<JobRelationship[]> {
     return this.http.get<JobRelationship[]>( `${environment.apiUrl}/job_relationships/?sede=${sede}`);
+  }
+  getTypesLinkages(sede: number): Observable<TypeLinkage[]> {
+    return this.http.get<TypeLinkage[]>( `${environment.apiUrl}/type_of_link/?sede=${sede}`);
   }
 
   updateClient(id: number, updateClientDto: UpdateClientDto): Observable<any> {
@@ -62,5 +65,10 @@ export class ClientService {
       name: name
     };
     return this.http.post<any>(`${environment.apiUrl}/job_relationships/`, body);
+  }
+
+  addTypeOfLink(sede: number, name: string): Observable<any> {
+    const body = { sede, name };
+    return this.http.post<any>(`${environment.apiUrl}/type_of_link/`, body);
   }
 }

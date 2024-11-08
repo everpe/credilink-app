@@ -12,7 +12,7 @@ export interface CreateClientDto {
     city: string;
     observations: string;
     office_phone: string;
-    type_of_linkage: string;
+    type_linkage: number;
     sede: number;
     job_relationship: number;
 }
@@ -31,6 +31,13 @@ export enum Gender {
 }
 
 export interface JobRelationship {
+    id: number;
+    name: string;
+    sede: number;
+    company?: number;
+}
+
+export interface TypeLinkage {
     id: number;
     name: string;
     sede: number;
