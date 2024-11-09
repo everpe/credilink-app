@@ -31,6 +31,7 @@ import { PaymentsCreditListComponent } from '../../payments/payments-credit-list
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { HistoryPaymentsComponent } from '../../payments/history-payments/history-payments.component';
 import { UpdateCreditComponent } from '../update-credit/update-credit.component';
+import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
 
 @Component({
   selector: 'list-credits',
@@ -286,6 +287,28 @@ export class ListComponent implements OnInit {
         this.loadCredits();
       }
     });
+  }
+
+  deleteCredit(credit: GetCreditDto){
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      width: '400px',
+      data: { message : `¿Está seguro que desea desactivar el credito de ${credit.client.first_name} ${credit.client.last_name}?` }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.clientService.deleteClientById(credit.id).subscribe(
+          (resp: any) => {
+            this.snackBar.success(resp.message);
+            this.loadCredits(); 
+        }, 
+          error => {
+            this.snackBar.error(error.error.error);
+            console.error(error);
+        });;
+      }
+    });
+
   }
 }
 

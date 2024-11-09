@@ -158,6 +158,12 @@
                   <mat-icon color="primary">edit</mat-icon>
                   <span>Modificar</span>
                 </button>
+                <button mat-menu-item (click)="deleteCredit(credit)">
+                  <mat-icon [color]="credit.load_status.toUpperCase() == 'DESACTIVADO' ? 'primary' : 'warn'">
+                    {{ credit.load_status.toUpperCase() == 'DESACTIVADO' ? 'toggle_on' : 'toggle_off' }}
+                  </mat-icon>
+                  <span>{{ credit.load_status.toUpperCase() == 'DESACTIVADO' ? 'Activar' : 'Desactivar' }}</span>
+                </button>
               </mat-menu>
             </td>
           </ng-container>

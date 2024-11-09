@@ -107,4 +107,9 @@ export class CreditService {
 
     return this.http.post<any>(url, body, { headers });
   }
+
+  deleteCreditById(creditId: number): Observable<void> {
+    const url = `${environment.apiUrl}/credits/${creditId}/`;
+    return this.http.delete<void>(url);
+  }
 }
