@@ -1,0 +1,20 @@
+.notificaciones-container {
+    // display: flex;
+    // align-items: center;
+    // gap: 16px;
+    padding-top: 2%;
+  }
+  
+  .input-buscar, .select-estado {
+    flex: 1;
+  }
+  
+  .btn-enviar {
+    background-color: #004d40; /* Ajusta el color según la imagen */
+    color: #fff;
+  }
+  
+  .btn-enviar:hover {
+    background-color: #00332a; /* Un tono más oscuro para el hover */
+  }
+  

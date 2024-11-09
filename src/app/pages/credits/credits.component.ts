@@ -20,6 +20,7 @@ import { CodebtorService } from 'src/app/services/codebtors/codebtor.service';
 import { CreditService } from 'src/app/services/credits/credit.service';
 import { ListComponent } from "./list/list.component";
 import { SharedService } from 'src/app/services/shared/shared.service';
+import { NotificationsComponent } from "./notifications/notifications.component";
 
 @Component({
   selector: 'app-credits',
@@ -38,7 +39,8 @@ import { SharedService } from 'src/app/services/shared/shared.service';
     CommonModule,
     MatTabsModule,
     MatSelectModule,
-    ListComponent
+    ListComponent,
+    NotificationsComponent
 ],
   templateUrl: './credits.component.html',
   styleUrl: './credits.component.scss'

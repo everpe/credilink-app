@@ -1,0 +1,120 @@
+<div class="container mx-auto mt-4">
+    <mat-card class="mat-elevation-z6 rounded-lg">
+        <mat-card-header class="px-4">
+            <div [formGroup]="notificacionesForm"
+                class="notificaciones-container grid grid-cols-1 lg:grid-cols-5 gap-4 w-full">
+
+                <mat-form-field class="col-span-1 lg:col-span-2 w-full" appearance="outline">
+                    <mat-label class="ml-12">Buscar cliente</mat-label>
+                    <mat-icon matPrefix>person_search</mat-icon>
+
+                    <input type="text" matInput formControlName="clientSearch"
+                        placeholder="Buscar por nombre, apellido, documento" [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onClientSelected($event.option.value)"
+                        [displayWith]="displayClient">
+                        <mat-option *ngFor="let client of filteredClients | async" [value]="client">
+                            {{ client.first_name }} {{ client.last_name }} - {{ client.document_number }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+
+
+
+                <mat-form-field appearance="outline" class="col-span-2 lg:col-span-2 w-full">
+                    <mat-label class="ml-12">Estado del crédito</mat-label>
+                    <mat-select formControlName="load_status" (selectionChange)="filterCredits()">
+                        <mat-option value="ACTIVO">ACTIVO</mat-option>
+                        <mat-option value="PAGADO">PAGADO</mat-option>
+                        <mat-option value="MORA">MORA</mat-option>
+                    </mat-select>
+                    <mat-icon matPrefix>info</mat-icon>
+                </mat-form-field>
+
+                <div class="flex justify-center">
+                    <button mat-raised-button color="primary" class="btn-enviar mt-3" (click)="sendNotificationSelectedCredits()">
+                        Enviar notificación
+                    </button>
+                </div>
+            </div>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="overflow-x-auto">
+                <table mat-table [dataSource]="dataSource" matSort class="min-w-full shadow-md rounded-lg bg-back">
+              
+                  <!-- Columna de Selección -->
+                  <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <mat-checkbox
+                        (change)="$event ? masterToggle() : null"
+                        [checked]="isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        aria-label="Select all rows">
+                      </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      <mat-checkbox
+                        (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)"
+                        aria-label="Select row">
+                      </mat-checkbox>
+                    </td>
+                  </ng-container>
+              
+                  <!-- Columna Cliente -->
+                  <ng-container matColumnDef="client">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4">Cliente</th>
+                    <td mat-cell *matCellDef="let credit">{{ credit.client.first_name }} {{ credit.client.last_name }}</td>
+                  </ng-container>
+              
+                  <!-- Valor Interés -->
+                  <ng-container matColumnDef="interest_value">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4">Valor interés </th>
+                    <td mat-cell *matCellDef="let credit">{{ credit.interest_value | currency:'' }}</td>
+                  </ng-container>
+              
+                  <!-- Tasa de Interés -->
+                  <!-- <ng-container matColumnDef="interest_rate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4">Tasa interés</th>
+                    <td mat-cell *matCellDef="let credit">{{ credit.interest_rate }}</td>
+                  </ng-container> -->
+              
+                  <!-- Total Deuda -->
+                  <ng-container matColumnDef="total_debt">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4">Total deuda </th>
+                    <td mat-cell *matCellDef="let credit">{{ credit.total_debt | currency:'' }}</td>
+                  </ng-container>
+              
+                  <!-- Saldo Pendiente -->
+                  <ng-container matColumnDef="remaining_balance">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4">Saldo pendiente </th>
+                    <td mat-cell *matCellDef="let credit">{{ credit.remaining_balance | currency:'' }}</td>
+                  </ng-container>
+              
+                  <!-- Próximo Pago -->
+                  <ng-container matColumnDef="next_payment_date">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4">Próximo pago</th>
+                    <td mat-cell *matCellDef="let credit">
+                      {{ credit.next_payment_date ? (credit.next_payment_date | date: 'dd-MM-yyyy') : 'Sin fecha' }}
+                    </td>
+                  </ng-container>
+              
+                  <!-- Estado del Crédito -->
+                  <ng-container matColumnDef="loan_status">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4">Estado</th>
+                    <td mat-cell *matCellDef="let credit">{{ credit.load_status }}</td>
+                  </ng-container>
+              
+                  <!-- Definiciones de Filas y Encabezados de la Tabla -->
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <div class="container">
+                    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                  </div>
+              </div>
+            
+        </mat-card-content>
+    </mat-card>
+</div>

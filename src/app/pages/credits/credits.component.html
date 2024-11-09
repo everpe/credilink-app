@@ -2,7 +2,7 @@
 
 <div class="container mx-auto mt-4">
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-        <mat-tab label="Registro crédito">
+        <mat-tab label="Nuevo crédito">
             <form [formGroup]="creditForm" (ngSubmit)="onSubmit()" class="mt-4">
                 <!-- Datos del Cliente -->
                 <mat-card class="mb-0">
@@ -94,11 +94,10 @@
                                     <mat-label>Valor del crédito</mat-label>
                                     <input type="text" matInput [value]="formattedLoanAmount"
                                         (input)="onLoanAmountInput($event)" (keydown)="restrictToNumbers($event)"
-                                        placeholder="Valor del crédito" required=""/>
+                                        placeholder="Valor del crédito" required="" />
                                     <mat-icon matSuffix>attach_money</mat-icon>
                                 </mat-form-field>
-                                <div class="red block"
-                                    *ngIf=" !formattedLoanAmount || formattedLoanAmount == '0'">
+                                <div class="red block" *ngIf=" !formattedLoanAmount || formattedLoanAmount == '0'">
                                     Valor crédito es requerido
                                 </div>
                             </div>
@@ -108,15 +107,15 @@
                             <!-- Porcentaje de Interés -->
                             <mat-form-field class="w-full" appearance="outline">
                                 <mat-label>Tasa de interés</mat-label>
-                                <input matInput formControlName="interest_rate"
-                                    placeholder="Porcentaje de interés" (input)="calculateInterest()" />
+                                <input matInput formControlName="interest_rate" placeholder="Porcentaje de interés"
+                                    (input)="calculateInterest()" />
                                 <mat-icon matSuffix>percent</mat-icon>
                                 <mat-error *ngIf="creditForm.get('interest_rate')?.hasError('required')">
                                     Porcentaje interés es requerido
                                 </mat-error>
                                 <mat-error *ngIf="creditForm.get('interest_rate')?.hasError('pattern')">
                                     Solo se permiten números, enteros o decimales
-                                  </mat-error>
+                                </mat-error>
                             </mat-form-field>
 
 
@@ -163,9 +162,9 @@
 
 
         </mat-tab>
-        <mat-tab label="Créditos otorgados">
+        <mat-tab label="Lista créditos">
             @defer (on viewport) {
-            <list-credits></list-credits>
+            <list-credits />
             }@loading {
             <p>Cargando creditos</p>
             }
@@ -173,6 +172,16 @@
             <p>Lista de creditos realizados</p>
             }
         </mat-tab>
+        <mat-tab label="Notificaciones">
+            @defer (on viewport) {
+            <notifications-credit />
+            }@loading {
+            <p>Cargando...</p>
+            } @placeholder {
+            <p>Lista de creditos realizados</p>
+            }
+        </mat-tab>
     </mat-tab-group>
+
     <!-- {{this.creditForm.value | json}} -->
 </div>

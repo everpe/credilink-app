@@ -92,9 +92,9 @@ export class ListComponent implements OnInit {
   private reloadSubscription!: Subscription;
 
   constructor(private formBuilder: FormBuilder,
-    private clientService: ClientService,
     private codebtorService: CodebtorService,
     private authService: AuthService,
+    private clientService: ClientService,
     private creditService: CreditService,
     private snackBar: ToastrService,
     private dialog: MatDialog,
@@ -179,7 +179,7 @@ export class ListComponent implements OnInit {
         }
       },
       (error) => {
-        this.snackBar.error('Hubo un error al filtrar los créditos', 'Error');
+        this.snackBar.error(error.error.error, 'Error');
         console.error(error);
       }
     );
