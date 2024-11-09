@@ -5,7 +5,7 @@
                 class="notificaciones-container grid grid-cols-1 lg:grid-cols-5 gap-4 w-full">
 
                 <mat-form-field class="col-span-1 lg:col-span-2 w-full" appearance="outline">
-                    <mat-label class="ml-12">Buscar cliente</mat-label>
+                    <mat-label class="ml-11">Buscar cliente</mat-label>
                     <mat-icon matPrefix>person_search</mat-icon>
 
                     <input type="text" matInput formControlName="clientSearch"
@@ -21,7 +21,7 @@
 
 
                 <mat-form-field appearance="outline" class="col-span-2 lg:col-span-2 w-full">
-                    <mat-label class="ml-12">Estado del crédito</mat-label>
+                    <mat-label class="ml-10">Estado del crédito</mat-label>
                     <mat-select formControlName="load_status" (selectionChange)="filterCredits()">
                         <mat-option value="ACTIVO">ACTIVO</mat-option>
                         <mat-option value="PAGADO">PAGADO</mat-option>
@@ -31,8 +31,9 @@
                 </mat-form-field>
 
                 <div class="flex justify-center">
-                    <button mat-raised-button color="primary" class="btn-enviar mt-3" (click)="sendNotificationSelectedCredits()">
-                        Enviar notificación
+                    <button mat-raised-button color="primary" type="submit" class="flex items-center mt-3" (click)="sendNotificationSelectedCredits()">
+                      <mat-icon class="mr-2">notifications</mat-icon> 
+                      Enviar notificación
                     </button>
                 </div>
             </div>

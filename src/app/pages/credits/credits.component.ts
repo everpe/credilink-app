@@ -21,6 +21,7 @@ import { CreditService } from 'src/app/services/credits/credit.service';
 import { ListComponent } from "./list/list.component";
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { NotificationsComponent } from "./notifications/notifications.component";
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-credits',
@@ -40,7 +41,8 @@ import { NotificationsComponent } from "./notifications/notifications.component"
     MatTabsModule,
     MatSelectModule,
     ListComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    MatProgressSpinner
 ],
   templateUrl: './credits.component.html',
   styleUrl: './credits.component.scss'

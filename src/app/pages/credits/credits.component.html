@@ -2,7 +2,12 @@
 
 <div class="container mx-auto mt-4">
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-        <mat-tab label="Nuevo crédito">
+        <mat-tab label="">
+            <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon">add_circle</mat-icon>
+                Nuevo crédito
+            </ng-template>
+
             <form [formGroup]="creditForm" (ngSubmit)="onSubmit()" class="mt-4">
                 <!-- Datos del Cliente -->
                 <mat-card class="mb-0">
@@ -12,6 +17,7 @@
                             <!-- Autocomplete Cliente -->
                             <mat-form-field class="w-full" appearance="outline">
                                 <mat-label>Buscar cliente</mat-label>
+                                <mat-icon matPrefix>person_search</mat-icon>
                                 <input type="text" matInput formControlName="clientSearch"
                                     placeholder="Buscar por nombres, apellidos,  o número documento"
                                     [matAutocomplete]="auto">
@@ -38,6 +44,7 @@
                             <!-- Autocomplete Codeudor -->
                             <mat-form-field class="w-full" appearance="outline">
                                 <mat-label>Buscar codeudor</mat-label>
+                                <mat-icon matPrefix>person_search</mat-icon>
                                 <input type="text" matInput formControlName="coDebtorSearch"
                                     placeholder="Buscar por nombres, apellidos, o número documento"
                                     [matAutocomplete]="autoCoDebtor">
@@ -69,7 +76,7 @@
                                 <mat-label>Fecha del crédito</mat-label>
                                 <input matInput [matDatepicker]="loanPicker" formControlName="loan_date"
                                     placeholder="Fecha del crédito" />
-                                <mat-datepicker-toggle matSuffix [for]="loanPicker"></mat-datepicker-toggle>
+                                <mat-datepicker-toggle matPrefix [for]="loanPicker"></mat-datepicker-toggle>
                                 <mat-datepicker #loanPicker></mat-datepicker>
                                 <mat-error *ngIf="creditForm.get('loan_date')?.hasError('required')">
                                     Fecha crédito es requerida
@@ -81,7 +88,7 @@
                                 <mat-label>Fecha de recordatorio</mat-label>
                                 <input matInput [matDatepicker]="reminderPicker" formControlName="reminder_date"
                                     placeholder="Fecha de recordatorio" />
-                                <mat-datepicker-toggle matSuffix [for]="reminderPicker"></mat-datepicker-toggle>
+                                <mat-datepicker-toggle matPrefix [for]="reminderPicker"></mat-datepicker-toggle>
                                 <mat-datepicker #reminderPicker></mat-datepicker>
                                 <mat-error *ngIf="creditForm.get('reminder_date')?.hasError('required')">
                                     Fecha recordatorio es requerida
@@ -95,7 +102,7 @@
                                     <input type="text" matInput [value]="formattedLoanAmount"
                                         (input)="onLoanAmountInput($event)" (keydown)="restrictToNumbers($event)"
                                         placeholder="Valor del crédito" required="" />
-                                    <mat-icon matSuffix>attach_money</mat-icon>
+                                    <mat-icon matPrefix>attach_money</mat-icon>
                                 </mat-form-field>
                                 <div class="red block" *ngIf=" !formattedLoanAmount || formattedLoanAmount == '0'">
                                     Valor crédito es requerido
@@ -109,7 +116,7 @@
                                 <mat-label>Tasa de interés</mat-label>
                                 <input matInput formControlName="interest_rate" placeholder="Porcentaje de interés"
                                     (input)="calculateInterest()" />
-                                <mat-icon matSuffix>percent</mat-icon>
+                                <mat-icon matPrefix>percent</mat-icon>
                                 <mat-error *ngIf="creditForm.get('interest_rate')?.hasError('required')">
                                     Porcentaje interés es requerido
                                 </mat-error>
@@ -144,6 +151,7 @@
 
                             <mat-form-field class="w-full" appearance="outline">
                                 <mat-label>PIN de seguridad</mat-label>
+                                <mat-icon matPrefix>lock</mat-icon>
                                 <input matInput formControlName="pin" placeholder="Ingrese su PIN para validar">
                                 <mat-error *ngIf="creditForm.get('pin')?.hasError('required')">
                                     Pin seguridad es requerido
@@ -162,21 +170,29 @@
 
 
         </mat-tab>
-        <mat-tab label="Lista créditos">
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon">request_quote</mat-icon>
+                Lista créditos
+            </ng-template>
             @defer (on viewport) {
             <list-credits />
             }@loading {
-            <p>Cargando creditos</p>
+            <mat-spinner></mat-spinner>
             }
             @placeholder {
             <p>Lista de creditos realizados</p>
             }
         </mat-tab>
-        <mat-tab label="Notificaciones">
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon">add_alert</mat-icon>
+                Notificaciones
+            </ng-template>
             @defer (on viewport) {
             <notifications-credit />
             }@loading {
-            <p>Cargando...</p>
+            <mat-spinner></mat-spinner>
             } @placeholder {
             <p>Lista de creditos realizados</p>
             }

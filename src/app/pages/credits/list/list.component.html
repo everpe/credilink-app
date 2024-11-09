@@ -4,10 +4,14 @@
       <form [formGroup]="requestForm" (ngSubmit)="applyFilters()" class="grid grid-cols-1 lg:grid-cols-6 gap-4 w-full">
           <mat-form-field class="col-span-2 lg:col-span-2 w-full" appearance="outline">
             <mat-label>Buscar cliente</mat-label>
+            <mat-icon matPrefix>person_search</mat-icon>
             <input type="text" matInput formControlName="clientSearch"
-              placeholder="Buscar por nombres, apellidos, o número documento" [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onClientSelected($event.option.value)"
-              [displayWith]="displayClient">
+              placeholder="Nombres, apellidos, o número documento" [matAutocomplete]="auto">
+            <mat-autocomplete 
+              #auto="matAutocomplete"
+              (optionSelected)="onClientSelected($event.option.value)"
+              [displayWith]="displayClient"
+            >
               <mat-option *ngFor="let client of filteredClients | async" [value]="client">
                 {{ client.first_name }} {{ client.last_name }} - {{ client.document_number }}
               </mat-option>
@@ -16,8 +20,9 @@
 
           <mat-form-field class="col-span-2 lg:col-span-2 w-full" appearance="outline">
             <mat-label>Buscar codeudor</mat-label>
+            <mat-icon matPrefix>person_search</mat-icon>
             <input type="text" matInput formControlName="coDebtorSearch"
-              placeholder="Buscar por nombres, apellidos, o número documento" [matAutocomplete]="autoCoDebtor">
+              placeholder="Nombres, apellidos, o número documento" [matAutocomplete]="autoCoDebtor">
             <mat-autocomplete #autoCoDebtor="matAutocomplete" (optionSelected)="onCoDebtorSelected($event.option.value)"
               [displayWith]="displayCoDebtor">
               <mat-option *ngFor="let coDebtor of filteredCoDebtors | async" [value]="coDebtor">
@@ -26,36 +31,37 @@
             </mat-autocomplete>
           </mat-form-field>
 
-          <div class="col-span-2 lg:col-span-2 w-full">
+          <div class="col-span-2 lg:col-span-2 w-full flex">
             <mat-form-field  appearance="outline">
-              <mat-label>Estado del crédito</mat-label>
+              <mat-label>Estado</mat-label>
               <mat-select formControlName="load_status">
                 <mat-option value="ACTIVO">ACTIVO</mat-option>
                 <mat-option value="PAGADO">PAGADO</mat-option>
                 <mat-option value="MORA">MORA</mat-option>
               </mat-select>
+              <mat-icon matPrefix>info</mat-icon>
             </mat-form-field>
-            <mat-checkbox formControlName="export" >Exportar a Excel</mat-checkbox>
+            <mat-checkbox formControlName="export" >Exportar Excel</mat-checkbox>
           </div>
 
           <mat-form-field class="col-span-2 lg:col-span-2 w-full" appearance="outline">
-            <mat-label>Seleccione el rango de fechas</mat-label>
+            <mat-label>Seleccione un periodo</mat-label>
             <mat-date-range-input formGroupName="dateRange" [rangePicker]="picker">
               <input matStartDate placeholder="Fecha de inicio" formControlName="start">
               <input matEndDate placeholder="Fecha de fin" formControlName="end">
             </mat-date-range-input>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
             <mat-date-range-picker #picker></mat-date-range-picker>
           </mat-form-field>
 
           <div class="flex justify-center items-center col-span-2 lg:col-span-2 space-x-2">
-            <button mat-raised-button color="primary" type="submit" class="flex items-center">
-              <mat-icon class="mr-2">search</mat-icon> 
-              Filtrar
-            </button>
             <button mat-raised-button color="secoundary" type="button" class="flex items-center" (click)="resetFilters()">
               <mat-icon class="mr-2">clear</mat-icon> 
               Limpiar
+            </button>
+            <button mat-raised-button color="primary" type="submit" class="flex items-center">
+              <mat-icon class="mr-2">search</mat-icon> 
+              Filtrar
             </button>
           </div>
       </form>
