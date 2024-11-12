@@ -85,6 +85,7 @@ export class ListComponent {
         this.totalRecords = response.count;  
       },
       (error) => {
+        this.snackBar.error(error.error.error);
         console.error('Error al obtener los codeudores:', error);
       }
     );
@@ -140,7 +141,7 @@ export class ListComponent {
           this.getCoDebtors(); 
         }, 
         error => {
-          this.snackBar.error('Ocurrió un error al actualizar el cliente.');
+          this.snackBar.error(error.error.error);
           console.error(error);
         });;
       }

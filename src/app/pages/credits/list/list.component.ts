@@ -297,7 +297,7 @@ export class ListComponent implements OnInit {
   
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.clientService.deleteClientById(credit.id).subscribe(
+        this.creditService.deleteCreditById(credit.id).subscribe(
           (resp: any) => {
             this.snackBar.success(resp.message);
             this.loadCredits(); 
