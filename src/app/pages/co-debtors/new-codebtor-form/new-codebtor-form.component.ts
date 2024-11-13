@@ -68,7 +68,7 @@ export class NewCodebtorFormComponent {
         type_document: [this.codebtorData.type_document || '', Validators.required],
         document_number: [
           this.codebtorData.document_number || '', 
-          [Validators.required, Validators.pattern('^[0-9]{10}$')]
+          [Validators.required, Validators.pattern('^[0-9]{8,10}$')]
         ],
         email: [this.codebtorData.email || '', [Validators.required, Validators.email]],
         place_of_issue: [this.codebtorData.place_of_issue || '',[Validators.required, Validators.maxLength(70)]],

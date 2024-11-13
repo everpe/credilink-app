@@ -64,7 +64,7 @@ export class NewClientFormComponent implements OnInit {
       last_name: [this.clientData.last_name || '', [Validators.required, Validators.maxLength(70)]],
       type_document: [this.clientData.type_document || '', Validators.required],
       document_number: [
-        this.clientData.document_number || '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+        this.clientData.document_number || '', [Validators.required, Validators.pattern('^[0-9]{8,10}$')]],
       email: [this.clientData.email || '', [Validators.required, Validators.email]],
       place_of_issue: [this.clientData.place_of_issue || '', [Validators.required, Validators.maxLength(70)]],
       gender: [this.clientData.gender || '', Validators.required],
