@@ -163,7 +163,7 @@
           <mat-option *ngFor="let linkage of lisTypeLinkages" [value]="linkage.id">
             {{ linkage.name }}
           </mat-option>
-  
+          <mat-option>Ninguno</mat-option>
           @if(!addingNewLinkage){
             <div class="flex justify-center">
               <button mat-stroked-button class="ml-3 mt-4" color="primary" aria-label="Agregar nuevo"
@@ -176,7 +176,12 @@
             <div class="p-6">
               <mat-form-field appearance="fill" class="w-full mb-0 new-linkage">
                 <mat-label>Nombre tipo vinculación</mat-label>
-                <input matInput [formControl]="newLinkageNameControl" placeholder="Nombre tipo vinculación" />
+                <input 
+                  matInput 
+                  [formControl]="newLinkageNameControl"
+                  placeholder="Nombre tipo vinculación"
+                  (keydown.space)="$event.stopPropagation()"
+                />
   
                 <mat-error *ngIf="newLinkageNameControl?.hasError('required')">
                   Nombre requerido
@@ -210,6 +215,7 @@
           <mat-option *ngFor="let relationship of lisJobRelationShips" [value]="relationship.id">
             {{ relationship.name }}
           </mat-option>
+          <mat-option>Ninguno</mat-option>
           @if(!addingNewRelationship) {
             <div class="flex justify-center">
               <button mat-stroked-button class="ml-3 mt-4" color="primary" aria-label="Agregar nuevo"
@@ -222,7 +228,12 @@
             <div class="p-6">
               <mat-form-field appearance="fill" class="w-full mb-0 new-relation">
                 <mat-label>Nombre relación laboral</mat-label>
-                <input matInput [formControl]="newRelationshipNameControl" placeholder="Nombre relación laboral" />
+                <input 
+                  matInput 
+                  [formControl]="newRelationshipNameControl" 
+                  placeholder="Nombre relación laboral" 
+                  (keydown.space)="$event.stopPropagation()"
+                />
                 <mat-error *ngIf="newRelationshipNameControl?.hasError('required')">
                   Nombre requerido
                 </mat-error>

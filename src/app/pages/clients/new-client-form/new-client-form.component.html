@@ -163,6 +163,8 @@
         <mat-option *ngFor="let linkage of lisTypeLinkages" [value]="linkage.id">
           {{ linkage.name }}
         </mat-option>
+        <mat-option>Ninguno</mat-option>
+
         @if(!addingNewLinkage){
           <div class="flex justify-center">
             <button mat-stroked-button class="ml-3 mt-4" color="primary" aria-label="Agregar nuevo"
@@ -175,8 +177,12 @@
           <div class="p-6">
             <mat-form-field appearance="fill" class="w-full mb-0 new-linkage">
               <mat-label>Nombre tipo vinculación</mat-label>
-              <input matInput [formControl]="newLinkageNameControl" placeholder="Nombre tipo vinculación" />
-
+              <input 
+                matInput 
+                [formControl]="newLinkageNameControl" 
+                placeholder="Nombre tipo vinculación"
+                (keydown.space)="$event.stopPropagation()"
+              />
               <mat-error *ngIf="newLinkageNameControl?.hasError('required')">
                 Nombre requerido
               </mat-error>
@@ -209,35 +215,42 @@
         <mat-option *ngFor="let relationship of lisJobRelationShips" [value]="relationship.id">
           {{ relationship.name }}
         </mat-option>
+        <mat-option>Ninguno</mat-option>
         @if(!addingNewRelationship) {
-          <div class="flex justify-center">
-            <button mat-stroked-button class="ml-3 mt-4" color="primary" aria-label="Agregar nuevo"
-              (click)="toggleAddNewRelationship()">
-              <mat-icon>add_circle</mat-icon>
-              Nuevo
-            </button>
-          </div>
-        }@else {
-          <div class="p-6">
-            <mat-form-field appearance="fill" class="w-full mb-0 new-relation">
-              <mat-label>Nombre relación laboral</mat-label>
-              <input matInput [formControl]="newRelationshipNameControl" placeholder="Nombre relación laboral" />
-              <mat-error *ngIf="newRelationshipNameControl?.hasError('required')">
-                Nombre requerido
-              </mat-error>
-              <mat-error *ngIf="newRelationshipNameControl?.hasError('maxlength')">
-                Máximo 70 caracteres
-              </mat-error>
-            </mat-form-field>
             <div class="flex justify-center">
-              <button mat-icon-button color="primary" aria-label="agregar" (click)="saveNewRelationship()">
-                <mat-icon>save</mat-icon>
-              </button>
-              <button mat-icon-button color="secoundary" aria-label="cerrar" (click)="cancelAddNewRelationship()">
-                <mat-icon>close</mat-icon>
+              <button mat-stroked-button class="ml-3 mt-4" color="primary" aria-label="Agregar nuevo"
+                (click)="toggleAddNewRelationship()">
+                <mat-icon>add_circle</mat-icon>
+                Nuevo
               </button>
             </div>
-          </div>
+        }@else {
+     
+            <div class="p-6">
+              <mat-form-field appearance="fill" class="w-full mb-0 new-relation">
+                <mat-label>Nombre relación laboral</mat-label>
+                <input 
+                  matInput 
+                  [formControl]="newRelationshipNameControl" 
+                  placeholder="Nombre relación laboral" 
+                  (keydown.space)="$event.stopPropagation()"
+                  />
+                <mat-error *ngIf="newRelationshipNameControl?.hasError('required')">
+                  Nombre requerido
+                </mat-error>
+                <mat-error *ngIf="newRelationshipNameControl?.hasError('maxlength')">
+                  Máximo 70 caracteres
+                </mat-error>
+              </mat-form-field>
+              <div class="flex justify-center">
+                <button mat-icon-button color="primary" aria-label="agregar" (click)="saveNewRelationship()">
+                  <mat-icon>save</mat-icon>
+                </button>
+                <button mat-icon-button color="secoundary" aria-label="cerrar" (click)="cancelAddNewRelationship()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </div>
         }
       </mat-select>
       <mat-error *ngIf="clientForm.get('job_relationship')?.hasError('required')">
