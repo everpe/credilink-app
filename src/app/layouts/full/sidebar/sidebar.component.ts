@@ -4,7 +4,8 @@ import { NavService } from '../../../services/nav.service';
 
 @Component({
   selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
+  templateUrl: './sidebar.component.html'
+
 })
 export class SidebarComponent implements OnInit {
   navItems = navItems;

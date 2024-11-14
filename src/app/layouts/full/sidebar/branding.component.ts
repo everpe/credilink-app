@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
     <div class="branding">
       <a href="/">
         <img
-          src="./assets/images/logos/credilink_negro.png"
+          src="./assets/images/logos/credilink_negro-3.webp"
           class="align-middle m-2 max-w-100"
           alt="logo"
         />

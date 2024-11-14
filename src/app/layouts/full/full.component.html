@@ -14,7 +14,7 @@
     [opened]="!isOver"
     (openedChange)="onSidenavOpenedChange($event)"
     (closedStart)="onSidenavClosedStart()"
-    class="sidebarNav"
+    class="sidebarNav box-menus"
   >
     <app-sidebar></app-sidebar>
   </mat-sidenav>
@@ -40,3 +40,10 @@
     </main>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<style>
+  .box-menus{
+    /* border: solid blue; */
+    position: fixed;
+  }
+</style>

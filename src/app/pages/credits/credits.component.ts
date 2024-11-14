@@ -22,6 +22,8 @@ import { ListComponent } from "./list/list.component";
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { NotificationsComponent } from "./notifications/notifications.component";
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-credits',
@@ -60,7 +62,8 @@ export class CreditsComponent implements OnInit {
     private authService: AuthService,
     private creditService: CreditService,
     private snackBar: ToastrService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -101,73 +104,88 @@ export class CreditsComponent implements OnInit {
   onSubmit() {
     if (this.creditForm.valid) {
 
-      const pin = this.creditForm.get('pin')?.value;
-      this.creditService.validatePinUser(pin).subscribe(
-        response => {
-          if(response){
-            const formValue = { ...this.creditForm.value };
 
-            // Eliminamos las propiedades extra que no necesitamos enviar
-            delete formValue.clientSearch;
-            delete formValue.coDebtorSearch;
-            delete formValue.pin;
-      
-            // Función que formatea las fechas al formato 'YYYY-MM-DD'para el server format
-            const formatDate = (date: any): string => {
-              if (date) {
-                const d = new Date(date);
-                const year = d.getFullYear();
-                const month = ('0' + (d.getMonth() + 1)).slice(-2); // Asegurarse de que el mes tenga dos dígitos
-                const day = ('0' + d.getDate()).slice(-2); // Asegurarse de que el día tenga dos dígitos
-                return `${year}-${month}-${day}`;
+      const message = '¿Está seguro de registrar el crédito?'
+
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      width: '400px',
+      data: { message }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+        const pin = this.creditForm.get('pin')?.value;
+        this.creditService.validatePinUser(pin).subscribe(
+          response => {
+            if(response){
+              const formValue = { ...this.creditForm.value };
+    
+              // Eliminamos las propiedades extra que no necesitamos enviar
+              delete formValue.clientSearch;
+              delete formValue.coDebtorSearch;
+              delete formValue.pin;
+        
+              // Función que formatea las fechas al formato 'YYYY-MM-DD'para el server format
+              const formatDate = (date: any): string => {
+                if (date) {
+                  const d = new Date(date);
+                  const year = d.getFullYear();
+                  const month = ('0' + (d.getMonth() + 1)).slice(-2); // Asegurarse de que el mes tenga dos dígitos
+                  const day = ('0' + d.getDate()).slice(-2); // Asegurarse de que el día tenga dos dígitos
+                  return `${year}-${month}-${day}`;
+                }
+                return "";
+              };
+        
+              // Convertimos las fechas al formato 'YYYY-MM-DD'
+              if (formValue.loan_date) {
+                formValue.loan_date = formatDate(formValue.loan_date); // Convertimos la fecha del préstamo
               }
-              return "";
-            };
-      
-            // Convertimos las fechas al formato 'YYYY-MM-DD'
-            if (formValue.loan_date) {
-              formValue.loan_date = formatDate(formValue.loan_date); // Convertimos la fecha del préstamo
-            }
-            if (formValue.reminder_date) {
-              formValue.reminder_date = formatDate(formValue.reminder_date); // Convertimos la fecha de recordatorio
-            }
-            formValue.interest_rate = Number(formValue.interest_rate?.replace(',','.'))
-            this.creditService.createCredit(formValue).subscribe(
-              response => {
-                this.snackBar.success(response.message);
-                this.creditForm.reset(
-                  {
-                    client: '',
-                    clientSearch: '',
-                    co_debtor: '', 
-                    coDebtorSearch: '',
-                    loan_date: new Date(), 
-                    reminder_date: '', 
-                    loan_amount: 0,
-                    interest_rate: '',
-                    number_of_installments: 0,
-                    sede: this.authService.getSedeUser(),
-                    by_quota: false,
-                  }
-                );
-                this.formattedLoanAmount = ""; 
-                this.monthlyInterest = 0;
-                Object.keys(this.creditForm.controls).forEach(key => {
-                  this.creditForm.get(key)?.setErrors(null); // Limpia los errores de validación
-                  this.creditForm.get(key)?.markAsPristine(); // Marca el control como limpio
-                  this.creditForm.get(key)?.markAsUntouched(); // Marca el control como no tocado
-                });
-                this.sharedService.triggerReloadCredits();
-              },
-              error => {
-                this.snackBar.error(error.error.error);
+              if (formValue.reminder_date) {
+                formValue.reminder_date = formatDate(formValue.reminder_date); // Convertimos la fecha de recordatorio
               }
-            );
+              formValue.interest_rate = Number(formValue.interest_rate?.replace(',','.'))
+              this.creditService.createCredit(formValue).subscribe(
+                response => {
+                  this.snackBar.success(response.message);
+                  this.creditForm.reset(
+                    {
+                      client: '',
+                      clientSearch: '',
+                      co_debtor: '', 
+                      coDebtorSearch: '',
+                      loan_date: new Date(), 
+                      reminder_date: '', 
+                      loan_amount: 0,
+                      interest_rate: '',
+                      number_of_installments: 0,
+                      sede: this.authService.getSedeUser(),
+                      by_quota: false,
+                    }
+                  );
+                  this.formattedLoanAmount = ""; 
+                  this.monthlyInterest = 0;
+                  Object.keys(this.creditForm.controls).forEach(key => {
+                    this.creditForm.get(key)?.setErrors(null); // Limpia los errores de validación
+                    this.creditForm.get(key)?.markAsPristine(); // Marca el control como limpio
+                    this.creditForm.get(key)?.markAsUntouched(); // Marca el control como no tocado
+                  });
+                  this.sharedService.triggerReloadCredits();
+                },
+                error => {
+                  this.snackBar.error(error.error.error);
+                }
+              );
+            }
+          }, error =>{
+            this.snackBar.error(error.error.error);
           }
-        }, error =>{
-          this.snackBar.error(error.error.error);
-        }
-      );
+        );
+      }
+    });
+
+
 
 
   
