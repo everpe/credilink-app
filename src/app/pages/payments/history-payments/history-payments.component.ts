@@ -42,7 +42,7 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
     'currentInterest',
     'capitalPayment',
     'interestPayment',
-    'lateInterest',
+    // 'lateInterest',
     'amount',
     'currentCapital',
     'pendingCapital'
@@ -83,8 +83,9 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
           { concept: 'Capital pendiente', amount: Number(response.data.remaining_balance) },
           { concept: 'Total de capital pagado', amount: Number(response.data.total_paid_capital) },
           { concept: 'Intereses pagados hasta la fecha', amount: Number(response.data.total_interest_paid) },
+          { concept: 'Valor interés', amount: Number(this.infoCredito.interest_value) },
           { concept: 'Intereses acumulados pendientes', amount: Number(response.data.current_interest_debt) },
-          { concept: 'Interés moratorio aplicado', amount: Number(response.data.late_interest) },
+          // { concept: 'Interés moratorio aplicado', amount: Number(response.data.late_interest) },
           { concept: 'Total pagado hasta la fecha', amount: Number(response.data.total_paid) },
         ];
         
@@ -113,7 +114,7 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
 
   createAbono(){
     const dialogRef = this.dialog.open(CreatePaymentComponent, {
-      width: '900px', // Ajusta el ancho del modal si es necesario
+      width: '800px', // Ajusta el ancho del modal si es necesario
       data: { 
         clienteId: this.infoCredito.id,
         capitalPendiente: this.infoCredito.remaining_balance,
@@ -152,24 +153,27 @@ generatePDF(): void {
   pdf.setFontSize(12);
   pdf.text('Datos del Cliente y Detalles del Crédito:', 40, 60);
 
-  // Información del cliente
+//una sola columna es esta tabla para juntar contenido
   const clientData = [
-      ['Cliente:', `${this.infoCredito.client.first_name?.toUpperCase()} ${this.infoCredito.client.last_name?.toUpperCase()}`],
-      ['Identificación:', this.infoCredito.client.document_number],
-      ['Fecha inicio crédito:', this.infoCredito.loan_date],
-      ['Monto de crédito:', Number(this.infoCredito.loan_amount).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })],
-      ['Tasa de interés corriente:', `${this.infoCredito.interest_rate}% mensual`],
-      ['Tasa de interés moratorio:', '3.10 mensual'],
-      ['Fecha de emisión del reporte:', new Date().toLocaleDateString()]
-  ];
-
-  // Generar tabla para datos del cliente
+    [`Cliente: ${this.infoCredito.client.first_name?.toUpperCase()} ${this.infoCredito.client.last_name?.toUpperCase()}`],
+    [`Identificación: ${this.infoCredito.client.document_number}`],
+    [`Fecha inicio crédito: ${this.infoCredito.loan_date}`],
+    [`Monto de crédito: ${Number(this.infoCredito.loan_amount).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}`],
+    [`Tasa de interés corriente: ${this.infoCredito.interest_rate}% mensual`],
+    [`Fecha de emisión del reporte: ${new Date().toLocaleDateString()}`]
+];
   autoTable(pdf, {
-      body: clientData,
-      startY: 80,
-      theme: 'plain',
-      styles: { fontSize: 10 },
-  });
+    body: clientData,
+    startY: 80,
+    theme: 'plain',
+    styles: { 
+      fontSize: 10, 
+      cellPadding: 2 // Reduce el espacio interno de las celdas
+    },
+    columnStyles: {
+      0: { halign: 'left' } // Alinea la única columna a la izquierda
+    }
+});
 
   // Agregar subtítulo para el estado del crédito
   const lastYClientTable = (pdf as any).lastAutoTable.finalY + 20;
@@ -200,14 +204,14 @@ generatePDF(): void {
       payment.currentInterest.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
       payment.capitalPayment.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
       payment.interestPayment.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
-      payment.lateInterest.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
+      // payment.lateInterest.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
       payment.amount.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
       payment.currentCapital.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
       (payment.remainingCapital ?? 0).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })
   ]);
 
   autoTable(pdf, {
-      head: [['Fecha', 'Interés Corriente', 'Pago a Capital', 'Pago a Interés', 'Interés Moratorio', 'Pago Total', 'Capital Actual', 'Capital pendiente']],
+      head: [['Fecha abono', 'Interés Corriente', 'Abono a Capital', 'Abono a Interés',  'Pago Total', 'Capital actual', 'Capital pendiente']],
       body: movementData,
       startY: lastYCreditStatusTable + 20,
       theme: 'grid',

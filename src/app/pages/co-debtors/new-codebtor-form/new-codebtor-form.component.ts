@@ -14,6 +14,7 @@ import { NewClientFormComponent } from '../../clients/new-client-form/new-client
 import { CodebtorService } from 'src/app/services/codebtors/codebtor.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatIconModule } from '@angular/material/icon';
+import { KeyPressOnlyNumbersValidator } from 'src/app/shared/Validators/keyPressOnlyNumbers';
 
 @Component({
   selector: 'app-new-codebtor-form',
@@ -70,7 +71,7 @@ export class NewCodebtorFormComponent {
           this.codebtorData.document_number || '', 
           [Validators.required, Validators.pattern('^[0-9]{8,10}$')]
         ],
-        email: [this.codebtorData.email || '', [Validators.required, Validators.email]],
+        email: [this.codebtorData.email || '', [ Validators.email]],
         place_of_issue: [this.codebtorData.place_of_issue || '',[Validators.required, Validators.maxLength(70)]],
         gender: [this.codebtorData.gender || '', Validators.required],
         phone: [this.codebtorData.phone || '', [Validators.required, Validators.pattern('^[0-9]{7,10}$')]],
@@ -216,5 +217,9 @@ export class NewCodebtorFormComponent {
   cancelAddNewLinkage() {
     this.addingNewLinkage = false;
     this.newLinkageNameControl?.reset();
+  }
+
+  handleKeyPress(event: KeyboardEvent): void {
+    KeyPressOnlyNumbersValidator(event);
   }
 }

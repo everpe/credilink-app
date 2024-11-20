@@ -11,7 +11,7 @@
     justify-content: space-between;
     gap: 24px;
     flex-wrap: wrap; /* Permite que los elementos se envuelvan */
-    padding: 10px 40px 10px 40px;
+    padding: 10px 20px 10px 20px;
     color: black;
 }
 
@@ -34,8 +34,6 @@
 .form-row {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 16px;
     flex-wrap: wrap; /* Permite que los elementos dentro de la fila se envuelvan en pantallas pequeñas */
 }
 
@@ -74,7 +72,9 @@
     padding-top: 8px;
     font-weight: bold;
 }
-
+.w-40{
+    width: 45%;
+}
 /* Media Query para pantallas pequeñas */
 @media (max-width: 768px) {
     .payment-container {

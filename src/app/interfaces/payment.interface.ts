@@ -9,6 +9,7 @@ export interface PaymentCreateDto {
     payments: PaymentCreateDto[]; // Array de pagos realizados
     description: string; // Descripción del abono
     sede: number; // ID de la sede donde se realiza el abono
+    payment_date: string
   }
   
 

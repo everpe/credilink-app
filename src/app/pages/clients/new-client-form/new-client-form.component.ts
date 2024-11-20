@@ -12,6 +12,7 @@ import { Gender, JobRelationship, TypeDocument, TypeLinkage } from 'src/app/inte
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ClientService } from 'src/app/services/clients/client.service';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
+import { KeyPressOnlyNumbersValidator } from 'src/app/shared/Validators/keyPressOnlyNumbers';
 
 @Component({
   selector: 'app-new-client-form',
@@ -65,7 +66,7 @@ export class NewClientFormComponent implements OnInit {
       type_document: [this.clientData.type_document || '', Validators.required],
       document_number: [
         this.clientData.document_number || '', [Validators.required, Validators.pattern('^[0-9]{8,10}$')]],
-      email: [this.clientData.email || '', [Validators.required, Validators.email]],
+      email: [this.clientData.email || '', [ Validators.email]],
       place_of_issue: [this.clientData.place_of_issue || '', [Validators.required, Validators.maxLength(70)]],
       gender: [this.clientData.gender || '', Validators.required],
       phone: [this.clientData.phone || '', [Validators.required, Validators.pattern('^[0-9]{7,10}$')]],
@@ -212,4 +213,10 @@ export class NewClientFormComponent implements OnInit {
     this.addingNewLinkage = false;
     this.newLinkageNameControl?.reset();
   }
+
+
+  handleKeyPress(event: KeyboardEvent): void {
+    KeyPressOnlyNumbersValidator(event);
+  }
+  
 }

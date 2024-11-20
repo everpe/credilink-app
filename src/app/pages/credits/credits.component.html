@@ -70,7 +70,7 @@
                     <mat-card-title class="text-xl font-bold px-6 py-3">Datos del crédito</mat-card-title>
                     <mat-card-content>
                         <!-- Ajuste Responsive de los campos -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <!-- Fecha del Crédito -->
                             <mat-form-field class="w-full" appearance="outline">
                                 <mat-label>Fecha del crédito</mat-label>
@@ -109,8 +109,6 @@
                                 </div>
                             </div>
 
-
-
                             <!-- Porcentaje de Interés -->
                             <mat-form-field class="w-full" appearance="outline">
                                 <mat-label>Tasa de interés</mat-label>
@@ -125,29 +123,35 @@
                                 </mat-error>
                             </mat-form-field>
 
-
                             <!-- Interés Mensual (Campo no editable) -->
                             <mat-form-field class="w-full" appearance="outline">
                                 <mat-label>Interés mensual</mat-label>
                                 <input matInput [value]="monthlyInterest | currency:'COP    '" disabled />
                             </mat-form-field>
 
-                            <!-- Tipo de Cuotas -->
-                            <mat-form-field class="w-full" appearance="outline">
-                                <mat-label>Por cuotas</mat-label>
-                                <mat-select formControlName="by_quota" (selectionChange)="onByQuotaChange()">
-                                    <mat-option [value]="true">Sí</mat-option>
-                                    <mat-option [value]="false">No</mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                    
 
-                            <!-- Número de Cuotas (solo visible si es por cuotas) -->
-                            <mat-form-field class="w-full" *ngIf="creditForm.get('by_quota')?.value === true"
-                                appearance="outline">
-                                <mat-label>Número de cuotas</mat-label>
-                                <input type="number" matInput formControlName="number_of_installments"
-                                    placeholder="Número de cuotas" />
-                            </mat-form-field>
+                         <div >
+
+                             <mat-checkbox formControlName="is_old" labelPosition="after">Es un crédito antiguo</mat-checkbox>
+                             @if(creditForm.get('is_old')?.value){
+                                 <!-- Fecha Final -->
+                                 <mat-form-field class="w-full" appearance="outline">
+                                     <mat-label>Fecha final</mat-label>
+                                     <input matInput [matDatepicker]="endPicker" formControlName="end_date"
+                                         placeholder="Fecha fin crédito" />
+                                     <mat-datepicker-toggle matPrefix [for]="endPicker"></mat-datepicker-toggle>
+                                     <mat-datepicker #endPicker></mat-datepicker>
+                                     <mat-error *ngIf="creditForm.get('end_date')?.hasError('required')">
+                                         Fecha fin crédito es requerida
+                                     </mat-error>
+                                 </mat-form-field>
+                                 
+                             }
+                         </div>
+
+
+
 
                             <mat-form-field class="w-full" appearance="outline">
                                 <mat-label>PIN de seguridad</mat-label>

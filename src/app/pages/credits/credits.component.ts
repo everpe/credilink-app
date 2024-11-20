@@ -24,6 +24,7 @@ import { NotificationsComponent } from "./notifications/notifications.component"
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-credits',
@@ -44,7 +45,8 @@ import { MatDialog } from '@angular/material/dialog';
     MatSelectModule,
     ListComponent,
     NotificationsComponent,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatCheckboxModule
 ],
   templateUrl: './credits.component.html',
   styleUrl: './credits.component.scss'
@@ -80,11 +82,12 @@ export class CreditsComponent implements OnInit {
       number_of_installments: [0, Validators.required],
       sede: [this.authService.getSedeUser(), Validators.required],
       by_quota: [false, Validators.required],
-      pin: ['', Validators.required] 
+      pin: ['', Validators.required],
+      is_old: [false, Validators.required],
+      end_date: [null] 
     });
 
-    // Si no es por cuotas, el número de cuotas será 0
-    this.onByQuotaChange();
+
 
     this.filteredClients = this.creditForm.get('clientSearch')?.valueChanges.pipe(
       debounceTime(300), // Espera a que el usuario deje de escribir
@@ -143,7 +146,10 @@ export class CreditsComponent implements OnInit {
                 formValue.loan_date = formatDate(formValue.loan_date); // Convertimos la fecha del préstamo
               }
               if (formValue.reminder_date) {
-                formValue.reminder_date = formatDate(formValue.reminder_date); // Convertimos la fecha de recordatorio
+                formValue.reminder_date = formatDate(formValue.reminder_date);
+              }
+              if (formValue.end_date) {
+                formValue.end_date = formatDate(formValue.end_date);
               }
               formValue.interest_rate = Number(formValue.interest_rate?.replace(',','.'))
               this.creditService.createCredit(formValue).subscribe(
@@ -156,6 +162,8 @@ export class CreditsComponent implements OnInit {
                       co_debtor: '', 
                       coDebtorSearch: '',
                       loan_date: new Date(), 
+                      is_old: false,
+                      end_date: null,
                       reminder_date: '', 
                       loan_amount: 0,
                       interest_rate: '',
@@ -208,12 +216,6 @@ export class CreditsComponent implements OnInit {
   }
 
 
-  // Método que se ejecuta cuando cambia la opción "Por cuotas"
-  onByQuotaChange(): void {
-    if (this.creditForm.get('by_quota')?.value === false) {
-      this.creditForm.patchValue({ number_of_installments: 0 });
-    }
-  }
 
   // Método para calcular el interés mensual
   calculateInterest(): void {
@@ -242,9 +244,9 @@ export class CreditsComponent implements OnInit {
   formatNumberWithCommas(value: number): string {
     return value.toLocaleString('en-US'); // Formatear en inglés para separar con comas
   }
+
+
   // Método para restringir la entrada a solo números y el punto decimal
-
-
   restrictToNumbers(event: KeyboardEvent): void {
     const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'];
     const key = event.key;

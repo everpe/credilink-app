@@ -48,6 +48,7 @@ export class ListComponent implements AfterViewInit {
 
   // Columnas a mostrar en la tabla
   displayedColumns: string[] = [
+    'actions',
     'first_name',
     'last_name',
     'job_relationship',
@@ -55,7 +56,6 @@ export class ListComponent implements AfterViewInit {
     'created_at',
     'created_by',
     'status',
-    'actions'
   ];
 
   private paginator!: MatPaginator;

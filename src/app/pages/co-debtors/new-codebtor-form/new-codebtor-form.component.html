@@ -40,9 +40,13 @@
       <!-- Número de Documento -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Número de Documento</mat-label>
-        <input matInput formControlName="document_number" />
+        <input 
+          matInput 
+          formControlName="document_number" 
+          (keypress)="handleKeyPress($event)" 
+        />
         <mat-error *ngIf="codebtorForm.get('document_number')?.hasError('required')">
-          El número de documento es requerido
+          Número de documento es requerido
         </mat-error>
         <mat-error *ngIf="codebtorForm.get('document_number')?.hasError('pattern')">
           Se requiere entre 8 y 10 dígitos
@@ -85,10 +89,14 @@
 
       <!-- Móvil -->
       <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Móvil</mat-label>
-        <input matInput formControlName="mobile" />
+        <mat-label>Whatsapp</mat-label>
+        <input 
+          matInput 
+          formControlName="mobile"
+          (keypress)="handleKeyPress($event)" 
+        />
         <mat-error *ngIf="codebtorForm.get('mobile')?.hasError('required')">
-          El móvil es requerido
+          El whatsapp es requerido
         </mat-error>
         <mat-error *ngIf="codebtorForm.get('mobile')?.hasError('pattern')">
           Debe contener 10 dígitos numéricos
@@ -98,7 +106,11 @@
       <!-- Teléfono -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Teléfono</mat-label>
-        <input matInput formControlName="phone" />
+        <input
+          matInput 
+          formControlName="phone"
+          (keypress)="handleKeyPress($event)" 
+        />
         <mat-error *ngIf="codebtorForm.get('phone')?.hasError('required')">
           El teléfono es requerido
         </mat-error>
@@ -110,7 +122,11 @@
        <!-- Teléfono de Oficina -->
        <mat-form-field appearance="outline" class="w-full">
         <mat-label>Teléfono de Oficina</mat-label>
-        <input matInput formControlName="office_phone" />
+        <input 
+          matInput 
+          formControlName="office_phone" 
+          (keypress)="handleKeyPress($event)" 
+        />
         <mat-error *ngIf="codebtorForm.get('office_phone')?.hasError('required')">
           El teléfono de oficina es requerido
         </mat-error>

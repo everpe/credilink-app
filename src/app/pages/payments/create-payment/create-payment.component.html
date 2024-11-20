@@ -17,7 +17,7 @@
         <!-- Tarjeta de Intereses Acumulados Pendientes -->
         <div class="border rounded-md shadow-md">
             <div class="bg-primary text-white py-3 rounded-t-md">
-                <p class="font-semibold text-center">INTERESES ACUMULADOS PENDIENTES</p>
+                <p class="font-semibold text-center">INTERÉS ACUMULADO PENDIENTE</p>
             </div>
             <div class="bg-white py-3">
                 <p class="text-xl font-bold text-center text-black">{{ dataCredit.interesAcumuladoPediente  | currency: '' }}</p>
@@ -27,7 +27,7 @@
         <!-- Tarjeta de Intereses Moratorios Pendientes -->
         <div class="border rounded-md shadow-md">
             <div class="bg-primary text-white py-3 rounded-t-md">
-                <p class="font-semibold text-center">INTERESES MORATORIOS PENDIENTES</p>
+                <p class="font-semibold text-center">INTERÉS MORATORIO PENDIENTE</p>
             </div>
             <div class="bg-white py-3">
                 <p class="text-xl font-bold text-center text-black">{{ dataCredit.interesMoratorioPendiente  | currency: '' }}</p>
@@ -39,8 +39,8 @@
         <!-- Formulario a la izquierda -->
         <form [formGroup]="paymentForm" class="form-content">
             <!-- Fecha de Pago -->
-            <div class="form-row">
-                <mat-form-field appearance="outline" class="field  lg:w-1/3">
+            <div class=" justify-start">
+                <mat-form-field appearance="outline" class="field w-40">
                     <mat-label>Fecha:</mat-label>
                     <input matInput [matDatepicker]="picker" formControlName="payment_date" placeholder="Fecha" />
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -51,11 +51,17 @@
             <!-- Pago a Intereses -->
             <div class="form-section">
                 <h3 class="section-title">Pago a intereses</h3>
-                <div class="form-row">
+                <div class="form-row flex justify-between">
                     <mat-form-field appearance="outline" class="field">
                         <mat-label>Valor:</mat-label>
-                        <input type="text" matInput [value]="formattedAmountPayInteres"
-                        (input)="onAmountPayInteresInput($event)" placeholder="Valor pago interes" />
+                        <input 
+                            type="text"
+                            matInput 
+                            [value]="formattedAmountPayInteres"
+                            (input)="onAmountPayInteresInput($event)" 
+                            placeholder="Valor pago interes" 
+                            (keypress)="handleKeyPress($event)" 
+                        />
                         <span matPrefix>$&nbsp;</span>
                     </mat-form-field>
     
@@ -68,18 +74,24 @@
                         </mat-select>
                     </mat-form-field>
     
-                    <mat-checkbox formControlName="includeLateInterest">¿Incluye mora?</mat-checkbox>
                 </div>
+                <mat-checkbox formControlName="includeLateInterest">¿Incluye mora?</mat-checkbox>
             </div>
     
             <!-- Pago a Capital -->
-            <div class="form-section">
+            <div class="form-section ">
                 <h3 class="section-title">Pago a capital</h3>
-                <div class="form-row">
+                <div class="form-row flex justify-between">
                     <mat-form-field appearance="outline" class="field">
                         <mat-label>Valor:</mat-label>
-                        <input type="text" matInput [value]="formattedAmountPayCapital"
-                        (input)="onAmountPayCapitalInput($event)" placeholder="Pago a capital" />
+                        <input 
+                            type="text" 
+                            matInput 
+                            [value]="formattedAmountPayCapital"
+                            (input)="onAmountPayCapitalInput($event)"
+                            placeholder="Pago a capital" 
+                            (keypress)="handleKeyPress($event)" 
+                        />
                         <span matPrefix>$&nbsp;</span>
                     </mat-form-field>
     
@@ -114,7 +126,7 @@
         </div>
     </div>
     
-    
+    <!-- {{paymentForm.value | json}} -->
     
     
 </mat-dialog-content>

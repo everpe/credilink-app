@@ -71,6 +71,7 @@ import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.comp
 export class ListComponent implements OnInit {
 
   displayedColumns: string[] = [
+        'actions',
     'client', 
     'co_debtor',
     'loan_date',
@@ -83,7 +84,7 @@ export class ListComponent implements OnInit {
     'total_debt', 
     'remaining_balance', 
     'next_payment_date',
-    'actions'
+
   ];
   dataSource = new MatTableDataSource<GetCreditDto>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;

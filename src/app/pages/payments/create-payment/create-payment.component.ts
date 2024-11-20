@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { PaymentDataDto } from 'src/app/interfaces/payment.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { PaymentService } from 'src/app/services/payments/payment.service';
+import { KeyPressOnlyNumbersValidator } from 'src/app/shared/Validators/keyPressOnlyNumbers';
 
 @Component({
   selector: 'app-create-payment',
@@ -89,6 +90,18 @@ export class CreatePaymentComponent {
     return interestAmount > 0 || capitalAmount > 0;
   }
 
+
+  formatDate = (date: any): string => {
+    if (date) {
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const month = ('0' + (d.getMonth() + 1)).slice(-2); // Asegurarse de que el mes tenga dos dígitos
+      const day = ('0' + d.getDate()).slice(-2); // Asegurarse de que el día tenga dos dígitos
+      return `${year}-${month}-${day}`;
+    }
+    return "";
+  };
+
   // Método para enviar el formulario
   onSubmit(): void {
     if (this.paymentForm.invalid || !this.validateAtLeastOnePayment()) {
@@ -116,10 +129,14 @@ export class CreatePaymentComponent {
       });
     }
 
+
+
+ 
     const paymentData: PaymentDataDto = {
       credit: this.paymentForm.get('credit')?.value,
       description: this.paymentForm.get('description')?.value,
       sede: this.paymentForm.get('sede')?.value,
+      payment_date: this.formatDate(this.paymentForm.get('payment_date')?.value),//this.formatDate(this.paymentForm.get('payment_date')?.value),
       payments: payments,
     };
 
@@ -183,5 +200,10 @@ export class CreatePaymentComponent {
     // Actualiza el valor del formulario sin las comas
     this.paymentForm.patchValue({ interest_amount: numericValue });
 
+  }
+
+  
+  handleKeyPress(event: KeyboardEvent): void {
+    KeyPressOnlyNumbersValidator(event);
   }
 }

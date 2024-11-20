@@ -6,48 +6,55 @@
       <div id="history-content">
         <!-- Información del cliente -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div class="text-black grid grid-cols-2 gap-y-2">
-                <!-- Cliente -->
-                <p class="font-semibold">Cliente:</p>
-                <p class="font-normal">
-                  {{ infoCredito.client.first_name?.toUpperCase() }} {{ infoCredito.client.last_name?.toUpperCase() }}
-                </p>
-                <!-- Identificación -->
-                <p class="font-semibold">Identificación:</p>
-                <p class="font-normal">
-                  {{ infoCredito.client.document_number }}
-                </p>
-              
-                <!-- Fecha inicio crédito -->
-                <p class="font-semibold">Fecha inicio crédito:</p>
-                <p class="font-normal">
-                  {{ infoCredito.loan_date | date: 'dd/MM/yyyy' }}
-                </p>
-              
-                <!-- Monto de crédito -->
-                <p class="font-semibold">Monto de crédito:</p>
-                <p class="font-normal">
-                  {{ infoCredito.loan_amount | currency: 'COP' }}
-                </p>
-              
-                <!-- Tasa de interés corriente -->
-                <p class="font-semibold">Tasa de interés corriente:</p>
-                <p class="font-normal">
-                  {{ infoCredito.interest_rate }}% mensual
-                </p>
-              
-                <!-- Tasa de interés moratorio -->
-                <p class="font-semibold">Tasa de interés moratorio:</p>
-                <p class="font-normal">
-                  3.10 mensual
-                </p>
-              
-                <!-- Fecha de emisión del reporte -->
-                <p class="font-semibold">Fecha de emisión del reporte:</p>
-                <p class="font-normal">
-                  {{ currentDate | date: 'dd/MM/yyyy' }}
-                </p>
-              </div>
+       
+
+          <div class="text-black ">
+            <!-- Cliente -->
+             <div class="flex">
+
+               <p class="font-semibold">Cliente: </p>
+               <p class="font-normal ml-2 ">
+                 {{ infoCredito.client.first_name?.toUpperCase() }} {{ infoCredito.client.last_name?.toUpperCase() }}
+               </p>
+             </div>
+            <!-- Identificación -->
+            <div class="flex">
+              <p class="font-semibold">Identificación:</p>
+              <p class="font-normal ml-2">
+                {{ infoCredito.client.document_number }}
+              </p>
+            </div>
+            <!-- Fecha inicio crédito -->
+            <div class="flex">
+              <p class="font-semibold">Fecha inicio crédito:</p>
+              <p class="font-normal ml-2">
+                {{ infoCredito.loan_date | date: 'dd/MM/yyyy' }}
+              </p>
+            </div>
+            <!-- Monto de crédito -->
+            <div class="flex">
+              <p class="font-semibold">Monto de crédito:</p>
+              <p class="font-normal ml-2">
+                {{ infoCredito.loan_amount | currency: '' }}
+              </p>
+            </div>
+            <!-- Tasa de interés corriente -->
+            <div class="flex">
+              <p class="font-semibold">Tasa de interés corriente:</p>
+              <p class="font-normal ml-2">
+                {{ infoCredito.interest_rate }}% mensual
+              </p>
+            </div>
+            <!-- Fecha de emisión del reporte -->
+            <div class="flex">
+              <p class="font-semibold">Fecha de emisión del reporte:</p>
+              <p class="font-normal ml-2">
+                {{ currentDate | date: 'dd/MM/yyyy' }}
+              </p>
+            </div>
+          </div>
+          
+          
               
             <div>
                 <div class="flex justify-end gap-4">
@@ -69,7 +76,7 @@
         </div>
 
 
-
+       
         <h2 class="text-2xl font-semibold mb-4 text-gray-950">Estado actual del crédito:</h2>
         <!-- Tabla con Material Design -->
         <div class="overflow-x-auto ">
@@ -105,7 +112,6 @@
 
         <div class="container mx-auto p-6">
             <h2 class="text-2xl font-semibold text-gray-950 mb-4">Historial de movimientos (mensual):</h2>
-            <!-- Tabla con Material Design y Tailwind -->
             <div class="overflow-x-auto">
                 <table mat-table [dataSource]="historyPayments" class="w-full border-collapse bg-white">
       
@@ -117,37 +123,37 @@
               
                     <!-- Interés Corriente Column -->
                     <ng-container matColumnDef="currentInterest">
-                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Interés Corriente</th>
+                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Interés corriente</th>
                       <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.currentInterest || 0 | currency: '' }}</td>
                     </ng-container>
               
                     <!-- Abono a Capital Column -->
                     <ng-container matColumnDef="capitalPayment">
-                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Abono a Capital</th>
+                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Abono a capital</th>
                       <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.capitalPayment || 0 | currency: '' }}</td>
                     </ng-container>
               
                     <!-- Abono a Interés Column -->
                     <ng-container matColumnDef="interestPayment">
-                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Abono a Interés</th>
+                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Abono a interés</th>
                       <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.interestPayment || 0 | currency: '' }}</td>
                     </ng-container>
               
                     <!-- Interés Moratorio Column -->
-                    <ng-container matColumnDef="lateInterest">
+                    <!-- <ng-container matColumnDef="lateInterest">
                       <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Interés Moratorio</th>
                       <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.lateInterest || 0 | currency: '' }}</td>
-                    </ng-container>
+                    </ng-container> -->
               
                     <!-- Pago Total Column -->
                     <ng-container matColumnDef="amount">
-                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Pago Total</th>
+                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Pago total</th>
                       <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.amount || 0 | currency: '' }}</td>
                     </ng-container>
               
                     <!-- Capital Actual Column -->
                     <ng-container matColumnDef="currentCapital">
-                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Capital Actual</th>
+                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Capital actual</th>
                       <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.currentCapital || 0 | currency: '' }}</td>
                     </ng-container>
               
