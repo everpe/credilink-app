@@ -1,5 +1,5 @@
 <div mat-dialog-title>
-    <h1 class="text-2xl font-bold text-center mb-6 mt-4 text-black">ABONO DE CRÉDITO</h1>
+    <h1 class="text-2xl font-bold text-center  text-black">ABONO DE CRÉDITO</h1>
 </div>
 
 <mat-dialog-content>
@@ -27,22 +27,22 @@
 
     <div class="payment-container">
         <!-- Formulario a la izquierda -->
-        <form [formGroup]="paymentForm" class="form-content">
+        <form [formGroup]="paymentForm" class="form-content grid grid-cols-1 lg:grid-cols-4 gap-4 w-full">
             <!-- Fecha de Pago -->
-            <div class=" justify-start">
-                <mat-form-field appearance="outline" class="field w-40">
-                    <mat-label>Fecha:</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="payment_date" placeholder="Fecha" />
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-            </div>
+            <mat-form-field appearance="outline" class="w-full lg:w-1/4 col-span-1 lg:col-span-4">
+                <mat-label>Fecha:</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="payment_date" placeholder="Fecha" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+   
+
     
             <!-- Pago a Intereses -->
-            <div class="form-section">
+            <div class="form-section col-span-1 lg:w-1/2 lg:col-span-4 w-full">
                 <h3 class="section-title">Pago a intereses</h3>
-                <div class="form-row flex justify-between">
-                    <mat-form-field appearance="outline" class="field">
+                <div class="form-row flex justify-between w-100">
+                    <mat-form-field appearance="outline" class="field w-100">
                         <mat-label>Valor:</mat-label>
                         <input 
                             type="text"
@@ -55,7 +55,7 @@
                         <span matPrefix>$&nbsp;</span>
                     </mat-form-field>
     
-                    <mat-form-field appearance="outline" class="field">
+                    <mat-form-field appearance="outline" class="field w-100">
                         <mat-label>Método de pago:</mat-label>
                         <mat-select formControlName="interest_payment_method">
                             <mat-option value="Efectivo">Efectivo</mat-option>
@@ -65,14 +65,14 @@
                     </mat-form-field>
     
                 </div>
-                <mat-checkbox formControlName="includeLateInterest">¿Incluye mora?</mat-checkbox>
             </div>
+   
     
             <!-- Pago a Capital -->
-            <div class="form-section ">
+            <div class="form-section col-span- lg:col-span-2 w-full">
                 <h3 class="section-title">Pago a capital</h3>
                 <div class="form-row flex justify-between">
-                    <mat-form-field appearance="outline" class="field">
+                    <mat-form-field appearance="outline" class="field w-100">
                         <mat-label>Valor:</mat-label>
                         <input 
                             type="text" 
@@ -85,7 +85,7 @@
                         <span matPrefix>$&nbsp;</span>
                     </mat-form-field>
     
-                    <mat-form-field appearance="outline" class="field">
+                    <mat-form-field appearance="outline" class="field w-100">
                         <mat-label>Método de pago:</mat-label>
                         <mat-select formControlName="capital_payment_method">
                             <mat-option value="Efectivo">Efectivo</mat-option>
@@ -95,25 +95,29 @@
                     </mat-form-field>
                 </div>
             </div>
+            <div class="col-span-1 lg:col-span-1 w-full flex items-center">
+                <mat-checkbox formControlName="skip_interest_check">¿Omitir intereses completos?</mat-checkbox>
+            </div>
+            
+                <!-- Sección de totales a la derecha -->
+                <div class="summary-section">
+        
+                    <div class="summary-row">
+                        <span>Intereses:</span>
+                        <span class="summary-value">{{ interestTotal | currency: '' }}</span>
+                    </div>
+            
+                    <div class="summary-row">
+                        <span>Capital:</span>
+                        <span class="summary-value">{{ capitalTotal | currency: '' }}</span>
+                    </div>
+            
+                    <div class="summary-row total">
+                        <span>Total pago:</span>
+                        <span class="summary-value">{{ totalAmount | currency: '' }}</span>
+                    </div>
+                </div>
         </form>
-    
-        <!-- Sección de totales a la derecha -->
-        <div class="summary-section">
-            <div class="summary-row">
-                <span>Intereses:</span>
-                <span class="summary-value">{{ interestTotal | currency: '' }}</span>
-            </div>
-    
-            <div class="summary-row">
-                <span>Capital:</span>
-                <span class="summary-value">{{ capitalTotal | currency: '' }}</span>
-            </div>
-    
-            <div class="summary-row total">
-                <span>Total a pagar:</span>
-                <span class="summary-value">{{ totalAmount | currency: '' }}</span>
-            </div>
-        </div>
     </div>
     
     <!-- {{paymentForm.value | json}} -->

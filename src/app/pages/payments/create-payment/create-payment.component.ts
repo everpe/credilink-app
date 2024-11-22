@@ -65,7 +65,7 @@ export class CreatePaymentComponent {
       interest_payment_method: [''], // Método opcional para intereses
       capital_amount: [''], // Campo opcional para monto de capital
       capital_payment_method: [''], // Método opcional para capital
-      includeLateInterest: [false],
+      skip_interest_check: [false],
       sede: [this.authService.getSedeUser(), Validators.required],
     },
     {
@@ -138,7 +138,8 @@ export class CreatePaymentComponent {
       credit: this.paymentForm.get('credit')?.value,
       description: this.paymentForm.get('description')?.value,
       sede: this.paymentForm.get('sede')?.value,
-      payment_date: this.formatDate(this.paymentForm.get('payment_date')?.value),//this.formatDate(this.paymentForm.get('payment_date')?.value),
+      payment_date: this.formatDate(this.paymentForm.get('payment_date')?.value),
+      skip_interest_check: this.paymentForm.get('skip_interest_check')?.value,
       payments: payments,
     };
 

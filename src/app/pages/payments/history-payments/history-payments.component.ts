@@ -114,7 +114,7 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
 
   createAbono(){
     const dialogRef = this.dialog.open(CreatePaymentComponent, {
-      width: '800px', // Ajusta el ancho del modal si es necesario
+      width: '900px', // Ajusta el ancho del modal si es necesario
       data: { 
         clienteId: this.infoCredito.id,
         capitalPendiente: this.infoCredito.remaining_balance,
