@@ -19,6 +19,14 @@ export interface GetCreditDto {
       first_name: string;
       last_name: string;
       document_number: string; // Assuming cedula/document is returned as document_number
+      job_relationship: {
+        id: number,
+        name: string
+      }
+      type_linkage: {
+        id: number,
+        name: string
+      }
     };
     co_debtor: {
       id: number;

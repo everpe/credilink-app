@@ -18,7 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { debounceTime, map, Observable, of, Subscription, switchMap } from 'rxjs';
-import { CoDebtor } from 'src/app/interfaces/co-debtor';
+import { CoDebtorDto } from 'src/app/interfaces/co-debtor';
 import { GetCreditDto } from 'src/app/interfaces/credit.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ClientService } from 'src/app/services/clients/client.service';
@@ -32,6 +32,7 @@ import { SharedService } from 'src/app/services/shared/shared.service';
 import { HistoryPaymentsComponent } from '../../payments/history-payments/history-payments.component';
 import { UpdateCreditComponent } from '../update-credit/update-credit.component';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
+import { JobRelationship, TypeLinkage } from 'src/app/interfaces/client.interface';
 
 @Component({
   selector: 'list-credits',
@@ -71,14 +72,13 @@ import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.comp
 export class ListComponent implements OnInit {
 
   displayedColumns: string[] = [
-        'actions',
+    'actions',
     'client', 
     'co_debtor',
+    'job_relationship',
     'loan_date',
     // 'reminder_date', 
     'loan_amount', 
-    // 'interest_rate', 
-    // 'number_of_installments', 
     'loan_status', 
     'interest_value', 
     'total_debt', 
@@ -90,7 +90,10 @@ export class ListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   requestForm: FormGroup;
   filteredClients: Observable<any[]> = of([]);
-  filteredCoDebtors: Observable<CoDebtor[]> = of([]);
+  filteredCoDebtors: Observable<CoDebtorDto[]> = of([]);
+  lisTypeLinkages: TypeLinkage[] = [];
+  lisJobRelationShips: JobRelationship[] = [];
+
   private reloadSubscription!: Subscription;
 
   constructor(private formBuilder: FormBuilder,
@@ -113,9 +116,20 @@ export class ListComponent implements OnInit {
       clientSearch: [''],
       co_debtor: [],
       coDebtorSearch: [''],
+      type_linkage: [''],
+      job_relationship: [''],
       sede: [this.authService.getSedeUser(), Validators.required],
     }, {
-      validators: atLeastOneFieldValidator(['client', 'co_debtor', 'load_status', 'export', 'dateRange.start', 'dateRange.end'])  // Aplicar el validador
+      validators: atLeastOneFieldValidator([
+        'client',
+        'co_debtor', 
+        'load_status', 
+        'export', 
+        'dateRange.start', 
+        'dateRange.end',
+        'job_relationship',
+        'type_linkage'
+      ])  // Aplicar el validador
     });
   }
 
@@ -130,10 +144,34 @@ export class ListComponent implements OnInit {
 
     this.loadCredits();
     this.subscribeToSearchFields();
+
+    this.getAllTypeLinkages();
+    this.GetAllJobRelationships();
   }
 
   credits: GetCreditDto[] = [];
 
+  getAllTypeLinkages(){
+    this.clientService.getTypesLinkages(Number(this.authService.getSedeUser()) ?? 0).subscribe(
+      (data: TypeLinkage[]) => {
+        this.lisTypeLinkages = data;
+      },
+      (error) => {
+        console.error('Error fetching type_lynkages:', error);
+      }
+    );
+  }
+  GetAllJobRelationships(){
+    this.clientService.getJobRelationships(Number(this.authService.getSedeUser()) ?? 0).subscribe(
+      (data: JobRelationship[]) => {
+        this.lisJobRelationShips = data;
+      },
+      (error) => {
+        console.error('Error fetching job relationships:', error);
+      }
+    );
+
+  }
 
   loadCredits(): void {
     this.creditService.getCredits(Number(this.authService.getSedeUser()) ?? 0).subscribe(
@@ -167,7 +205,9 @@ export class ListComponent implements OnInit {
         ? this.requestForm?.get('dateRange.end')?.value.toISOString().split('T')[0]
         : null,
 
-      export: this.requestForm.get('export')?.value
+      export: this.requestForm.get('export')?.value,
+      job_relationship: this.requestForm.get('job_relationship')?.value,
+      type_linkage: this.requestForm.get('type_linkage')?.value
     };
 
     this.creditService.filterCredits(filters)?.subscribe(

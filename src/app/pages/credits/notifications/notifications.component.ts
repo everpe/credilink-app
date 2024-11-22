@@ -16,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { debounceTime, map, Observable, of, switchMap } from 'rxjs';
+import { TypeLinkage, JobRelationship } from 'src/app/interfaces/client.interface';
 import { GetCreditDto } from 'src/app/interfaces/credit.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ClientService } from 'src/app/services/clients/client.service';
@@ -53,9 +54,18 @@ export class NotificationsComponent  implements OnInit {
   
   dataSource = new MatTableDataSource<GetCreditDto>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  displayedColumns: string[] = ['select', 'client', 'interest_value',  'total_debt', 'remaining_balance', 'next_payment_date', 'loan_status'];
+  displayedColumns: string[] = [
+    'select',
+    'client',
+    'job_relationship',
+    'interest_value',
+    'total_debt', 
+    'remaining_balance', 
+    'next_payment_date', 
+    'loan_status'];
   selection = new SelectionModel<GetCreditDto>(true, []);
-
+  lisTypeLinkages: TypeLinkage[] = [];
+  lisJobRelationShips: JobRelationship[] = [];
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
@@ -69,6 +79,8 @@ export class NotificationsComponent  implements OnInit {
       client: [],
       clientSearch: [''],
       load_status: [''],
+      job_relationship: [''],
+      type_linkage: [''],
       sede: [this.authService.getSedeUser(), Validators.required]
     });
   }
@@ -89,6 +101,8 @@ export class NotificationsComponent  implements OnInit {
       })
     ) ?? of([]);
     this.loadCredits();
+    this.getAllTypeLinkages();
+    this.GetAllJobRelationships();
   }
 
   loadCredits(): void {
@@ -108,6 +122,8 @@ export class NotificationsComponent  implements OnInit {
       sede: this.notificacionesForm.get('sede')?.value,
       client: this.notificacionesForm.get('client')?.value,
       load_status: this.notificacionesForm.get('load_status')?.value,
+      job_relationship: this.notificacionesForm.get('job_relationship')?.value,
+      type_linkage: this.notificacionesForm.get('type_linkage')?.value
     };
 
     this.creditService.filterCredits(filters)?.subscribe(
@@ -192,4 +208,26 @@ export class NotificationsComponent  implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row`;
   }
 
+
+  getAllTypeLinkages(){
+    this.clientService.getTypesLinkages(Number(this.authService.getSedeUser()) ?? 0).subscribe(
+      (data: TypeLinkage[]) => {
+        this.lisTypeLinkages = data;
+      },
+      (error) => {
+        console.error('Error fetching type_lynkages:', error);
+      }
+    );
+  }
+  GetAllJobRelationships(){
+    this.clientService.getJobRelationships(Number(this.authService.getSedeUser()) ?? 0).subscribe(
+      (data: JobRelationship[]) => {
+        this.lisJobRelationShips = data;
+      },
+      (error) => {
+        console.error('Error fetching job relationships:', error);
+      }
+    );
+
+  }
 }

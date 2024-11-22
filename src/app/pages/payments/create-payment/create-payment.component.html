@@ -3,7 +3,7 @@
 </div>
 
 <mat-dialog-content>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-center">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-center">
         <!-- Tarjeta de Capital Pendiente -->
         <div class="border rounded-md shadow-md">
             <div class="bg-primary text-white py-3 rounded-t-md">
@@ -21,16 +21,6 @@
             </div>
             <div class="bg-white py-3">
                 <p class="text-xl font-bold text-center text-black">{{ dataCredit.interesAcumuladoPediente  | currency: '' }}</p>
-            </div>
-        </div>
-
-        <!-- Tarjeta de Intereses Moratorios Pendientes -->
-        <div class="border rounded-md shadow-md">
-            <div class="bg-primary text-white py-3 rounded-t-md">
-                <p class="font-semibold text-center">INTERÉS MORATORIO PENDIENTE</p>
-            </div>
-            <div class="bg-white py-3">
-                <p class="text-xl font-bold text-center text-black">{{ dataCredit.interesMoratorioPendiente  | currency: '' }}</p>
             </div>
         </div>
     </div>

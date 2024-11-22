@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CoDebtor, CreateCoDebtorDto, UpdateCoDebtorDto } from 'src/app/interfaces/co-debtor';
+import { CoDebtorDto, CreateCoDebtorDto, UpdateCoDebtorDto } from 'src/app/interfaces/co-debtor';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -11,14 +11,14 @@ export class CodebtorService {
 
   constructor(private http: HttpClient) {}
 
-  getCoDebtors(offset: number, limit: number, sede: number, search: string): Observable<{ count: number, results: CoDebtor[] }> {
+  getCoDebtors(offset: number, limit: number, sede: number, search: string): Observable<{ count: number, results: CoDebtorDto[] }> {
     const params = new HttpParams()
       .set('offset', offset.toString())
       .set('limit', limit.toString())
       .set('sede', sede.toString())
       .set('search', search);;
 
-    return this.http.get<{ count: number, results: CoDebtor[] }>(`${environment.apiUrl}/CoDebtor/`, { params });
+    return this.http.get<{ count: number, results: CoDebtorDto[] }>(`${environment.apiUrl}/CoDebtor/`, { params });
   }
 
   createCoDebtor(coDebtor: CreateCoDebtorDto): Observable<any> {

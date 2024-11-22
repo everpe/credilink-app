@@ -15,6 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { debounceTime } from 'rxjs/operators';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { ClientDto } from 'src/app/interfaces/client.interface';
 
 @Component({
   selector: 'app-list',
@@ -52,6 +53,7 @@ export class ListComponent implements AfterViewInit {
     'first_name',
     'last_name',
     'job_relationship',
+    'type_linkage',
     'document_number',
     'created_at',
     'created_by',
@@ -59,7 +61,7 @@ export class ListComponent implements AfterViewInit {
   ];
 
   private paginator!: MatPaginator;
-  clientsDatasource = new MatTableDataSource<any>();
+  clientsDatasource = new MatTableDataSource<ClientDto>();
 
   constructor(
     private clientService: ClientService,

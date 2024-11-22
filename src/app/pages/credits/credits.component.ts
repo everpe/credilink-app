@@ -13,7 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ToastrService } from 'ngx-toastr';
 import { debounceTime, map, Observable, of, switchMap } from 'rxjs';
-import { CoDebtor } from 'src/app/interfaces/co-debtor';
+import { CoDebtorDto } from 'src/app/interfaces/co-debtor';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ClientService } from 'src/app/services/clients/client.service';
 import { CodebtorService } from 'src/app/services/codebtors/codebtor.service';
@@ -54,7 +54,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 export class CreditsComponent implements OnInit {
   creditForm!: FormGroup;
   filteredClients: Observable<any[]> = of([]);  // Simulación de clientes filtrados
-  filteredCoDebtors: Observable<CoDebtor[]> = of([]);
+  filteredCoDebtors: Observable<CoDebtorDto[]> = of([]);
   monthlyInterest: number = 0; // Valor para mostrar el interés mensual
   formattedLoanAmount: string = '';
 
@@ -108,7 +108,7 @@ export class CreditsComponent implements OnInit {
     if (this.creditForm.valid) {
 
 
-      const message = '¿Está seguro de registrar el crédito?'
+    const message = '¿Está seguro de registrar el crédito?'
 
     const dialogRef = this.dialog.open(ConfirmComponent, {
       width: '400px',

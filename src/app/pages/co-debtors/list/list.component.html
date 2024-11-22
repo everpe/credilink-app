@@ -44,6 +44,11 @@
             <td mat-cell *matCellDef="let record"> {{ record.job_relationship.name }} </td>
           </ng-container>
 
+          <ng-container matColumnDef="type_linkage">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="  font-bold p-4"> T. Vinculación </th>
+            <td mat-cell *matCellDef="let record"> {{ record.type_linkage?.name ?? '' }} </td>
+          </ng-container>
+
           <ng-container matColumnDef="document_number">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="  font-bold p-4"> Documento </th>
             <td mat-cell *matCellDef="let record"> {{ record.document_number }} </td>

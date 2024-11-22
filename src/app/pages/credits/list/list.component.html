@@ -1,69 +1,89 @@
 <div class="container mx-auto mt-4">
   <mat-card class="mat-elevation-z6 rounded-lg">
     <mat-card-header class="px-4">
-      <form [formGroup]="requestForm" (ngSubmit)="applyFilters()" class="grid grid-cols-1 lg:grid-cols-6 gap-4 w-full">
-          <mat-form-field class="col-span-2 lg:col-span-2 w-full" appearance="outline">
-            <mat-label>Buscar cliente</mat-label>
-            <mat-icon matPrefix>person_search</mat-icon>
-            <input type="text" matInput formControlName="clientSearch"
-              placeholder="Nombres, apellidos, o número documento" [matAutocomplete]="auto">
-            <mat-autocomplete 
-              #auto="matAutocomplete"
-              (optionSelected)="onClientSelected($event.option.value)"
-              [displayWith]="displayClient"
-            >
-              <mat-option *ngFor="let client of filteredClients | async" [value]="client">
-                {{ client.first_name }} {{ client.last_name }} - {{ client.document_number }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
+      <form [formGroup]="requestForm" (ngSubmit)="applyFilters()" class="grid grid-cols-1 lg:grid-cols-4 gap-4 w-full">
 
-          <mat-form-field class="col-span-2 lg:col-span-2 w-full" appearance="outline">
-            <mat-label>Buscar codeudor</mat-label>
-            <mat-icon matPrefix>person_search</mat-icon>
-            <input type="text" matInput formControlName="coDebtorSearch"
-              placeholder="Nombres, apellidos, o número documento" [matAutocomplete]="autoCoDebtor">
-            <mat-autocomplete #autoCoDebtor="matAutocomplete" (optionSelected)="onCoDebtorSelected($event.option.value)"
-              [displayWith]="displayCoDebtor">
-              <mat-option *ngFor="let coDebtor of filteredCoDebtors | async" [value]="coDebtor">
-                {{ coDebtor.first_name }} {{ coDebtor.last_name }} - {{ coDebtor.document_number }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
+        <mat-form-field class="col-span-1 lg:col-span-1 w-full" appearance="outline">
+          <mat-label>Buscar cliente</mat-label>
+          <mat-icon matPrefix>person_search</mat-icon>
+          <input type="text" matInput formControlName="clientSearch"
+            placeholder="Nombres, apellidos, o número documento" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onClientSelected($event.option.value)"
+            [displayWith]="displayClient">
+            <mat-option *ngFor="let client of filteredClients | async" [value]="client">
+              {{ client.first_name }} {{ client.last_name }} - {{ client.document_number }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
 
-          <div class="col-span-2 lg:col-span-2 w-full flex">
-            <mat-form-field  appearance="outline">
-              <mat-label>Estado</mat-label>
-              <mat-select formControlName="load_status">
-                <mat-option value="ACTIVO">ACTIVO</mat-option>
-                <mat-option value="PAGADO">PAGADO</mat-option>
-                <mat-option value="MORA">MORA</mat-option>
-              </mat-select>
-              <mat-icon matPrefix>info</mat-icon>
-            </mat-form-field>
-            <mat-checkbox formControlName="export" >Exportar Excel</mat-checkbox>
-          </div>
+        <mat-form-field class="col-span-1 lg:col-span-1 w-full" appearance="outline">
+          <mat-label>Buscar codeudor</mat-label>
+          <mat-icon matPrefix>person_search</mat-icon>
+          <input type="text" matInput formControlName="coDebtorSearch"
+            placeholder="Nombres, apellidos, o número documento" [matAutocomplete]="autoCoDebtor">
+          <mat-autocomplete #autoCoDebtor="matAutocomplete" (optionSelected)="onCoDebtorSelected($event.option.value)"
+            [displayWith]="displayCoDebtor">
+            <mat-option *ngFor="let coDebtor of filteredCoDebtors | async" [value]="coDebtor">
+              {{ coDebtor.first_name }} {{ coDebtor.last_name }} - {{ coDebtor.document_number }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
 
-          <mat-form-field class="col-span-2 lg:col-span-2 w-full" appearance="outline">
-            <mat-label>Seleccione un periodo</mat-label>
-            <mat-date-range-input formGroupName="dateRange" [rangePicker]="picker">
-              <input matStartDate placeholder="Fecha de inicio" formControlName="start">
-              <input matEndDate placeholder="Fecha de fin" formControlName="end">
-            </mat-date-range-input>
-            <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
-            <mat-date-range-picker #picker></mat-date-range-picker>
-          </mat-form-field>
+        <mat-form-field appearance="outline" class="col-span-1 lg:col-span-1 w-full">
+          <mat-label>Estado</mat-label>
+          <mat-select formControlName="load_status">
+            <mat-option value="ACTIVO">ACTIVO</mat-option>
+            <mat-option value="PAGADO">PAGADO</mat-option>
+            <mat-option value="MORA">MORA</mat-option>
+          </mat-select>
+          <mat-icon matPrefix>info</mat-icon>
+        </mat-form-field>
 
-          <div class="flex justify-center items-center col-span-2 lg:col-span-2 space-x-2">
-            <button mat-raised-button color="secoundary" type="button" class="flex items-center" (click)="resetFilters()">
-              <mat-icon class="mr-2">clear</mat-icon> 
-              Limpiar
-            </button>
-            <button mat-raised-button color="primary" type="submit" class="flex items-center">
-              <mat-icon class="mr-2">search</mat-icon> 
-              Filtrar
-            </button>
-          </div>
+        <mat-checkbox formControlName="export">Exportar Excel</mat-checkbox>
+
+
+        <mat-form-field class="col-span-1 lg:col-span-1 w-full" appearance="outline">
+          <mat-label>Rango de fechas</mat-label>
+          <mat-date-range-input formGroupName="dateRange" [rangePicker]="picker">
+            <input matStartDate placeholder="Fecha de inicio" formControlName="start">
+            <input matEndDate placeholder="Fecha de fin" formControlName="end">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Relación de Trabajo</mat-label>
+          <mat-select formControlName="job_relationship" #jobRelationshipSelect>
+            <mat-option *ngFor="let relationship of lisJobRelationShips" [value]="relationship.id">
+              {{ relationship.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-span-1 lg:col-span-1 w-full">
+          <mat-label>Tipo Vinculación</mat-label>
+          <mat-select formControlName="type_linkage" #typeLinkageSelect>
+            <mat-option *ngFor="let linkage of lisTypeLinkages" [value]="linkage.id">
+              {{ linkage.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+
+
+        <div class="flex justify-center items-center col-span-1 lg:col-span-1 space-x-2">
+          <button mat-raised-button color="secoundary" type="button" class="flex items-center" (click)="resetFilters()">
+            <mat-icon class="mr-2">clear</mat-icon>
+            Limpiar
+          </button>
+          <button mat-raised-button color="primary" type="submit" class="flex items-center">
+            <mat-icon class="mr-2">search</mat-icon>
+            Filtrar
+          </button>
+        </div>
       </form>
     </mat-card-header>
 
@@ -86,6 +106,14 @@
             </td>
           </ng-container>
 
+          <ng-container matColumnDef="job_relationship">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Rl. Laboral </th>
+            <td mat-cell *matCellDef="let credit">
+              {{ credit.client.job_relationship.name }}
+            </td>
+          </ng-container>
+
+
           <ng-container matColumnDef="loan_date">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Fecha crédito </th>
             <td mat-cell *matCellDef="let credit">
@@ -104,9 +132,8 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Estado </th>
             <td mat-cell *matCellDef="let credit">
               <div class="flex items-center">
-                <span 
-                  class="ml-2">
-                  {{credit.load_status}} 
+                <span class="ml-2">
+                  {{credit.load_status}}
                 </span>
               </div>
             </td>

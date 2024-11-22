@@ -15,6 +15,7 @@ import { CodebtorService } from 'src/app/services/codebtors/codebtor.service';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
 import { NewCodebtorFormComponent } from '../new-codebtor-form/new-codebtor-form.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { CoDebtorDto } from 'src/app/interfaces/co-debtor';
 
 @Component({
   selector: 'app-list',
@@ -52,6 +53,7 @@ export class ListComponent {
     'first_name',
     'last_name',
     'job_relationship',
+    'type_linkage',
     'document_number',
     'created_at',
     'created_by',
@@ -59,7 +61,7 @@ export class ListComponent {
   ];
 
   private paginator!: MatPaginator;
-  coDebtorsDatasource = new MatTableDataSource<any>();
+  coDebtorsDatasource = new MatTableDataSource<CoDebtorDto>();
 
   constructor(
     private coDebtorService: CodebtorService,

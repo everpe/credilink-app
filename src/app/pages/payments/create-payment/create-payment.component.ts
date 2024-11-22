@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { PaymentDataDto } from 'src/app/interfaces/payment.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { PaymentService } from 'src/app/services/payments/payment.service';
+import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
 import { KeyPressOnlyNumbersValidator } from 'src/app/shared/Validators/keyPressOnlyNumbers';
 
 @Component({
@@ -53,7 +54,8 @@ export class CreatePaymentComponent {
     private creditPaymentService: PaymentService,
     private toastr: ToastrService,
     private authService: AuthService,
-    @Inject(MAT_DIALOG_DATA) public dataCredit: any // Puedes pasar datos adicionales si es necesario
+    @Inject(MAT_DIALOG_DATA) public dataCredit: any, // Puedes pasar datos adicionales si es necesario
+    private dialog: MatDialog,
   ) {
     this.paymentForm = this.formBuilder.group({
       credit: [this.dataCredit.clienteId, Validators.required],
@@ -140,16 +142,27 @@ export class CreatePaymentComponent {
       payments: payments,
     };
 
-    this.creditPaymentService.createPayment(paymentData).subscribe(
-      (response) => {
-        this.toastr.success(response.message, 'Éxito');
-        this.dialogRef.close(true); // Cierra el modal y pasa true como confirmación
-      },
-      (error) => {
-        this.toastr.error(error.error.error, 'Error');
-        console.error(error);
+    const message = '¿Está seguro de registrar el abono?'
+
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      width: '400px',
+      data: { message }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.creditPaymentService.createPayment(paymentData).subscribe(
+          (response) => {
+            this.toastr.success(response.message, 'Éxito');
+            this.dialogRef.close(true); 
+          },
+          (error) => {
+            this.toastr.error(error.error.error, 'Error');
+            console.error(error);
+          }
+        );
       }
-    );
+    });
   }
 
   paymentMethodValidator(group: FormGroup): { [key: string]: any } | null {

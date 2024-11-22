@@ -53,6 +53,13 @@ export class CreditService {
     if (filters.co_debtor) {
       params = params.set('co_debtor', filters.co_debtor);
     }
+
+    if (filters.job_relationship) {
+      params = params.set('job_relationship', filters.job_relationship);
+    }
+    if (filters.type_linkage) {
+      params = params.set('type_linkage', filters.type_linkage);
+    }
   
     //  esperamos un archivo binario (excel) en la respuesta
     if (filters.export) {
