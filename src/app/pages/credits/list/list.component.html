@@ -99,13 +99,17 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="co_debtor">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Codeudor </th>
+          <ng-container matColumnDef="co_debtors">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Codeudores </th>
             <td mat-cell *matCellDef="let credit">
-              {{ credit.co_debtor.first_name }} {{ credit.co_debtor.last_name }}
+              <div>
+                <span *ngFor="let coDebtor of credit.co_debtors; let last = last">
+                  {{ coDebtor.full_name }}<br *ngIf="!last">
+                </span>
+              </div>
             </td>
           </ng-container>
-
+          
           <ng-container matColumnDef="job_relationship">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4"> Rl. Laboral </th>
             <td mat-cell *matCellDef="let credit">

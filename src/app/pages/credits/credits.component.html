@@ -46,10 +46,13 @@
                                 <mat-form-field class="w-full" appearance="outline">
                                     <mat-label>Buscar codeudor</mat-label>
                                     <mat-icon matPrefix>person_search</mat-icon>
-                                    <input type="text" matInput formControlName="coDebtorSearch"
+                                    <input 
+                                        type="text" 
+                                        matInput 
+                                        formControlName="coDebtorSearch"
                                         placeholder="Buscar por nombres, apellidos, o número documento"
-                                        [matAutocomplete]="autoCoDebtor">
-                        
+                                        [matAutocomplete]="autoCoDebtor"
+                                    >
                                     <mat-autocomplete #autoCoDebtor="matAutocomplete"
                                                     (optionSelected)="onCoDebtorSelected($event.option.value, i)"
                                                     [displayWith]="displayCoDebtor">

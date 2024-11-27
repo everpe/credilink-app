@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -36,7 +36,8 @@ import { CreditService } from 'src/app/services/credits/credit.service';
     CommonModule,
     MatTabsModule,
     MatSelectModule,
-    MatDialogModule
+    MatDialogModule,
+    MatAutocompleteModule
   ],
   templateUrl: './update-credit.component.html',
   styleUrl: './update-credit.component.scss'
@@ -44,7 +45,7 @@ import { CreditService } from 'src/app/services/credits/credit.service';
 export class UpdateCreditComponent implements OnInit{
   creditForm!: FormGroup;
   filteredClients: Observable<any[]> = of([]);
-  filteredCoDebtors: Observable<any[]> = of([]);
+  filteredCoDebtors: any[][] = [];
   formattedLoanAmount: string = '';
 
 
@@ -62,9 +63,8 @@ export class UpdateCreditComponent implements OnInit{
     this.creditForm = this.formBuilder.group({
       client: [this.data.client || '', Validators.required],
       clientSearch: [this.data.client, Validators.required],
-      co_debtor: [this.data.co_debtor || null, Validators.required], // Usa el objeto completo
-      coDebtorSearch: [this.data.co_debtor || '', Validators.required], // Usa el objeto completo
-      // loan_date: [this.data.loan_date || new Date(), Validators.required],
+      co_debtors: this.formBuilder.array([], Validators.required),
+
       loan_date: [this.convertToLocalDate(this.data.loan_date), Validators.required],
       reminder_date: [this.data.reminder_date || '', Validators.required],
       loan_amount: [this.data.loan_amount || 0, Validators.required],
@@ -73,7 +73,9 @@ export class UpdateCreditComponent implements OnInit{
     });
   
     this.patchFormValues();
-    this.setupCoDebtorSearch();
+
+    // Cargar datos iniciales
+    this.initCoDebtors();
     this.setupClientSearch();
   }
   
@@ -81,8 +83,8 @@ export class UpdateCreditComponent implements OnInit{
     if (this.creditForm && this.data) {
       this.creditForm.patchValue({
         client: this.data.client,
-        co_debtor: this.data.co_debtor, // Pasa el objeto completo
-        coDebtorSearch: this.data.co_debtor, // También usa el objeto completo
+        // co_debtor: this.data.co_debtor, // Pasa el objeto completo
+        // coDebtorSearch: this.data.co_debtor, // También usa el objeto completo
         loan_date: this.convertToLocalDate(this.data.loan_date),
         reminder_date: this.convertToLocalDate(this.data.reminder_date),
         loan_amount: this.data.loan_amount,
@@ -94,6 +96,102 @@ export class UpdateCreditComponent implements OnInit{
     }
   }
   
+  get coDebtors(): FormArray {
+    return this.creditForm.get('co_debtors') as FormArray;
+  }
+
+  private initCoDebtors(): void {
+    this.data?.co_debtors?.forEach((coDebtor) => {
+      const coDebtorGroup = this.formBuilder.group({
+        coDebtorSearch: [coDebtor.full_name, Validators.required],
+        coDebtorId: [coDebtor.id, Validators.required]
+      });
+
+      // Inicializa la lista de registros filtrados para este nuevo grupo
+      this.filteredCoDebtors.push([]);
+
+      // Suscribirse a los cambios del campo `coDebtorSearch`
+      const index = this.coDebtors.length; // Obtén el índice del nuevo grupo
+      coDebtorGroup.get('coDebtorSearch')?.valueChanges.pipe(
+          debounceTime(300),
+          switchMap(value => this.codebtorService.getCoDebtors(0, 20, 1, value ?? '').pipe(
+              map(response => response?.results || [])
+          ))
+      ).subscribe(filteredCoDebtors => {
+        //Por cada grupo que se crea un listado de filtrado
+          this.filteredCoDebtors[index] = filteredCoDebtors; // Actualiza la lista en el índice correspondiente
+      });
+
+      this.coDebtors.push(coDebtorGroup);
+    });
+
+    // const initialCoDebtors = [
+    //   { id: 1, full_name: 'Juan Pérez' },
+    //   { id: 2, full_name: 'María García' },
+    //   { id: 3, full_name: 'Carlos Sánchez' }
+    // ];
+    // initialCoDebtors.forEach((coDebtor, index1) => {
+        
+
+
+    // });
+  }
+
+  // Agregar un nuevo campo de coDebtor al FormArray
+  addCoDebtorField(): void {
+    const coDebtorGroup = this.formBuilder.group({
+        coDebtorSearch: ['', Validators.required],
+        coDebtorId: ['', Validators.required]
+    });
+
+    // Inicializa la lista de filtrados para este nuevo grupo
+    this.filteredCoDebtors.push([]);
+
+    // Suscribirse a los cambios del campo `coDebtorSearch`
+    const index = this.coDebtors.length; // Obtén el índice del nuevo grupo
+    coDebtorGroup.get('coDebtorSearch')?.valueChanges.pipe(
+        debounceTime(300),
+        switchMap(value => this.codebtorService.getCoDebtors(0, 20, 1, value ?? '').pipe(
+            map(response => response?.results || [])
+        ))
+    ).subscribe(filteredCoDebtors => {
+        this.filteredCoDebtors[index] = filteredCoDebtors; // Actualiza la lista en el índice correspondiente
+    });
+
+    this.coDebtors.push(coDebtorGroup);
+  }
+
+  removeCoDebtorField(index: number): void {
+    if (this.coDebtors.length === 1) {
+      this.snackBar.error('Debe haber al menos un codeudor.');
+      return;
+    }
+    this.coDebtors.removeAt(index);
+    this.filteredCoDebtors.splice(index, 1); // Eliminar observable asociado
+  }
+
+  onCoDebtorSelected(coDebtor: any, index: number): void {
+    const coDebtorGroup = this.coDebtors.at(index) as FormGroup;
+
+    // Verificar si el coDebtorId ya existe en el FormArray
+    const duplicate = this.coDebtors.controls.some(control =>
+      control !== coDebtorGroup && control.get('coDebtorId')?.value === coDebtor.id
+    );
+
+    if (duplicate) {
+      this.snackBar.error('Este codeudor ya ha sido agregado.');
+      coDebtorGroup.get('coDebtorSearch')?.setValue('');
+      return;
+    }
+
+    // Actualizar el coDebtorId
+    coDebtorGroup.patchValue({
+      coDebtorId: coDebtor.id,
+      // coDebtorSearch: '' 
+    });
+  }
+
+
   private convertToLocalDate(dateString: string): Date {
     if (!dateString) return new Date();
     const date = new Date(dateString);
@@ -102,21 +200,8 @@ export class UpdateCreditComponent implements OnInit{
   
   
   
-  private setupCoDebtorSearch(): void {
-    this.filteredCoDebtors = this.creditForm.get('coDebtorSearch')?.valueChanges.pipe(
-      debounceTime(300),
-      switchMap(value => {
-        if (value) {
-          return this.codebtorService.getCoDebtors(0, 20, 1, value).pipe(
-            map(response => response?.results || [])
-          );
-        } else {
-          this.creditForm.get('co_debtor')?.setValue(null); // Resetea el valor de co_debtor si el campo está vacío
-          return of([]);
-        }
-      })
-    ) ?? of([]);
-  }
+
+
   private setupClientSearch(): void {
     this.filteredClients = this.creditForm.get('clientSearch')?.valueChanges.pipe(
       debounceTime(300),
@@ -138,19 +223,18 @@ export class UpdateCreditComponent implements OnInit{
       clientSearch: client // También actualiza el campo de búsqueda
     });
   }
-  onCoDebtorSelected(coDebtor: any): void {
-    this.creditForm.patchValue({ 
-      co_debtor: coDebtor, // Pasa el objeto completo al campo de formulario
-      coDebtorSearch: coDebtor // También actualiza el campo de búsqueda
-    });
-  }
+
+
   displayClient(client: any): string {
     return client ? `${client.first_name} ${client.last_name} - ${client.document_number}` : '';
   }
+  // displayCoDebtor(coDebtor: any): string {
+  //   return coDebtor && coDebtor.first_name && coDebtor.last_name
+  //     ? `${coDebtor.first_name} ${coDebtor.last_name} - ${coDebtor.document_number??0}`
+  //     : 'Información no disponible';
+  // }
   displayCoDebtor(coDebtor: any): string {
-    return coDebtor && coDebtor.first_name && coDebtor.last_name
-      ? `${coDebtor.first_name} ${coDebtor.last_name} - ${coDebtor.document_number??0}`
-      : 'Información no disponible';
+    return coDebtor ? `${coDebtor.full_name}` : '';
   }
   
   updateCredit(): void {
@@ -174,7 +258,8 @@ export class UpdateCreditComponent implements OnInit{
             this.creditService.updateCredit(this.data.id, {
               loan_amount: this.creditForm.get('loan_amount')?.value ,
               loan_date:  formatDate(this.creditForm.get('loan_date')?.value) ,
-              co_debtor: this.creditForm.get('co_debtor')?.value.id,
+              // co_debtor: this.creditForm.get('co_debtor')?.value.id,
+              co_debtors: this.coDebtors.controls.map((control) =>control.get('id')?.value),
               client: this.creditForm.get('client')?.value.id,
               reminder_date: formatDate(this.creditForm.get('reminder_date')?.value), 
               interest_rate: this.creditForm.get('interest_rate')?.value.replace(',','.')

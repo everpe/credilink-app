@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreditDto, GetCreditDto, UpdateCredit } from 'src/app/interfaces/credit.interface';
+import {  CreditDto, GetCreditDto, UpdateCredit } from 'src/app/interfaces/credit.interface';
 import { environment } from 'src/environments/environment';
 
 

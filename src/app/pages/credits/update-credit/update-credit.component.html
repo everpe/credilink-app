@@ -25,7 +25,7 @@
     </mat-card>
 
     <!-- Datos del Codeudor -->
-    <mat-card class="mb-1">
+    <!-- <mat-card class="mb-1">
       <mat-card-title class="text-xl font-bold px-6 py-3">Datos del codeudor</mat-card-title>
       <mat-card-content>
         <div class="grid grid-cols-1 gap-4">
@@ -45,7 +45,51 @@
           </mat-form-field>
         </div>
       </mat-card-content>
-    </mat-card>
+    </mat-card> -->
+
+    <mat-card class="mb-1 text-center">
+      <mat-card-title class="text-xl font-bold px-6 py-3">Datos del codeudor</mat-card-title>
+      <mat-card-content >
+          <div class="grid grid-cols-1 gap-4" formArrayName="co_debtors">
+              <div *ngFor="let coDebtor of coDebtors.controls; let i = index" [formGroupName]="i" class="flex">
+                  <!-- Autocomplete Codeudor -->
+                  <mat-form-field class="w-full" appearance="outline">
+                      <mat-label>Buscar codeudor</mat-label>
+                      <mat-icon matPrefix>person_search</mat-icon>
+                      <input 
+                          type="text" 
+                          matInput 
+                          formControlName="coDebtorSearch"
+                          placeholder="Buscar por nombres, apellidos, o número documento"
+                          [matAutocomplete]="autoCoDebtor"
+                      >
+                      <mat-autocomplete #autoCoDebtor="matAutocomplete"
+                                      (optionSelected)="onCoDebtorSelected($event.option.value, i)"
+                                      [displayWith]="displayCoDebtor">
+                          <mat-option *ngFor="let coDebtor of filteredCoDebtors[i]" [value]="coDebtor">
+                              {{ coDebtor.first_name }} {{ coDebtor.last_name }} - {{ coDebtor.document_number }}
+                          </mat-option>
+                      </mat-autocomplete>
+
+                      <mat-error *ngIf="coDebtor.get('coDebtorSearch')?.hasError('required')">
+                      Codeudor es requerido
+                      </mat-error>
+                  </mat-form-field>
+
+                  <button mat-icon-button color="warn" (click)="removeCoDebtorField(i)" [disabled]="i==0 ? true : false ">
+                      <mat-icon>delete</mat-icon>
+                  </button>
+            
+              </div>
+          </div>
+          <button mat-icon-button color="primary" (click)="addCoDebtorField()" matTooltip="Agregar codeudor">
+              <mat-icon>add_circle</mat-icon>
+          </button>
+      </mat-card-content>
+  </mat-card>
+    
+    
+    
 
     <!-- Datos del Préstamo -->
     <mat-card>

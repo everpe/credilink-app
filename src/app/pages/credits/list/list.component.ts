@@ -74,10 +74,9 @@ export class ListComponent implements OnInit {
   displayedColumns: string[] = [
     'actions',
     'client', 
-    'co_debtor',
+    'co_debtors',
     'job_relationship',
     'loan_date',
-    // 'reminder_date', 
     'loan_amount', 
     'loan_status', 
     'interest_value', 

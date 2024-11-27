@@ -1,6 +1,6 @@
 export interface CreditDto {
     client: number;          // ID del cliente
-    co_debtor: number;       // ID del codeudor
+    co_debtors: number[];       // ID del codeudor
     loan_date: string;       // Fecha del préstamo o crédito
     reminder_date: string;   // Fecha de recordatorio
     loan_amount: number;     // Valor del préstamo o crédito
@@ -28,17 +28,7 @@ export interface GetCreditDto {
         name: string
       }
     };
-    co_debtor: {
-      id: number;
-      first_name: string;
-      last_name: string;
-      document_number: string;
-      company: string;
-      office_phone: string;
-      phone: string;
-      mobile: string;
-      address: string;
-    };
+    co_debtors: CodebtorRecord[];
     loan_date: string;
     reminder_date: string;
     loan_amount: number;
@@ -52,6 +42,16 @@ export interface GetCreditDto {
     current_interest_debt: number;
   }
   
+  export interface CodebtorRecord{
+    id: number;
+    full_name: string;
+
+    // "co_debtor": {
+    //   "id": 0,
+    //   "first_name": "",
+    //   "last_name": "",
+    //   "document_number": "",
+  }
 
   export interface ConcepCredit{
     concept: string
@@ -61,7 +61,7 @@ export interface GetCreditDto {
   export interface UpdateCredit{
     loan_amount: number;
     loan_date: string;
-    co_debtor: number;
+    co_debtors: number[];
     client: number;
     reminder_date: string;
     interest_rate: string;
