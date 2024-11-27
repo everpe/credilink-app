@@ -8,3 +8,14 @@
   // background-color: #4c6382   !important; //#5D87FF !important;
   font-weight: 600;
 }
+
+
+.wide-column {
+  flex: 2; /* O un valor mayor para asignarle más espacio */
+}
+
+.mat-column-co_debtors {
+  min-width: 200px; /* Ajusta el valor según el tamaño deseado */
+  max-width: 400px; /* Opcional para limitar el ancho */
+  word-wrap: break-word; /* Asegura que no se desborde el contenido */
+}
