@@ -167,35 +167,53 @@ export class CreditsComponent implements OnInit {
     this.creditService.createCredit(formValue).subscribe(
       response => {
         this.snackBar.success(response.message);
-        this.creditForm.reset(
-          {
-            client: '',
-            clientSearch: '',
-            co_debtors: '',
-            loan_date: new Date(),
-            is_old: false,
-            end_date: null,
-            reminder_date: '',
-            loan_amount: 0,
-            interest_rate: '',
-            number_of_installments: 0,
-            sede: this.authService.getSedeUser(),
-            by_quota: false,
-          }
-        );
-        this.formattedLoanAmount = "";
-        this.monthlyInterest = 0;
-        Object.keys(this.creditForm.controls).forEach(key => {
-          this.creditForm.get(key)?.setErrors(null); // Limpia los errores de validación
-          this.creditForm.get(key)?.markAsPristine(); // Marca el control como limpio
-          this.creditForm.get(key)?.markAsUntouched(); // Marca el control como no tocado
-        });
+        this.resetForm();
         this.sharedService.triggerReloadCredits();
       },
       error => {
         this.snackBar.error(error.error.error);
       }
     );
+  }
+
+  resetForm(){
+    this.creditForm.reset(
+      {
+        client: '',
+        clientSearch: '',
+        loan_date: new Date(),
+        is_old: false,
+        end_date: null,
+        reminder_date: '',
+        loan_amount: 0,
+        interest_rate: '',
+        number_of_installments: 0,
+        sede: this.authService.getSedeUser(),
+        by_quota: false,
+      }
+    );
+
+    this.formattedLoanAmount = "";
+    this.monthlyInterest = 0;
+
+
+    //reseterar formArray
+    const coDebtorsFormArray = this.creditForm.get('co_debtors') as FormArray;
+    coDebtorsFormArray.clear(); // Vacía los controles actuales
+    coDebtorsFormArray.push(
+      this.formBuilder.group({
+        coDebtorSearch: ['', Validators.required],
+        coDebtorId: [null, Validators.required]
+      })
+    );
+
+    Object.keys(this.creditForm.controls).forEach(key => {
+      this.creditForm.get(key)?.setErrors(null); // Limpia los errores de validación
+      this.creditForm.get(key)?.markAsPristine(); // Marca el control como limpio
+      this.creditForm.get(key)?.markAsUntouched(); // Marca el control como no tocado
+    });
+
+
   }
 
   onClientSelected(client: any): void {
