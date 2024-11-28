@@ -3,7 +3,7 @@
       <!-- Cliente -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Cliente</mat-label>
-        <input matInput [value]="credit?.client?.first_name + ' ' + credit?.client?.last_name" readonly />
+        <input matInput [value]="credit.client.first_name + ' ' + credit.client.last_name" readonly />
       </mat-form-field>
   
       <!-- Codeudor -->
@@ -19,61 +19,61 @@
       <!-- Fecha Crédito -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Fecha Crédito</mat-label>
-        <input matInput [value]="credit?.loan_date | date: 'dd/MM/yyyy'" readonly />
+        <input matInput [value]="credit.loan_date | date: 'dd/MM/yyyy'" readonly />
       </mat-form-field>
   
       <!-- Fecha Recordatorio (reminder_date) -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Fecha Recordatorio</mat-label>
-        <input matInput [value]="credit?.reminder_date | date: 'dd/MM/yyyy'" readonly />
+        <input matInput [value]="credit.reminder_date | date: 'dd/MM/yyyy'" readonly />
       </mat-form-field>
   
       <!-- Valor del Crédito -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Valor Crédito (COP)</mat-label>
-        <input matInput [value]="credit?.loan_amount | currency:''" readonly />
+        <input matInput [value]="credit.loan_amount | currency:''" readonly />
       </mat-form-field>
   
       <!-- Tasa de Interés (interest_rate) -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Tasa de Interés (%)</mat-label>
-        <input matInput [value]="credit?.interest_rate" readonly />
+        <input matInput [value]="credit.interest_rate" readonly />
       </mat-form-field>
   
       <!-- Número de Cuotas (number_of_installments) -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Número de Cuotas</mat-label>
-        <input matInput [value]="credit?.number_of_installments" readonly />
+        <input matInput [value]="credit.number_of_installments" readonly />
       </mat-form-field>
   
       <!-- Estado del Crédito (load_status) -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Estado del Crédito</mat-label>
-        <input matInput [value]="credit?.load_status" readonly />
+        <input matInput [value]="credit.load_status" readonly />
       </mat-form-field>
   
       <!-- Valor Interés (interest_value) -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Valor Interés (COP)</mat-label>
-        <input matInput [value]="credit?.interest_value | currency:''" readonly />
+        <input matInput [value]="credit.interest_value | currency:''" readonly />
       </mat-form-field>
   
       <!-- Total Deuda (total_debt) -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Total Deuda (COP)</mat-label>
-        <input matInput [value]="credit?.total_debt | currency:''" readonly />
+        <input matInput [value]="credit.total_debt | currency:''" readonly />
       </mat-form-field>
   
       <!-- Saldo Pendiente (remaining_balance) -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Saldo Pendiente (COP)</mat-label>
-        <input matInput [value]="credit?.remaining_balance | currency:''" readonly />
+        <input matInput [value]="credit.remaining_balance | currency:''" readonly />
       </mat-form-field>
   
       <!-- Próximo Pago (next_payment_date) -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Próximo Pago</mat-label>
-        <input matInput [value]="credit?.next_payment_date ? (credit?.next_payment_date | date: 'dd/MM/yyyy') : 'Sin fecha'" readonly />
+        <input matInput [value]="credit.next_payment_date ? (credit.next_payment_date | date: 'dd/MM/yyyy') : 'Sin fecha'" readonly />
       </mat-form-field>
     </form>
   </mat-dialog-content>
