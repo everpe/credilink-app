@@ -74,7 +74,7 @@ export class CreditsComponent implements OnInit {
 
     this.creditForm = this.formBuilder.group({
       client: ['', Validators.required],
-      clientSearch: [''],
+      clientSearch: ['',Validators.required],
       // coDebtorSearch: ['', Validators.required],
       loan_date: [new Date(), Validators.required],
       reminder_date: ['', Validators.required],
@@ -331,5 +331,6 @@ export class CreditsComponent implements OnInit {
       coDebtorId: coDebtor.id,
       // coDebtorSearch: '' 
     });
+    this.filteredCoDebtorsArray[index] = []; 
   }
 }

@@ -66,7 +66,12 @@
                                     </mat-error>
                                 </mat-form-field>
           
-                                <button mat-icon-button color="warn" (click)="removeCoDebtorField(i)" [disabled]="i==0 ? true : false ">
+                                <button 
+                                    mat-icon-button 
+                                    color="warn" 
+                                    (click)="removeCoDebtorField(i)" 
+                                    [disabled]="i==0 ? true : false "
+                                    matTooltip="Eliminar">
                                     <mat-icon>delete</mat-icon>
                                 </button>
                           

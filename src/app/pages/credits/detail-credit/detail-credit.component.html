@@ -7,15 +7,15 @@
       </mat-form-field>
   
       <!-- Codeudor -->
-      <!-- @for (item of credit.co_debtors; track item; let  i = $index) {
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Codeudor {{i}}</mat-label>
-          <input matInput [value]="item.full_name" readonly />
-        </mat-form-field>
-
-      }  -->
-
-  
+      @for (item of credit.co_debtors; track item; let  i = $index) {
+        <div>
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Codeudor {{ i + 1 }}</mat-label>
+            <input matInput [value]="item.first_name + ' ' + item.last_name" readonly />
+          </mat-form-field>
+        </div>
+      } 
+      
       <!-- Fecha Crédito -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Fecha Crédito</mat-label>
