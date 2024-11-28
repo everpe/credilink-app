@@ -37,9 +37,9 @@
                 </mat-card>
 
                 <!-- Datos del Codeudor -->
-                <mat-card class="mb-1 text-center">
+                <mat-card class="mb-1 ">
                     <mat-card-title class="text-xl font-bold px-6 py-3">Datos del codeudor</mat-card-title>
-                    <mat-card-content >
+                    <mat-card-content class="text-center">
                         <div class="grid grid-cols-1 gap-4" formArrayName="co_debtors">
                             <div *ngFor="let coDebtor of coDebtors.controls; let i = index" [formGroupName]="i" class="flex">
                                 <!-- Autocomplete Codeudor -->
