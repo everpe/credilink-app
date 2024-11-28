@@ -44,13 +44,9 @@ export interface GetCreditDto {
   
   export interface CodebtorRecord{
     id: number;
-    full_name: string;
-
-    // "co_debtor": {
-    //   "id": 0,
-    //   "first_name": "",
-    //   "last_name": "",
-    //   "document_number": "",
+    first_name: string;
+    last_name: string;
+    document_number: string;
   }
 
   export interface ConcepCredit{

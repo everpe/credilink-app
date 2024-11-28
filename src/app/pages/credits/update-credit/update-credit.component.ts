@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -56,7 +56,8 @@ export class UpdateCreditComponent implements OnInit{
     private creditService: CreditService,
     private codebtorService: CodebtorService,
     private clientService: ClientService,
-    private snackBar: ToastrService
+    private snackBar: ToastrService,
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -101,20 +102,21 @@ export class UpdateCreditComponent implements OnInit{
   }
 
   private initCoDebtors(): void {
-    this.data?.co_debtors?.forEach((coDebtor) => {
+    this.data?.co_debtors?.forEach((coDebtor, index2) => {
       const coDebtorGroup = this.formBuilder.group({
-        coDebtorSearch: [coDebtor.full_name, Validators.required],
+        coDebtorSearch: [coDebtor, Validators.required],
         coDebtorId: [coDebtor.id, Validators.required]
       });
-
+      this.changeDetector.detectChanges();
       // Inicializa la lista de registros filtrados para este nuevo grupo
-      this.filteredCoDebtors.push([]);
+      this.filteredCoDebtors[index2] = [coDebtor];
+
 
       // Suscribirse a los cambios del campo `coDebtorSearch`
       const index = this.coDebtors.length; // Obtén el índice del nuevo grupo
       coDebtorGroup.get('coDebtorSearch')?.valueChanges.pipe(
           debounceTime(300),
-          switchMap(value => this.codebtorService.getCoDebtors(0, 20, 1, value ?? '').pipe(
+          switchMap(value => this.codebtorService.getCoDebtors(0, 20, 1, value?.first_name ?? '').pipe(
               map(response => response?.results || [])
           ))
       ).subscribe(filteredCoDebtors => {
@@ -122,19 +124,10 @@ export class UpdateCreditComponent implements OnInit{
           this.filteredCoDebtors[index] = filteredCoDebtors; // Actualiza la lista en el índice correspondiente
       });
 
+
       this.coDebtors.push(coDebtorGroup);
     });
 
-    // const initialCoDebtors = [
-    //   { id: 1, full_name: 'Juan Pérez' },
-    //   { id: 2, full_name: 'María García' },
-    //   { id: 3, full_name: 'Carlos Sánchez' }
-    // ];
-    // initialCoDebtors.forEach((coDebtor, index1) => {
-        
-
-
-    // });
   }
 
   // Agregar un nuevo campo de coDebtor al FormArray
@@ -171,7 +164,7 @@ export class UpdateCreditComponent implements OnInit{
   }
 
   onCoDebtorSelected(coDebtor: any, index: number): void {
-    const coDebtorGroup = this.coDebtors.at(index) as FormGroup;
+    const coDebtorGroup = this.coDebtors.at(index) as FormGroup; //obtiene el FormGroup del ArrayFomr
 
     // Verificar si el coDebtorId ya existe en el FormArray
     const duplicate = this.coDebtors.controls.some(control =>
@@ -228,14 +221,12 @@ export class UpdateCreditComponent implements OnInit{
   displayClient(client: any): string {
     return client ? `${client.first_name} ${client.last_name} - ${client.document_number}` : '';
   }
-  // displayCoDebtor(coDebtor: any): string {
-  //   return coDebtor && coDebtor.first_name && coDebtor.last_name
-  //     ? `${coDebtor.first_name} ${coDebtor.last_name} - ${coDebtor.document_number??0}`
-  //     : 'Información no disponible';
-  // }
   displayCoDebtor(coDebtor: any): string {
-    return coDebtor ? `${coDebtor.full_name}` : '';
+    return coDebtor && coDebtor.first_name && coDebtor.last_name
+      ? `${coDebtor.first_name} ${coDebtor.last_name} - ${coDebtor.document_number ?? 0}`
+      : '';
   }
+
   
   updateCredit(): void {
     this.creditForm.markAllAsTouched();
@@ -258,8 +249,9 @@ export class UpdateCreditComponent implements OnInit{
             this.creditService.updateCredit(this.data.id, {
               loan_amount: this.creditForm.get('loan_amount')?.value ,
               loan_date:  formatDate(this.creditForm.get('loan_date')?.value) ,
-              // co_debtor: this.creditForm.get('co_debtor')?.value.id,
-              co_debtors: this.coDebtors.controls.map((control) =>control.get('id')?.value),
+
+
+              co_debtors: this.coDebtors.controls.map((control) => control.get('coDebtorId')?.value),
               client: this.creditForm.get('client')?.value.id,
               reminder_date: formatDate(this.creditForm.get('reminder_date')?.value), 
               interest_rate: this.creditForm.get('interest_rate')?.value.replace(',','.')
