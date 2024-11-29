@@ -19,7 +19,9 @@
           "options": {
             "allowedCommonJsDependencies": [
               "ng-apexcharts",
-              "apexcharts"
+              "apexcharts",
+              "rgbcolor",
+              "jspdf-autotable"
             ],
             "outputPath": "dist/credilink",
             "index": "src/index.html",
