@@ -307,10 +307,13 @@ export class ListComponent implements OnInit {
 
 
   openListPayments(credito: GetCreditDto){
-    this.dialog.open(HistoryPaymentsComponent, {
+    const dialogRef = this.dialog.open(HistoryPaymentsComponent, {
       width: '1000px', 
       data: { credit: credito }, 
       disableClose: true
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+        this.loadCredits();
     });
   }
 

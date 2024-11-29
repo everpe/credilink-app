@@ -22,8 +22,6 @@ export class PaymentService {
   }
 
   getCreditPayments(creditId: number): Observable<PaymentDto[]> {
-
-
     return this.http.get<PaymentDto[]>(`${environment.apiUrl}/credits/${creditId}/get_payments/`);
   }
 }

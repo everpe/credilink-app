@@ -126,8 +126,8 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.getPayments();
         this.getCreditDetailById();
+        this.getPayments();
       }
     });
   }
@@ -136,6 +136,7 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
   getCreditDetailById(){
     this.creditService.getCreditDetails(this.infoCredito.id).subscribe( (resp:any) => {
       this.infoCredito = resp.data;
+
     },error=>{
       this.snackbar.error(error.error.error);
     });
