@@ -136,7 +136,6 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
   getCreditDetailById(){
     this.creditService.getCreditDetails(this.infoCredito.id).subscribe( (resp:any) => {
       this.infoCredito = resp.data;
-
     },error=>{
       this.snackbar.error(error.error.error);
     });
