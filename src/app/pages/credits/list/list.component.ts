@@ -26,8 +26,6 @@ import { CodebtorService } from 'src/app/services/codebtors/codebtor.service';
 import { CreditService } from 'src/app/services/credits/credit.service';
 import { atLeastOneFieldValidator } from 'src/app/shared/Validators/filterCredito-validator';
 import { DetailCreditComponent } from '../detail-credit/detail-credit.component';
-import { CreatePaymentComponent } from '../../payments/create-payment/create-payment.component';
-import { PaymentsCreditListComponent } from '../../payments/payments-credit-list/payments-credit-list.component';
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { HistoryPaymentsComponent } from '../../payments/history-payments/history-payments.component';
 import { UpdateCreditComponent } from '../update-credit/update-credit.component';
@@ -43,9 +41,6 @@ import { JobRelationship, TypeLinkage } from 'src/app/interfaces/client.interfac
     MatPaginatorModule,
     MatCard,
     MatCardHeader,
-    MatCardActions,
-    MatCardTitle,
-    MatCardSubtitle,
     MatCardContent,
     MatDatepickerModule,
     MatNativeDateModule,
@@ -62,9 +57,6 @@ import { JobRelationship, TypeLinkage } from 'src/app/interfaces/client.interfac
     MatIconModule,
     MatAutocompleteModule,
     MatDividerModule
-  ],
-  providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' } // Usar los formatos personalizados
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'

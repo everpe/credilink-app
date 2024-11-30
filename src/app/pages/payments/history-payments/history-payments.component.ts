@@ -95,7 +95,7 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
           paymentType: payment.payment_type,
           credit: payment.credit,
           amount: parseFloat(payment.amount),
-          paymentDate: new Date(payment.payment_date.split('/').reverse().join('-')),
+          paymentDate: payment.payment_date,
           interestPayment: parseFloat(payment.interest_payment),
           capitalPayment: parseFloat(payment.capital_payment),
           lateInterest: parseFloat(payment.late_interest),

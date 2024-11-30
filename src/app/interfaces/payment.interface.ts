@@ -20,7 +20,7 @@ export interface PaymentCreateDto {
     paymentType: string;
     credit: number;
     amount: number;
-    paymentDate: Date;
+    paymentDate: string;
     interestPayment: number;
     capitalPayment: number;
     lateInterest: number;
