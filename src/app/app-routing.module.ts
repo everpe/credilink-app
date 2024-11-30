@@ -11,23 +11,23 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/dashboard',
+        redirectTo: '/credits',
         pathMatch: 'full',
       },
-      {
-        path: 'dashboard',
-        canActivate: [authGuard],
-        loadChildren: () =>
-          import('./pages/pages.module').then((m) => m.PagesModule),
-      },
-      {
-        path: 'ui-components',
-        canActivate: [authGuard],
-        loadChildren: () =>
-          import('./pages/ui-components/ui-components.module').then(
-            (m) => m.UicomponentsModule
-          ),
-      },
+      // {
+      //   path: 'dashboard',
+      //   canActivate: [authGuard],
+      //   loadChildren: () =>
+      //     import('./pages/pages.module').then((m) => m.PagesModule),
+      // },
+      // {
+      //   path: 'ui-components',
+      //   canActivate: [authGuard],
+      //   loadChildren: () =>
+      //     import('./pages/ui-components/ui-components.module').then(
+      //       (m) => m.UicomponentsModule
+      //     ),
+      // },
       {
         path: 'clients',
         canActivate: [authGuard],

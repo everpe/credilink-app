@@ -130,9 +130,6 @@ export class CreatePaymentComponent {
         payment_method: this.paymentForm.get('capital_payment_method')?.value,
       });
     }
-
-
-
  
     const paymentData: PaymentDataDto = {
       credit: this.paymentForm.get('credit')?.value,

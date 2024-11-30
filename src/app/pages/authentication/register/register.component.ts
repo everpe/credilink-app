@@ -21,6 +21,6 @@ export class AppSideRegisterComponent {
 
   submit() {
     // console.log(this.form.value);
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/credits']);
   }
 }
