@@ -38,6 +38,8 @@ export class AppSideLoginComponent {
         (response) => {
           this.authService.setToken(response.token);
           this.authService.setSedeUserToStorage(response.data.company.sedes[0].id.toString())
+          this.authService.setDateLogged(new Date(Date.now()));
+          this.authService.setUserLogged(response.data.username)
           this.router.navigate(['/credits']);
           this.isLoading = false;
         },

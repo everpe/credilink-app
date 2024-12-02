@@ -5,34 +5,20 @@
   </button>
   <!-- --------------------------------------------------------------- -->
 
-  <!-- --------------------------------------------------------------- -->
-  <!-- Notification Dropdown -->
-  <!-- --------------------------------------------------------------- -->
-
-  <button mat-icon-button aria-label="Notifications">
-    <i-tabler
-      class="d-flex"
-      name="bell"
-      matBadge="1"
-      matBadgeColor="primary"
-    ></i-tabler>
-  </button>
-
   <span class="flex-1-auto"></span>
 
-  <!-- --------------------------------------------------------------- -->
-  <!-- profile Dropdown -->
-  <!-- --------------------------------------------------------------- -->
-  <!-- <a
-    mat-flat-button
-    color="primary"
-    href="https://adminmart.com/product/modernize-angular-admin-dashboard/"
-    target="_blank"
-    class="d-flex justify-content-center"
-  >
-    Download Free
-  </a> -->
-  <button
+
+  <div class="user-info">
+    <p class="user-session">
+      <span class="font-semibold">USUARIO EN SESIÓN:</span>
+      {{loggedUSer}}
+    </p>
+    <p class="last-login">
+      <em>Último inicio de sesión:</em> {{ loggedDate | date: 'dd/MM/yyyy HH:mm' }}
+    </p>
+  </div>
+
+  <!-- <button
     mat-icon-button
     [matMenuTriggerFor]="profilemenu"
     aria-label="Notifications"
@@ -49,19 +35,6 @@
         ><i-tabler name="user" class="icon-18 d-flex"></i-tabler></mat-icon
       >Mi perfil
     </button>
-    <!-- <button mat-menu-item>
-      <mat-icon class="d-flex align-items-center"
-        ><i-tabler name="mail" class="icon-18 d-flex"></i-tabler></mat-icon
-      >My Account
-    </button>
-    <button mat-menu-item>
-      <mat-icon class="d-flex align-items-center"
-        ><i-tabler
-          name="list-check"
-          class="icon-18 d-flex"
-        ></i-tabler></mat-icon
-      >My Task
-    </button> -->
 
     <div class="p-x-12 m-t-12">
       <button
@@ -71,5 +44,34 @@
         (click)="logout()"
         >Cerrar sesión</button>
     </div>
-  </mat-menu>
+  </mat-menu> -->
 </mat-toolbar>
+
+<style>
+  .topbar {
+    position: fixed !important; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  .user-info {
+    text-align: center;
+    /* Centra el texto */
+    font-family: Arial, sans-serif;
+    /* Usa una fuente legible */
+    margin-top: 10px;
+  }
+
+  .user-session {
+    font-size: 14px;
+    color: #212121;
+  }
+
+  .last-login {
+    font-size: 12px;
+    font-style: italic;
+    color: #666;
+  }
+</style>

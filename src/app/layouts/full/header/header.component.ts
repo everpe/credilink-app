@@ -22,8 +22,13 @@ export class HeaderComponent {
   @Output() toggleCollapsed = new EventEmitter<void>();
 
   showFiller = false;
+  loggedUSer = '';
+  loggedDate: Date;
 
-  constructor(public dialog: MatDialog, private authService: AuthService) { }
+  constructor(public dialog: MatDialog, private authService: AuthService) { 
+    this.loggedUSer = this.authService.getUserLogged() ?? '';
+    this.loggedDate = this.authService.getDateLogged() ?? new Date();
+  }
   logout(): void {
     this.authService.logout(); 
   }

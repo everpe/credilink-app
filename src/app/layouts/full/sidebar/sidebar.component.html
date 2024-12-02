@@ -1,21 +1,27 @@
-<div class="flex-layout">
+<div class="flex flex-col h-screen">
   <app-branding></app-branding>
-  <mat-nav-list class="sidebar-list">
+  <mat-nav-list class="sidebar-list flex-1">
     <app-nav-item *ngFor="let item of navItems" [item]="item"> </app-nav-item>
   </mat-nav-list>
-  <!-- <div class="p-24">
-    <div class="bg-light-primary d-flex align-items-center rounded p-20 m-t-20">
-      <div>
-        <h5 class="mat-subtitle-1 f-s-16 f-w-600 m-b-8">
-          Credilink <br />
-        </h5>
-
-      </div>
-      <img
-        src="/assets/images/backgrounds/rocket.png"
-        alt="imgae"
-        class="side-img"
-      />
-    </div>
-  </div> -->
+  <button mat-raised-button class="logout-button mt-auto" (click)="logout()">
+    <mat-icon class="icon">logout</mat-icon>
+    Cerrar Sesión
+  </button>
 </div>
+
+<style>
+  .flex-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Ocupa toda la altura del contenedor */
+}
+
+.sidebar-list {
+  flex: 1; /* Esto permite que la lista ocupe el espacio disponible */
+}
+
+::ng-deep .mat-drawer-side{
+  border: none !important;
+}
+
+</style>

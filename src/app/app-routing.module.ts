@@ -60,7 +60,7 @@ const routes: Routes = [
   },
   {
     path: '**',  
-    redirectTo: '/dashboard',  
+    redirectTo: '/credits',  
     pathMatch: 'full'
   }
 ];

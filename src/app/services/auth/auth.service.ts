@@ -11,6 +11,11 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthService {
 
+  private readonly KEY_USER_LOGGED = 'user_logged';
+  private readonly KEY_DATE_LOGGED = 'date_logged';
+
+
+
   constructor(private http: HttpClient, private router: Router) {}
     /**
    * Método para hacer login
@@ -68,7 +73,26 @@ export class AuthService {
 
     logout(): void {
       localStorage.removeItem('auth_token'); 
+      localStorage.removeItem('sede_user'); 
+      localStorage.removeItem(this.KEY_USER_LOGGED); 
+      localStorage.removeItem(this.KEY_DATE_LOGGED); 
       this.router.navigate(['/authentication/login']); 
+    }
+
+    setUserLogged(userName: string): void {
+      localStorage.setItem(this.KEY_USER_LOGGED, userName);
+    }
+    setDateLogged(date: Date): void {
+      localStorage.setItem(this.KEY_DATE_LOGGED, date.toISOString()); // Convertimos el Date a string
+    }
+    
+    getDateLogged(): Date | null {
+      const dateStr = localStorage.getItem(this.KEY_DATE_LOGGED); // Recuperamos el string
+      return dateStr ? new Date(dateStr) : null; // Convertimos el string a Date
+    }
+    
+    getUserLogged(): string | null {
+      return localStorage.getItem(this.KEY_USER_LOGGED);
     }
 
 }
