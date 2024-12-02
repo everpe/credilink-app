@@ -1,9 +1,14 @@
-<div class="flex flex-col h-screen">
+<div class="flex flex-col h-screen overflow-hidden">
   <app-branding></app-branding>
   <mat-nav-list class="sidebar-list flex-1">
     <app-nav-item *ngFor="let item of navItems" [item]="item"> </app-nav-item>
   </mat-nav-list>
-  <button mat-raised-button class="logout-button mt-auto" (click)="logout()">
+
+  <button
+    mat-raised-button
+    class="logout-button absolute bottom-1 w-100 "
+    (click)="logout()"
+  >
     <mat-icon class="icon">logout</mat-icon>
     Cerrar Sesión
   </button>
@@ -23,5 +28,9 @@
 ::ng-deep .mat-drawer-side{
   border: none !important;
 }
+/* ::ng-deeep .h-screen{
+  border: solid red;
+}  */
+
 
 </style>
