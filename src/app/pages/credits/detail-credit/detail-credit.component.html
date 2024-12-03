@@ -19,13 +19,13 @@
       <!-- Fecha Crédito -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Fecha Crédito</mat-label>
-        <input matInput [value]="credit.loan_date | date: 'dd/MM/yyyy'" readonly />
+        <input matInput [value]="credit.loan_date" readonly />
       </mat-form-field>
   
       <!-- Fecha Recordatorio (reminder_date) -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Fecha Recordatorio</mat-label>
-        <input matInput [value]="credit.reminder_date | date: 'dd/MM/yyyy'" readonly />
+        <input matInput [value]="credit.reminder_date" readonly />
       </mat-form-field>
   
       <!-- Valor del Crédito -->
@@ -73,7 +73,7 @@
       <!-- Próximo Pago (next_payment_date) -->
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Próximo Pago</mat-label>
-        <input matInput [value]="credit.next_payment_date ? (credit.next_payment_date | date: 'dd/MM/yyyy') : 'Sin fecha'" readonly />
+        <input matInput [value]="credit.next_payment_date ? (credit.next_payment_date) : 'Sin fecha'" readonly />
       </mat-form-field>
     </form>
   </mat-dialog-content>

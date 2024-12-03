@@ -66,7 +66,7 @@ export class UpdateCreditComponent implements OnInit{
       clientSearch: [this.data.client, Validators.required],
       co_debtors: this.formBuilder.array([], Validators.required),
 
-      loan_date: [this.convertToLocalDate(this.data.loan_date), Validators.required],
+      loan_date: [this.data.loan_date, Validators.required],
       reminder_date: [this.data.reminder_date || '', Validators.required],
       loan_amount: [this.data.loan_amount || 0, Validators.required],
       interest_rate	:[this.data.interest_rate, [Validators.required, Validators.pattern(/^[0-9]+([.,][0-9]{1,2})?$/)]],
@@ -86,8 +86,8 @@ export class UpdateCreditComponent implements OnInit{
         client: this.data.client,
         // co_debtor: this.data.co_debtor, // Pasa el objeto completo
         // coDebtorSearch: this.data.co_debtor, // También usa el objeto completo
-        loan_date: this.convertToLocalDate(this.data.loan_date),
-        reminder_date: this.convertToLocalDate(this.data.reminder_date),
+        loan_date:this.parseDateFromString(this.data.loan_date),
+        reminder_date: this.parseDateFromString(this.data.reminder_date),
         loan_amount: this.data.loan_amount,
         interest_rate: this.data.interest_rate,
         pin: '' 
@@ -292,4 +292,16 @@ export class UpdateCreditComponent implements OnInit{
   formatNumberWithCommas(value: number): string {
     return value.toLocaleString('en-US'); // Formatear en inglés para separar con comas
   }
+
+  private parseDateFromString(dateStr: string): Date | null {
+    if (!dateStr) return null;
+  
+    const parts = dateStr.split('/'); // Divide la cadena en [día, mes, año]
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1; // Restamos 1 porque los meses van de 0 a 11
+    const year = parseInt(parts[2], 10);
+  
+    return new Date(year, month, day); // Crea un objeto Date válido
+  }
+  
 }
