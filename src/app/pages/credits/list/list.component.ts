@@ -196,20 +196,20 @@ export class ListComponent implements OnInit {
         ? this.requestForm?.get('dateRange.end')?.value.toISOString().split('T')[0]
         : null,
 
-      export: this.requestForm.get('export')?.value,
+      // export: this.requestForm.get('export')?.value,
       job_relationship: this.requestForm.get('job_relationship')?.value,
       type_linkage: this.requestForm.get('type_linkage')?.value
     };
 
     this.creditService.filterCredits(filters)?.subscribe(
       (credits) => {
-        if (!filters.export) {
-          this.dataSource.data = credits;
-          this.snackBar.success('Créditos filtrados obtenidos correctamente', 'Éxito');
-        } else {
-          // Si `export` es true, ya se habrá manejado la descarga en el servicio
-          this.snackBar.success('Exportación en proceso', 'Éxito');
-        }
+        this.dataSource.data = credits;
+        this.snackBar.success('Créditos filtrados obtenidos correctamente', 'Éxito');
+        // if (!filters.export) {
+        // } else {
+        //   // Si `export` es true, ya se habrá manejado la descarga en el servicio
+        //   this.snackBar.success('Exportación en proceso', 'Éxito');
+        // }
       },
       (error) => {
         this.snackBar.error(error.error.error, 'Error');
