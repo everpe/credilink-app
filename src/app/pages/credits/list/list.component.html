@@ -1,7 +1,7 @@
 <div class="container mx-auto mt-4">
   <mat-card class="mat-elevation-z6 rounded-lg">
     <mat-card-header class="px-4">
-      <form [formGroup]="requestForm" (ngSubmit)="applyFilters()" class="grid grid-cols-1 lg:grid-cols-4 gap-4 w-full">
+      <form [formGroup]="requestForm" class="grid grid-cols-1 lg:grid-cols-4 gap-4 w-full">
 
         <mat-form-field class="col-span-1 lg:col-span-1 w-full" appearance="outline">
           <mat-label>Buscar cliente</mat-label>
@@ -39,8 +39,19 @@
           <mat-icon matPrefix>info</mat-icon>
         </mat-form-field>
 
-        <mat-checkbox formControlName="export">Exportar Excel</mat-checkbox>
-
+        <div class="flex justify-around">
+          <mat-checkbox formControlName="export">Excel</mat-checkbox>
+          <button 
+            mat-raised-button 
+            color="primary" 
+            class="flex items-center"   
+            [disabled]="!requestForm.get('export')?.value" 
+            (click)="downloadExcel()"
+          >
+            Descargar
+          </button>
+        </div>
+        
 
         <mat-form-field class="col-span-1 lg:col-span-1 w-full" appearance="outline">
           <mat-label>Rango de fechas</mat-label>
@@ -79,7 +90,7 @@
             <mat-icon class="mr-2">clear</mat-icon>
             Limpiar
           </button>
-          <button mat-raised-button color="primary" type="submit" class="flex items-center">
+          <button mat-raised-button color="primary" type="submit" class="flex items-center" (click)="applyFilters()">
             <mat-icon class="mr-2">search</mat-icon>
             Filtrar
           </button>

@@ -218,6 +218,9 @@ export class ListComponent implements OnInit {
     );
   }
 
+  downloadExcel(){
+    this.creditService.exportExcel(this.requestForm.get('sede')?.value);
+  }
 
 
   resetFilters() {

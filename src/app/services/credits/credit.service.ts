@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import {  CreditDto, GetCreditDto, UpdateCredit } from 'src/app/interfaces/credit.interface';
 import { environment } from 'src/environments/environment';
 
@@ -25,8 +25,6 @@ export class CreditService {
   getCredits(sede: number, offset: number = 0, limit: number = 20): Observable<GetCreditDto[]> {
     let params = new HttpParams()
       .set('sede', sede.toString());
-      // .set('offset', offset.toString())
-      // .set('limit', limit.toString());
 
     return this.http.get<GetCreditDto[]>(`${environment.apiUrl}/credits/`, { params });
   }
@@ -61,35 +59,39 @@ export class CreditService {
       params = params.set('type_linkage', filters.type_linkage);
     }
   
-    //  esperamos un archivo binario (excel) en la respuesta
-    if (filters.export) {
-      params = params.set('export', Boolean(filters.export ?? false).toString());
-      return this.exportExcel(params);
-    }
-  
-    // retornamos los datos filtrados como siempre
+    // //  esperamos un archivo binario (excel) en la respuesta
+    // if (filters.export) {
+    //   params = params.set('export', Boolean(filters.export ?? false).toString());
+    //   return this.exportExcel(params);
+    // }
     return this.http.post<GetCreditDto[]>(`${environment.apiUrl}/credits/list_filters/`, params );
   }
   
 
-  private exportExcel(params: HttpParams): void {
+  exportExcel(sede: number): void {
     this.http
-      .post(`${environment.apiUrl}/credits/list_filters/`, params, {
-        params: params,
-        responseType: 'blob' // Se espera un archivo binario en formato blob
+      .post(`${environment.apiUrl}/credits/list_filters/`, { sede: sede, export: true }, {
+        responseType: 'blob', // Se espera un archivo binario en formato blob
       })
-      .subscribe((response: Blob) => {
-        // Crear un enlace para descargar el archivo Excel
-        const blob = new Blob([response], { type: 'application/vnd.ms-excel' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'creditos_export.xlsx'; // Nombre del archivo Excel
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+      .pipe(
+        tap((response: Blob) => {
+          const blob = new Blob([response], { type: 'application/vnd.ms-excel' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'creditos_export.xlsx'; // Nombre del archivo Excel
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        })
+      )
+      .subscribe({
+        error: (err) => {
+          console.error('Error al exportar el archivo Excel:', err);
+        },
       });
   }
+  
 
   getCreditDetails(creditId: number): Observable<GetCreditDto> {
     const url = `${environment.apiUrl}/credits/${creditId}/`;
