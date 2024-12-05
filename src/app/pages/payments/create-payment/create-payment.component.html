@@ -20,7 +20,8 @@
                 <p class="font-semibold text-center">INTERÉS ACUMULADO PENDIENTE</p>
             </div>
             <div class="bg-white py-3">
-                <p class="text-xl font-bold text-center text-black">{{ dataCredit.interesAcumuladoPediente  | currency: '' }}</p>
+                <p class="text-xl font-bold text-center text-black">{{ dataCredit.interesAcumuladoPediente | currency:
+                    '' }}</p>
             </div>
         </div>
     </div>
@@ -35,9 +36,9 @@
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
-   
 
-    
+
+
             <!-- Pago a Intereses -->
             <div class="form-section col-span-1 lg:w-1/2 lg:col-span-4 w-full">
                 <h3 class="section-title">Pago a intereses</h3>
@@ -45,16 +46,16 @@
                     <mat-form-field appearance="outline" class="field w-100">
                         <mat-label>Valor:</mat-label>
                         <input 
-                            type="text"
+                            type="text" 
                             matInput 
                             [value]="formattedAmountPayInteres"
                             (input)="onAmountPayInteresInput($event)" 
-                            placeholder="Valor pago interes" 
+                            placeholder="Valor pago interes"
                             (keypress)="handleKeyPress($event)" 
                         />
                         <span matPrefix>$&nbsp;</span>
                     </mat-form-field>
-    
+
                     <mat-form-field appearance="outline" class="field w-100">
                         <mat-label>Método de pago:</mat-label>
                         <mat-select formControlName="interest_payment_method">
@@ -63,11 +64,11 @@
                             <mat-option value="Tarjeta">Tarjeta</mat-option>
                         </mat-select>
                     </mat-form-field>
-    
+
                 </div>
             </div>
-   
-    
+
+
             <!-- Pago a Capital -->
             <div class="form-section col-span- lg:col-span-2 w-full">
                 <h3 class="section-title">Pago a capital</h3>
@@ -75,16 +76,16 @@
                     <mat-form-field appearance="outline" class="field w-100">
                         <mat-label>Valor:</mat-label>
                         <input 
-                            type="text" 
+                            type="text"
                             matInput 
                             [value]="formattedAmountPayCapital"
-                            (input)="onAmountPayCapitalInput($event)"
-                            placeholder="Pago a capital" 
+                            (input)="onAmountPayCapitalInput($event)" 
+                            placeholder="Pago a capital"
                             (keypress)="handleKeyPress($event)" 
                         />
                         <span matPrefix>$&nbsp;</span>
                     </mat-form-field>
-    
+
                     <mat-form-field appearance="outline" class="field w-100">
                         <mat-label>Método de pago:</mat-label>
                         <mat-select formControlName="capital_payment_method">
@@ -97,32 +98,40 @@
             </div>
             <div class="col-span-1 lg:col-span-1 w-full flex items-center">
                 <mat-checkbox formControlName="skip_interest_check">¿Omitir intereses completos?</mat-checkbox>
+           
             </div>
-            
-                <!-- Sección de totales a la derecha -->
-                <div class="summary-section">
-        
-                    <div class="summary-row">
-                        <span>Intereses:</span>
-                        <span class="summary-value">{{ interestTotal | currency: '' }}</span>
-                    </div>
-            
-                    <div class="summary-row">
-                        <span>Capital:</span>
-                        <span class="summary-value">{{ capitalTotal | currency: '' }}</span>
-                    </div>
-            
-                    <div class="summary-row total">
-                        <span>Total pago:</span>
-                        <span class="summary-value">{{ totalAmount | currency: '' }}</span>
-                    </div>
+            @if(this.paymentForm.get('skip_interest_check')?.value){
+                <div class="col-span-1 lg:col-span-1 w-full flex items-center">
+                    <mat-form-field appearance="outline" class="w-full md:col-span-3">
+                        <mat-label>Observaciones</mat-label>
+                        <textarea matInput formControlName="description"></textarea>
+                      </mat-form-field>
                 </div>
+            }
+
+            <!-- Sección de totales a la derecha -->
+            <div class="summary-section">
+                <div class="summary-row">
+                    <span>Intereses:</span>
+                    <span class="summary-value">{{ interestTotal | currency: '' }}</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Capital:</span>
+                    <span class="summary-value">{{ capitalTotal | currency: '' }}</span>
+                </div>
+
+                <div class="summary-row total">
+                    <span>Total pago:</span>
+                    <span class="summary-value">{{ totalAmount | currency: '' }}</span>
+                </div>
+            </div>
         </form>
     </div>
-    
+
     <!-- {{paymentForm.value | json}} -->
-    
-    
+
+
 </mat-dialog-content>
 
 <mat-dialog-actions align="center" class="p-4">

@@ -42,10 +42,10 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
     'currentInterest',
     'capitalPayment',
     'interestPayment',
-    // 'lateInterest',
     'amount',
     'currentCapital',
-    'pendingCapital'
+    'pendingCapital',
+    'description'
   ];
 
   historyPayments = new MatTableDataSource<PaymentDto>([]);
@@ -101,7 +101,8 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
           lateInterest: parseFloat(payment.late_interest),
           currentCapital: parseFloat(payment.current_capital),
           remainingCapital: parseFloat(payment.pendient_capital),
-          currentInterest: parseFloat(payment.current_interest)
+          currentInterest: parseFloat(payment.current_interest),
+          description: payment?.description ?? ''
         }));
       },
       (error) => {
@@ -200,7 +201,7 @@ generatePDF(): void {
   pdf.text('Historial de Movimientos (Mensual):', 40, lastYCreditStatusTable);
 
   const movementData = this.historyPayments.data.map((payment: any) => [
-      payment.paymentDate.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+      payment.paymentDate,//.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }),
       payment.currentInterest.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
       payment.capitalPayment.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
       payment.interestPayment.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),

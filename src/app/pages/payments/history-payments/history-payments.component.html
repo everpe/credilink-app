@@ -54,23 +54,23 @@
             </div>
           </div>
           
-          
-              
             <div>
                 <div class="flex justify-end gap-4">
+                  <button 
+                    mat-raised-button 
+                    color="primary" 
+                    class="flex items-center"   
+                    (click)="createAbono()"
+                    [disabled]="infoCredito.load_status == 'PAGADO'"
+                  >
+                    <mat-icon>add_circle_outline</mat-icon>
+                    Registrar Abono
+                  </button>
 
-                    <button 
-                      mat-raised-button color="primary" 
-                      class="bg-primary flex items-center space-x-2" 
-                      (click)="createAbono()"
-                    >
-                      <mat-icon>add_circle_outline</mat-icon>
-                      <span>Registrar Abono</span>
-                    </button>
-                    <button mat-raised-button color="primary" class="bg-primary flex items-center space-x-2" (click)="generatePDF()">
-                        <mat-icon>print</mat-icon>
-                        <span>Imprimir Kardex</span>
-                    </button>
+                  <button mat-raised-button color="primary" class="bg-primary flex items-center space-x-2" (click)="generatePDF()">
+                      <mat-icon>print</mat-icon>
+                      <span>Imprimir Kardex</span>
+                  </button>
                 </div>
             </div>
         </div>
@@ -117,7 +117,7 @@
       
                     <!-- Fecha del abono Column -->
                     <ng-container matColumnDef="paymentDate">
-                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Fecha del abono</th>
+                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left rounded-tl-lg">Fecha del abono</th>
                       <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200">{{ element.paymentDate }}</td>
                     </ng-container>
               
@@ -138,13 +138,7 @@
                       <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Abono a interés</th>
                       <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.interestPayment || 0 | currency: '' }}</td>
                     </ng-container>
-              
-                    <!-- Interés Moratorio Column -->
-                    <!-- <ng-container matColumnDef="lateInterest">
-                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Interés Moratorio</th>
-                      <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.lateInterest || 0 | currency: '' }}</td>
-                    </ng-container> -->
-              
+                            
                     <!-- Pago Total Column -->
                     <ng-container matColumnDef="amount">
                       <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Pago total</th>
@@ -159,8 +153,16 @@
               
                     <!-- Capital Pendiente Column -->
                     <ng-container matColumnDef="pendingCapital">
-                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left rounded-tr-lg">Capital pendiente</th>
+                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left">Capital pendiente</th>
                       <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.remainingCapital || 0 | currency: '' }}</td>
+                    </ng-container>
+
+
+
+                    <!-- Observaciones -->
+                    <ng-container matColumnDef="description">
+                      <th mat-header-cell *matHeaderCellDef class="bg-primary text-white px-4 py-3 text-left  rounded-tr-lg">Observaciones</th>
+                      <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 text-right">{{ element.description || ''  }}</td>
                     </ng-container>
               
                     <!-- Header and Row Declarations -->

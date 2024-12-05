@@ -66,7 +66,7 @@ export class CreatePaymentComponent {
       capital_amount: [''], // Campo opcional para monto de capital
       capital_payment_method: [''], // Método opcional para capital
       skip_interest_check: [false],
-      sede: [this.authService.getSedeUser(), Validators.required],
+      sede: [this.authService.getSedeUser(), Validators.required]
     },
     {
       validators: [this.paymentMethodValidator], // Añadimos la validación personalizada
