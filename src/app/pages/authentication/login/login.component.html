@@ -16,7 +16,7 @@
         <!-- Título de la sesión -->
         <mat-card-title class="text-center text-2xl font-bold text-primary mb-4">INICIAR SESIÓN</mat-card-title>
 
-        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <form [formGroup]="loginForm">
           <!-- Usuario -->
           <mat-form-field appearance="outline" class="w-full mb-4" color="primary">
             <mat-label>Usuario</mat-label>
@@ -45,7 +45,14 @@
           </div>
 
           <!-- Botón de acceso -->
-          <button mat-flat-button color="primary" class="w-full py-2 text-white font-bold bg-primary hover:bg-primary-dark" type="submit" [disabled]="loginForm.invalid">
+          <button 
+            mat-flat-button 
+            color="primary" 
+            class="w-full py-2 text-white font-bold bg-primary hover:bg-primary-dark" 
+            type="submit" 
+            [disabled]="loginForm.invalid"
+            (click)="onLogin()"
+          >
             ACCESO
           </button>
         </form>

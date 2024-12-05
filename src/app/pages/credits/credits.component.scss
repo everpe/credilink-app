@@ -11,3 +11,7 @@
   border:  1px solid red ;
   display: none;
 }
+.space-x{
+  display: flex !important;
+  justify-content: space-between;
+}

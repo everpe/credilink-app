@@ -19,7 +19,7 @@ export class SidebarComponent implements OnInit {
   logout(): void {
     const dialogRef = this.dialog.open(ConfirmComponent, {
       width: '400px',
-      data: { message : `¿Está seguro que desea cerrar sesión ?` }
+      data: { message : `¿Está seguro que deseas cerrar sesión ?` }
     });
 
     dialogRef.afterClosed().subscribe(result => {

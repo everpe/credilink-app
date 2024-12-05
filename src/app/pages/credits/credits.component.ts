@@ -25,6 +25,8 @@ import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.comp
 import { MatDialog } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { NewClientFormComponent } from '../clients/new-client-form/new-client-form.component';
+import { NewCodebtorFormComponent } from '../co-debtors/new-codebtor-form/new-codebtor-form.component';
 
 @Component({
   selector: 'app-credits',
@@ -332,5 +334,30 @@ export class CreditsComponent implements OnInit {
       // coDebtorSearch: '' 
     });
     this.filteredCoDebtorsArray[index] = []; 
+  }
+
+
+  openNewClientDialog(): void {
+    const dialogRef = this.dialog.open(NewClientFormComponent, {
+      width: '800px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // if (result) {
+      //   this.getClients(); 
+      // }
+    });
+  }
+  openNewCodebtorDialog(): void {
+    const dialogRef = this.dialog.open(NewCodebtorFormComponent, {
+      width: '800px',
+      disableClose: true
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      // if (result) {
+      //   this.getCoDebtors();   
+      // }
+    });
   }
 }
