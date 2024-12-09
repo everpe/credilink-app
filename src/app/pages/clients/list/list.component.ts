@@ -27,9 +27,6 @@ import { ClientDto } from 'src/app/interfaces/client.interface';
     MatPaginatorModule,
     MatCard,
     MatCardHeader,
-    MatCardActions,
-    MatCardTitle,
-    MatCardSubtitle,
     MatCardContent,
     MatIconModule,
     MatMenuModule,
@@ -43,7 +40,7 @@ import { ClientDto } from 'src/app/interfaces/client.interface';
 export class ListComponent implements AfterViewInit {
   offset = 0;
   limit = 10;
-  sede = 1;
+  sede = 0;
   search = new FormControl('');
   totalClients = 0;
 
@@ -62,15 +59,18 @@ export class ListComponent implements AfterViewInit {
 
   private paginator!: MatPaginator;
   clientsDatasource = new MatTableDataSource<ClientDto>();
-
   constructor(
     private clientService: ClientService,
     private dialog: MatDialog,
     private snackBar: ToastrService,
     private authService: AuthService
-  ) { }
+  ) { 
+    this.sede = Number(this.authService.getSedeUser())
+  }
 
   ngAfterViewInit(): void {
+
+
     this.clientsDatasource.paginator = this.paginator;
     this.search.valueChanges
       .pipe(debounceTime(500))

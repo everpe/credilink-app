@@ -159,11 +159,7 @@
                                 <mat-label>Interés mensual</mat-label>
                                 <input matInput [value]="monthlyInterest | currency:'COP    '" disabled />
                             </mat-form-field>
-
-                    
-
                          <div >
-
                              <mat-checkbox formControlName="is_old" labelPosition="after">Es un crédito antiguo</mat-checkbox>
                              @if(creditForm.get('is_old')?.value){
                                  <!-- Fecha Final -->
@@ -177,12 +173,8 @@
                                          Fecha fin crédito es requerida
                                      </mat-error>
                                  </mat-form-field>
-                                 
                              }
                          </div>
-
-
-
 
                             <mat-form-field class="w-full" appearance="outline">
                                 <mat-label>PIN de seguridad</mat-label>

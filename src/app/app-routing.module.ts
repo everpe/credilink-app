@@ -20,14 +20,6 @@ const routes: Routes = [
       //   loadChildren: () =>
       //     import('./pages/pages.module').then((m) => m.PagesModule),
       // },
-      // {
-      //   path: 'ui-components',
-      //   canActivate: [authGuard],
-      //   loadChildren: () =>
-      //     import('./pages/ui-components/ui-components.module').then(
-      //       (m) => m.UicomponentsModule
-      //     ),
-      // },
       {
         path: 'clients',
         canActivate: [authGuard],
@@ -42,6 +34,11 @@ const routes: Routes = [
         path: 'credits',
         canActivate: [authGuard],
         loadComponent: () => import('./pages/credits/credits.component').then(m => m.CreditsComponent)  
+      },
+      {
+        path: 'users',
+        canActivate: [authGuard],
+        loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent)  
       },
     ],
   },

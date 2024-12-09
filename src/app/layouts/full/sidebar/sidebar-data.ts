@@ -26,7 +26,7 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Usuarios',
     iconName: 'user',
-    route: '/',
+    route: '/users',
   },
   {
     displayName: 'Empresas',

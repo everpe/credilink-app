@@ -52,7 +52,7 @@ export class NewCodebtorFormComponent {
   
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<NewClientFormComponent>,
+    private dialogRef: MatDialogRef<NewCodebtorFormComponent>,
     private clientService: ClientService,
     private authService: AuthService,
     private dialog: MatDialog,  
@@ -119,6 +119,7 @@ export class NewCodebtorFormComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         if(this.isEditMode){
+          
             this.coDebtorService.updateCoDebtor(this.data.client?.id, this.codebtorForm.value).subscribe(resp => {
               this.snackBar.success(resp.message);
               this.dialogRef.close(true);
