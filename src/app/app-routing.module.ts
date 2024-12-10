@@ -40,6 +40,11 @@ const routes: Routes = [
         canActivate: [authGuard],
         loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent)  
       },
+      {
+        path: 'companies',
+        canActivate: [authGuard],
+        loadComponent: () => import('./pages/companies/companies.component').then(m => m.CompaniesComponent)  
+      },
     ],
   },
   {

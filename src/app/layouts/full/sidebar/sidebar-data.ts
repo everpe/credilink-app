@@ -31,7 +31,7 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Empresas',
     iconName: 'building-community',
-    route: '/',
+    route: '/companies',
   },
   {
     displayName: 'Sedes',

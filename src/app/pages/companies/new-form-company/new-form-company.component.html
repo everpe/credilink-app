@@ -1,0 +1,129 @@
+<div class="contenedor p-4 mt-2">
+    @if(this.isEditMode){
+    <h3 class="text-xl font-medium text-black text-center">Modificar compañia</h3>
+    }
+    @else{
+    <h3 class="text-xl font-medium text-black text-center">Registro nueva compañia</h3>
+    }
+    <mat-dialog-content>
+        <form [formGroup]="companyForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <mat-form-field appearance="outline">
+                <mat-label>Razón Social</mat-label>
+                <input matInput formControlName="social_reason" />
+                <mat-error *ngIf="companyForm.get('social_reason')?.hasError('required')">
+                    Campo requerido
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>RUT</mat-label>
+                <input matInput formControlName="rut" />
+                <mat-error *ngIf="companyForm.get('rut')?.hasError('required')">
+                    Campo requerido
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Dirección Fiscal</mat-label>
+                <input matInput formControlName="fiscal_address" />
+                <mat-error *ngIf="companyForm.get('fiscal_address')?.hasError('required')">
+                    Campo requerido
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Nombre del Representante</mat-label>
+                <input matInput formControlName="representative_first_name" />
+                <mat-error *ngIf="companyForm.get('representative_first_name')?.hasError('required')">
+                    Campo requerido
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Apellido del Representante</mat-label>
+                <input matInput formControlName="representative_last_name" />
+                <mat-error *ngIf="companyForm.get('representative_last_name')?.hasError('required')">
+                    Campo requerido
+                </mat-error>
+            </mat-form-field>
+
+            <!-- Tipo de Documento -->
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Tipo de Documento</mat-label>
+                <mat-select formControlName="type_document">
+                    <mat-option *ngFor="let type of documentTypes" [value]="type">{{ type }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="companyForm.get('type_document')?.hasError('required')">
+                    Campo requerido
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Número de Documento</mat-label>
+                <input matInput formControlName="document_number" (keypress)="handleKeyPress($event)" />
+                <mat-error *ngIf="companyForm.get('document_number')?.hasError('required')">
+                    Campo requerido
+                </mat-error>
+                <mat-error *ngIf="companyForm.get('document_number')?.hasError('pattern')">
+                    Debe contener entre 7 y 10 dígitos
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Teléfono Comercial</mat-label>
+                <input matInput formControlName="business_phone" (keypress)="handleKeyPress($event)"/>
+                <mat-error *ngIf="companyForm.get('business_phone')?.hasError('required')">
+                    Campo requerido
+                </mat-error>
+                <mat-error *ngIf="companyForm.get('business_phone')?.hasError('pattern')">
+                    Debe contener entre 7 y 10 dígitos
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Celular</mat-label>
+                <input matInput formControlName="cellphone" (keypress)="handleKeyPress($event)"/>
+                <mat-error *ngIf="companyForm.get('cellphone')?.hasError('required')">
+                    Campo requerido
+                </mat-error>
+                <mat-error *ngIf="companyForm.get('cellphone')?.hasError('pattern')">
+                    Debe contener entre 7 y 10 dígitos
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="email" />
+                <mat-error *ngIf="companyForm.get('email')?.hasError('required')">
+                    Campo requerido
+                </mat-error>
+                <mat-error *ngIf="companyForm.get('email')?.hasError('email') && !companyForm.get('email')?.hasError('required')">
+                    Formato de correo incorrecto
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Número de Locales</mat-label>
+                <input matInput type="number" formControlName="number_of_locations" (keypress)="handleKeyPress($event)"/>
+                <mat-error *ngIf="companyForm.get('number_of_locations')?.hasError('required')">
+                    Campo requerido
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Nombre de la Compañía</mat-label>
+                <input matInput formControlName="company_name" />
+                <mat-error *ngIf="companyForm.get('company_name')?.hasError('required')">
+                    Campo requerido
+                </mat-error>
+            </mat-form-field>
+
+
+        </form>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="center" class="p-4">
+        <button mat-raised-button mat-dialog-close>Cerrar</button>
+        <button mat-raised-button color="primary" type="button" (click)="onSubmit()">Guardar</button>
+    </mat-dialog-actions>
+</div>
