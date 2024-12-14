@@ -26,14 +26,15 @@ export class AppNavItemComponent implements OnChanges {
   }
 
   onItemSelected(item: NavItem) {
+    // console.log('onItemSelected')
     if (!item.children || !item.children.length) {
       this.router.navigate([item.route]);
     }
 
     // scroll
-    document.querySelector('.page-wrapper')?.scroll({
-      top: 0,
-      left: 0,
-    });
+    // document.querySelector('.page-wrapper')?.scroll({
+    //   top: 0,
+    //   left: 0,
+    // });
   }
 }
