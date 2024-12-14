@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CompanyDto, CompanyResponse } from 'src/app/interfaces/company.interface';
+import { CompanyDto, CompanyMinDto, CompanyResponse } from 'src/app/interfaces/company.interface';
 import { UserResponse } from 'src/app/interfaces/user.interface';
 import { environment } from 'src/environments/environment';
 
@@ -38,4 +38,13 @@ export class CompanyService {
     const url = `${environment.apiUrl}/company/${userId}/`;
     return this.http.delete<CompanyResponse>(url);
   }
+
+
+    /**
+   * Obtiene la lista de compañías en formato resumido.
+   * @returns Observable con la lista de compañías.
+   */
+    getCompaniesMin(): Observable<CompanyMinDto[]> {
+      return this.http.get<CompanyMinDto[]>(`${environment.apiUrl}/company/list_min/`);
+    }
 }

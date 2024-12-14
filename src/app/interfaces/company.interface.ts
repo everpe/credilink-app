@@ -18,3 +18,8 @@ export interface CompanyDto {
   export interface CompanyResponse {
     message: string; 
   }
+
+  export interface CompanyMinDto {
+    id: number;
+    company_name: string;
+  }

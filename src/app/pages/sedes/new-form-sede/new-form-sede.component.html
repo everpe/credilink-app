@@ -1,0 +1,123 @@
+<div class="contenedor p-4 mt-2">
+    <h3 class="text-xl font-medium text-black text-center">
+        {{ isEditMode ? 'Modificar Sede' : 'Registro Nueva Sede' }}
+    </h3>
+
+    <mat-dialog-content>
+        <form [formGroup]="sedeForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <mat-form-field appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="name" />
+                <mat-error *ngIf="sedeForm.get('name')?.hasError('required')">Campo requerido</mat-error>
+                <mat-error *ngIf="sedeForm.get('name')?.hasError('maxlength')">
+                    Máximo 70 caracteres permitidos
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Nombre del Responsable</mat-label>
+                <input matInput formControlName="responsible_name" />
+                <mat-error *ngIf="sedeForm.get('responsible_name')?.hasError('required')">Campo requerido</mat-error>
+                <mat-error *ngIf="sedeForm.get('responsible_name')?.hasError('maxlength')">
+                    Máximo 70 caracteres permitidos
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Apellidos del Responsable</mat-label>
+                <input matInput formControlName="surnames_responsible" />
+                <mat-error *ngIf="sedeForm.get('surnames_responsible')?.hasError('required')">Campo
+                    requerido</mat-error>
+                <mat-error *ngIf="sedeForm.get('surnames_responsible')?.hasError('maxlength')">
+                    Máximo 70 caracteres permitidos
+                </mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline">
+                <mat-label>Compañía</mat-label>
+                <mat-select formControlName="company">
+                    @for (item of companies; track item; let i = $index) {
+                    <mat-option [value]="item.id">{{ item.company_name }}</mat-option>
+                    }
+                </mat-select>
+                @if(sedeForm.get('company')?.hasError('required')){
+                <mat-error>Campo requerido</mat-error>
+                }
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline">
+                <mat-label>RUT</mat-label>
+                <input matInput formControlName="rut" />
+                <mat-error *ngIf="sedeForm.get('rut')?.hasError('required')">Campo requerido</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Email Corporativo</mat-label>
+                <input matInput type="email" formControlName="corporate_email" />
+                <mat-error *ngIf="sedeForm.get('corporate_email')?.hasError('required')">Campo requerido</mat-error>
+                <mat-error *ngIf="sedeForm.get('corporate_email')?.hasError('email')">Formato incorrecto</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Ciudad</mat-label>
+                <input matInput formControlName="city" />
+                <mat-error *ngIf="sedeForm.get('city')?.hasError('required')">Campo requerido</mat-error>
+                <mat-error *ngIf="sedeForm.get('city')?.hasError('maxlength')">
+                    Máximo 70 caracteres permitidos
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Dirección</mat-label>
+                <input matInput formControlName="address" />
+                <mat-error *ngIf="sedeForm.get('address')?.hasError('required')">Campo requerido</mat-error>
+                <mat-error *ngIf="sedeForm.get('address')?.hasError('maxlength')">
+                    Máximo 70 caracteres permitidos
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Teléfono Corporativo</mat-label>
+                <input matInput formControlName="coporative_phone" (keypress)="handleKeyPress($event)" />
+                <mat-error *ngIf="sedeForm.get('coporative_phone')?.hasError('required')">Campo requerido</mat-error>
+                <mat-error *ngIf="sedeForm.get('coporative_phone')?.hasError('pattern')">
+                    Debe contener entre 7 y 10 dígitos
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Tipo de Documento</mat-label>
+                <mat-select formControlName="type_of_responsible_document">
+                    <mat-option *ngFor="let type of documentTypes" [value]="type">{{ type }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="sedeForm.get('type_of_responsible_document')?.hasError('required')">Campo
+                    requerido</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Teléfono del Responsable</mat-label>
+                <input matInput formControlName="responsible_phone" (keypress)="handleKeyPress($event)" />
+                <mat-error *ngIf="sedeForm.get('responsible_phone')?.hasError('required')">Campo requerido</mat-error>
+                <mat-error *ngIf="sedeForm.get('responsible_phone')?.hasError('pattern')">
+                    Debe contener entre 7 y 10 dígitos
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Email del Responsable</mat-label>
+                <input matInput type="email" formControlName="responsible_email" />
+                <mat-error *ngIf="sedeForm.get('responsible_email')?.hasError('required')">Campo requerido</mat-error>
+                <mat-error *ngIf="sedeForm.get('responsible_email')?.hasError('email')">Formato incorrecto</mat-error>
+            </mat-form-field>
+
+            <mat-checkbox formControlName="send_notifications">Enviar notificaciones</mat-checkbox>
+        </form>
+    </mat-dialog-content>
+<!-- {{this.sedeForm.value | json}} -->
+    <mat-dialog-actions align="center" class="p-4">
+        <button mat-raised-button mat-dialog-close>Cerrar</button>
+        <button mat-raised-button color="primary" type="button" (click)="onSubmit()">Guardar</button>
+    </mat-dialog-actions>
+</div>

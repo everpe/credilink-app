@@ -45,6 +45,11 @@ const routes: Routes = [
         canActivate: [authGuard],
         loadComponent: () => import('./pages/companies/companies.component').then(m => m.CompaniesComponent)  
       },
+      {
+        path: 'sedes',
+        canActivate: [authGuard],
+        loadComponent: () => import('./pages/sedes/sedes.component').then(m => m.SedesComponent)  
+      },
     ],
   },
   {

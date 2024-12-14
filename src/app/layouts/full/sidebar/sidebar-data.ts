@@ -36,7 +36,7 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Sedes',
     iconName: 'home-2',
-    route: '/',
+    route: '/sedes',
   },
   {
     displayName: 'Moverse de sede',
