@@ -41,6 +41,6 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Moverse de sede',
     iconName: 'home-move',
-    route: '/',
+    route: '/move/sede',
   },
 ];

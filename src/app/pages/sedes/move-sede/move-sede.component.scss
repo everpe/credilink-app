@@ -1,0 +1,59 @@
+/* Contenedor General */
+.container {
+  background-color: #f9fafb;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* Tarjetas de las sedes */
+mat-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+mat-card:hover {
+  transform: scale(1.05);
+}
+
+/* Botones */
+button {
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+button.bg-green-600 {
+  //background-color: rgb(59 130 246) !important; /* #16a34a Verde */
+  background-color:#16a34a ;
+}
+
+button.bg-blue-500 {
+  background-color: #005555!important; /* Azul */
+}
+
+button.mat-raised-button {
+  color: white !important;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

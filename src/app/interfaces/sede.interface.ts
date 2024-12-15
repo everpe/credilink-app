@@ -32,3 +32,8 @@ export interface CreateSedeDto {
     responsible_email: string;
     send_notifications: boolean;
 }
+
+export interface SedeMinDto {
+    id: number;
+    name: string;
+}

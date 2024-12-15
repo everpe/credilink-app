@@ -10,22 +10,22 @@ import { environment } from 'src/environments/environment';
 })
 export class CompanyService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-    /**
-   * Obtiene la información de las empresas.
-   * @returns Observable con la lista de empresas.
-   */
-    getCompanies(): Observable<CompanyDto[]> {
-      return this.http.get<CompanyDto[]>(`${environment.apiUrl}/company/`);
+  /**
+ * Obtiene la información de las empresas.
+ * @returns Observable con la lista de empresas.
+ */
+  getCompanies(): Observable<CompanyDto[]> {
+    return this.http.get<CompanyDto[]>(`${environment.apiUrl}/company/`);
 
-    }
+  }
 
-      /**
-   * Crea una nueva compañía.
-   * @param companyData - Datos de la compañía que se desea crear.
-   * @returns Observable con la respuesta del servidor.
-   */
+  /**
+* Crea una nueva compañía.
+* @param companyData - Datos de la compañía que se desea crear.
+* @returns Observable con la respuesta del servidor.
+*/
   createCompany(companyData: Omit<CompanyDto, 'id' | 'status'>): Observable<CompanyDto> {
     return this.http.post<CompanyDto>(`${environment.apiUrl}/company/`, companyData);
   }
@@ -40,11 +40,11 @@ export class CompanyService {
   }
 
 
-    /**
-   * Obtiene la lista de compañías en formato resumido.
-   * @returns Observable con la lista de compañías.
-   */
-    getCompaniesMin(): Observable<CompanyMinDto[]> {
-      return this.http.get<CompanyMinDto[]>(`${environment.apiUrl}/company/list_min/`);
-    }
+  /**
+ * Obtiene la lista de compañías en formato resumido.
+ * @returns Observable con la lista de compañías.
+ */
+  getCompaniesMin(): Observable<CompanyMinDto[]> {
+    return this.http.get<CompanyMinDto[]>(`${environment.apiUrl}/company/list_min/`);
+  }
 }

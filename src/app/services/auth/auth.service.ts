@@ -13,6 +13,9 @@ export class AuthService {
 
   private readonly KEY_USER_LOGGED = 'user_logged';
   private readonly KEY_DATE_LOGGED = 'date_logged';
+  private readonly KEY_SEDE_USER = 'sede_user';
+  private readonly KEY_JWT = 'auth_token';
+  private readonly KEY_TYPE_USER = 'type_user';
 
 
 
@@ -32,34 +35,12 @@ export class AuthService {
         );
     }
   
-    /**
-     * Método para almacenar el token de autenticación en localStorage
-     * @param token - Token JWT
-     */
-    setToken(token: string): void {
-      localStorage.setItem('auth_token', token);
-    }
 
-    setSedeUserToStorage(sede: string): void {
-      localStorage.setItem('sede_user', sede);
-    }
-  
-    /**
-     * Método para obtener el token de autenticación desde localStorage
-     * @returns Token JWT o null si no está presente
-     */
-    getToken(): string | null {
-      return localStorage.getItem('auth_token');
-    }
-  
-    getSedeUser(): string | null {
-      return localStorage.getItem('sede_user');
-    }
     /**
      * Método para eliminar el token de autenticación de localStorage
      */
     clearToken(): void {
-      localStorage.removeItem('auth_token');
+      localStorage.removeItem(this.KEY_JWT);
     }
   
     /**
@@ -72,11 +53,25 @@ export class AuthService {
 
 
     logout(): void {
-      localStorage.removeItem('auth_token'); 
-      localStorage.removeItem('sede_user'); 
+      localStorage.removeItem(this.KEY_JWT); 
+      localStorage.removeItem(this.KEY_SEDE_USER); 
       localStorage.removeItem(this.KEY_USER_LOGGED); 
       localStorage.removeItem(this.KEY_DATE_LOGGED); 
+      localStorage.removeItem(this.KEY_TYPE_USER); 
       this.router.navigate(['/authentication/login']); 
+    }
+
+
+    /**
+     * Método para almacenar el token de autenticación en localStorage
+     * @param token - Token JWT
+     */
+    setToken(token: string): void {
+      localStorage.setItem(this.KEY_JWT, token);
+    }
+
+    setSedeUserToStorage(sede: string): void {
+      localStorage.setItem(this.KEY_SEDE_USER, sede);
     }
 
     setUserLogged(userName: string): void {
@@ -85,7 +80,23 @@ export class AuthService {
     setDateLogged(date: Date): void {
       localStorage.setItem(this.KEY_DATE_LOGGED, date.toISOString()); // Convertimos el Date a string
     }
-    
+    setTypeUserLogged(type: string): void {
+      localStorage.setItem(this.KEY_TYPE_USER, type);
+    }
+
+
+    /**
+     * Método para obtener el token de autenticación desde localStorage
+     * @returns Token JWT o null si no está presente
+     */
+    getToken(): string | null {
+      return localStorage.getItem(this.KEY_JWT);
+    }
+  
+    getSedeUser(): string | null {
+      return localStorage.getItem(this.KEY_SEDE_USER);
+    }
+
     getDateLogged(): Date | null {
       const dateStr = localStorage.getItem(this.KEY_DATE_LOGGED); // Recuperamos el string
       return dateStr ? new Date(dateStr) : null; // Convertimos el string a Date
@@ -93,6 +104,10 @@ export class AuthService {
     
     getUserLogged(): string | null {
       return localStorage.getItem(this.KEY_USER_LOGGED);
+    }
+
+    getTypeUserLogged(): string | null {
+      return localStorage.getItem(this.KEY_TYPE_USER);
     }
 
 }

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
 import { authGuard } from './shared/guards/auth.guard';
+import { adminGuard } from './shared/guards/admin.guard';
 
 const routes: Routes = [
   {
@@ -49,6 +50,11 @@ const routes: Routes = [
         path: 'sedes',
         canActivate: [authGuard],
         loadComponent: () => import('./pages/sedes/sedes.component').then(m => m.SedesComponent)  
+      },
+      {
+        path: 'move/sede',
+        canActivate: [authGuard,adminGuard],
+        loadComponent: () => import('./pages/sedes/move-sede/move-sede.component').then(m => m.MoveSedeComponent)  
       },
     ],
   },

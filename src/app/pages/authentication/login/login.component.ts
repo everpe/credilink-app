@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { LoginRequestDto } from 'src/app/interfaces/auth.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';   
+import { UserType } from 'src/app/interfaces/user.interface';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -40,7 +41,12 @@ export class AppSideLoginComponent {
           this.authService.setSedeUserToStorage(response.data.company.sedes[0].id.toString())
           this.authService.setDateLogged(new Date(Date.now()));
           this.authService.setUserLogged(response.data.username)
-          this.router.navigate(['/credits']);
+          this.authService.setTypeUserLogged(response.data.type_user)
+          if(response.data.type_user == UserType.ADMIN){
+            this.router.navigate(['/move/sede']);
+          }else{
+            this.router.navigate(['/credits']);
+          }
           this.isLoading = false;
         },
         (error) => {
