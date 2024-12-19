@@ -13,6 +13,9 @@ import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import { CreditService } from 'src/app/services/credits/credit.service';
 import { ToastrService } from 'ngx-toastr';
+import { MatMenuModule } from '@angular/material/menu';
+import { NewClientFormComponent } from '../../clients/new-client-form/new-client-form.component';
+import { UpdatePaymentComponent } from '../update-payment/update-payment.component';
 @Component({
   selector: 'app-history-payments',
   standalone: true,
@@ -22,7 +25,8 @@ import { ToastrService } from 'ngx-toastr';
     MatButtonModule,
     MatTableModule,
     MatDialogModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatMenuModule,
   ],
   templateUrl: './history-payments.component.html',
   styleUrl: './history-payments.component.scss'
@@ -73,11 +77,10 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
 
 
 
-
   getPayments(): void {
     this.creditPaymentService.getCreditPayments(this.infoCredito.id).subscribe(
       (response: any) => {
-
+        // Configurar los conceptos del crédito
         this.conceptsCredit = [
           { concept: 'Capital original del crédito', amount: Number(response.data.loan_amount) },
           { concept: 'Capital pendiente', amount: Number(response.data.remaining_balance) },
@@ -85,11 +88,18 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
           { concept: 'Intereses pagados hasta la fecha', amount: Number(response.data.total_interest_paid) },
           { concept: 'Valor interés', amount: Number(this.infoCredito.interest_value) },
           { concept: 'Intereses acumulados pendientes', amount: Number(response.data.current_interest_debt) },
-          // { concept: 'Interés moratorio aplicado', amount: Number(response.data.late_interest) },
           { concept: 'Total pagado hasta la fecha', amount: Number(response.data.total_paid) },
         ];
-        
-        this.historyPayments.data = response.data.payments.map((payment: any) => ({
+  
+        // Convertir las fechas de string a Date y ordenarlas
+        const sortedPayments = response.data.payments.sort((a: any, b: any) => {
+          const dateA = new Date(a.payment_date).getTime();
+          const dateB = new Date(b.payment_date).getTime();
+          return dateB - dateA; // De más reciente a más antigua
+        });
+  
+        // Mapear los pagos a la estructura deseada
+        this.historyPayments.data = sortedPayments.map((payment: any) => ({
           id: payment.id,
           type: payment.type,
           paymentType: payment.payment_type,
@@ -110,17 +120,19 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
       }
     );
   }
+  
+  
+  
 
 
-
-  createAbono(){
+  createAbono() {
     const dialogRef = this.dialog.open(CreatePaymentComponent, {
       width: '900px', // Ajusta el ancho del modal si es necesario
-      data: { 
+      data: {
         clienteId: this.infoCredito.id,
         capitalPendiente: this.infoCredito.remaining_balance,
         interesAcumuladoPediente: this.infoCredito.current_interest_debt,
-        interesMoratorioPendiente : 0
+        interesMoratorioPendiente: 0
       },
       disableClose: true
     });
@@ -134,73 +146,73 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
   }
 
 
-  getCreditDetailById(){
-    this.creditService.getCreditDetails(this.infoCredito.id).subscribe( (resp:any) => {
+  getCreditDetailById() {
+    this.creditService.getCreditDetails(this.infoCredito.id).subscribe((resp: any) => {
       this.infoCredito = resp.data;
-    },error=>{
+    }, error => {
       this.snackbar.error(error.error.error);
     });
   }
 
 
-generatePDF(): void {
-  const pdf = new jsPDF('p', 'pt', 'a4');
+  generatePDF(): void {
+    const pdf = new jsPDF('p', 'pt', 'a4');
 
-  // Agregar título
-  pdf.setTextColor(0, 0, 0);
-  pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(18);
-  pdf.text('KARDEX DIGITAL', pdf.internal.pageSize.getWidth() / 2, 30, { align: 'center' });
-  pdf.setFontSize(12);
-  pdf.text('Datos del Cliente y Detalles del Crédito:', 40, 60);
+    // Agregar título
+    pdf.setTextColor(0, 0, 0);
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(18);
+    pdf.text('KARDEX DIGITAL', pdf.internal.pageSize.getWidth() / 2, 30, { align: 'center' });
+    pdf.setFontSize(12);
+    pdf.text('Datos del Cliente y Detalles del Crédito:', 40, 60);
 
-//una sola columna es esta tabla para juntar contenido
-  const clientData = [
-    [`Cliente: ${this.infoCredito.client.first_name?.toUpperCase()} ${this.infoCredito.client.last_name?.toUpperCase()}`],
-    [`Identificación: ${this.infoCredito.client.document_number}`],
-    [`Fecha inicio crédito: ${this.infoCredito.loan_date}`],
-    [`Monto de crédito: ${Number(this.infoCredito.loan_amount).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}`],
-    [`Tasa de interés corriente: ${this.infoCredito.interest_rate}% mensual`],
-    [`Fecha de emisión del reporte: ${new Date().toLocaleDateString()}`]
-];
-  autoTable(pdf, {
-    body: clientData,
-    startY: 80,
-    theme: 'plain',
-    styles: { 
-      fontSize: 10, 
-      cellPadding: 2 // Reduce el espacio interno de las celdas
-    },
-    columnStyles: {
-      0: { halign: 'left' } // Alinea la única columna a la izquierda
-    }
-});
+    //una sola columna es esta tabla para juntar contenido
+    const clientData = [
+      [`Cliente: ${this.infoCredito.client.first_name?.toUpperCase()} ${this.infoCredito.client.last_name?.toUpperCase()}`],
+      [`Identificación: ${this.infoCredito.client.document_number}`],
+      [`Fecha inicio crédito: ${this.infoCredito.loan_date}`],
+      [`Monto de crédito: ${Number(this.infoCredito.loan_amount).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}`],
+      [`Tasa de interés corriente: ${this.infoCredito.interest_rate}% mensual`],
+      [`Fecha de emisión del reporte: ${new Date().toLocaleDateString()}`]
+    ];
+    autoTable(pdf, {
+      body: clientData,
+      startY: 80,
+      theme: 'plain',
+      styles: {
+        fontSize: 10,
+        cellPadding: 2 // Reduce el espacio interno de las celdas
+      },
+      columnStyles: {
+        0: { halign: 'left' } // Alinea la única columna a la izquierda
+      }
+    });
 
-  // Agregar subtítulo para el estado del crédito
-  const lastYClientTable = (pdf as any).lastAutoTable.finalY + 20;
-  pdf.text('Estado Actual del Crédito:', 40, lastYClientTable);
+    // Agregar subtítulo para el estado del crédito
+    const lastYClientTable = (pdf as any).lastAutoTable.finalY + 20;
+    pdf.text('Estado Actual del Crédito:', 40, lastYClientTable);
 
-  // Datos de la tabla de estado del crédito con formato de moneda
-  const creditStatusData = this.conceptsCredit.map(item => [
-    item.concept, 
-     item.amount ? item.amount.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }) : '$ 0,00'
-  ]);
+    // Datos de la tabla de estado del crédito con formato de moneda
+    const creditStatusData = this.conceptsCredit.map(item => [
+      item.concept,
+      item.amount ? item.amount.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }) : '$ 0,00'
+    ]);
 
-  // Generar tabla para estado del crédito
-  autoTable(pdf, {
+    // Generar tabla para estado del crédito
+    autoTable(pdf, {
       head: [['Concepto', 'Monto']],
       body: creditStatusData,
       startY: lastYClientTable + 10,
       theme: 'grid',
       styles: { fontSize: 10 },
       headStyles: { fillColor: [0, 85, 85], textColor: [255, 255, 255] },
-  });
+    });
 
-  // Historial de movimientos
-  const lastYCreditStatusTable = (pdf as any).lastAutoTable.finalY + 20;
-  pdf.text('Historial de Movimientos (Mensual):', 40, lastYCreditStatusTable);
+    // Historial de movimientos
+    const lastYCreditStatusTable = (pdf as any).lastAutoTable.finalY + 20;
+    pdf.text('Historial de Movimientos (Mensual):', 40, lastYCreditStatusTable);
 
-  const movementData = this.historyPayments.data.map((payment: any) => [
+    const movementData = this.historyPayments.data.map((payment: any) => [
       payment.paymentDate,//.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }),
       payment.currentInterest.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
       payment.capitalPayment.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
@@ -209,20 +221,36 @@ generatePDF(): void {
       payment.amount.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
       payment.currentCapital.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
       (payment.remainingCapital ?? 0).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })
-  ]);
+    ]);
 
-  autoTable(pdf, {
-      head: [['Fecha abono', 'Interés Corriente', 'Abono a Capital', 'Abono a Interés',  'Pago Total', 'Capital actual', 'Capital pendiente']],
+    autoTable(pdf, {
+      head: [['Fecha abono', 'Interés Corriente', 'Abono a Capital', 'Abono a Interés', 'Pago Total', 'Capital actual', 'Capital pendiente']],
       body: movementData,
       startY: lastYCreditStatusTable + 20,
       theme: 'grid',
       styles: { fontSize: 10 },
       headStyles: { fillColor: [0, 85, 85], textColor: [255, 255, 255] },
-  });
+    });
 
-  // Abrir el PDF en una nueva pestaña
-  pdf.output('dataurlnewwindow');
-}
+    // Abrir el PDF en una nueva pestaña
+    pdf.output('dataurlnewwindow');
+  }
 
+
+  editPayment(payment: any): void {
+    const dialogRef = this.dialog.open(UpdatePaymentComponent, {
+      width: '400px',
+      data: { payment, isEditMode: true },  // Pasamos el cliente para editar
+      disableClose: true
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+          this.getPayments();
+      } else {
+        this.snackbar.info('Cambios no efectuados.');
+      }
+    });
+  }
 
 }

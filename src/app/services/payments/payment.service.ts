@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PaymentDataDto, PaymentDto } from 'src/app/interfaces/payment.interface';
+import { PaymentDataDto, PaymentDto, UpdatePaymentDto } from 'src/app/interfaces/payment.interface';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -24,4 +24,14 @@ export class PaymentService {
   getCreditPayments(creditId: number): Observable<PaymentDto[]> {
     return this.http.get<PaymentDto[]>(`${environment.apiUrl}/credits/${creditId}/get_payments/`);
   }
+
+    /**
+   * Método para actualizar un abono
+   * @param id ID del abono a editar
+   * @param updatePaymentDto Datos actualizados del abono
+   * @returns Observable con la respuesta de la API
+   */
+    updatePayment(id: number, updatePaymentDto: UpdatePaymentDto): Observable<any> {
+      return this.http.put<any>(`${environment.apiUrl}/payments/${id}/`, updatePaymentDto);
+    }
 }

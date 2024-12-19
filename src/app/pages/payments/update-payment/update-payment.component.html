@@ -1,0 +1,60 @@
+<div class="p-8">
+    <h2 class="text-2xl font-semibold text-center mb-4">Actualizar abono</h2>
+  
+    <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()" class="grid gap-4">
+      <!-- Fecha del Pago -->
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Fecha del Pago</mat-label>
+        <input
+          matInput
+          [matDatepicker]="paymentDatePicker"
+          formControlName="payment_date"
+          placeholder="Seleccione la fecha del pago"
+        />
+        <mat-datepicker-toggle matPrefix [for]="paymentDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #paymentDatePicker></mat-datepicker>
+        <mat-error *ngIf="paymentForm.get('payment_date')?.hasError('required')">
+          La fecha de pago es requerida
+        </mat-error>
+      </mat-form-field>
+      
+  
+      <!-- ID de la Sede -->
+      <!-- <mat-form-field appearance="outline">
+        <mat-label>ID de la Sede</mat-label>
+        <input matInput formControlName="sede" type="number" placeholder="Ingrese el ID de la sede" />
+        <mat-error *ngIf="paymentForm.get('sede')?.hasError('required')">Campo requerido</mat-error>
+      </mat-form-field> -->
+  
+      <!-- ID del Crédito -->
+      <!-- <mat-form-field appearance="outline">
+        <mat-label>ID del Crédito</mat-label>
+        <input matInput formControlName="credit" type="number" placeholder="Ingrese el ID del crédito" />
+        <mat-error *ngIf="paymentForm.get('credit')?.hasError('required')">Campo requerido</mat-error>
+      </mat-form-field> -->
+  
+      <!-- Monto -->
+      <mat-form-field appearance="outline">
+        <mat-label>Monto</mat-label>
+        <input matInput formControlName="amount" type="number" placeholder="Ingrese el monto del pago" />
+        <mat-error *ngIf="paymentForm.get('amount')?.hasError('required')">Campo requerido</mat-error>
+        <mat-error *ngIf="paymentForm.get('amount')?.hasError('min')">Debe ser mayor a 0</mat-error>
+      </mat-form-field>
+  
+      <!-- Tipo de Pago -->
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo de Pago</mat-label>
+        <mat-select formControlName="payment_type">
+          <mat-option *ngFor="let type of paymentTypes" [value]="type">{{ type }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="paymentForm.get('payment_type')?.hasError('required')">Campo requerido</mat-error>
+      </mat-form-field>
+  
+      <!-- Botones -->
+      <div class="flex justify-center gap-4">
+        <button mat-raised-button mat-dialog-close>Cancelar</button>
+        <button mat-raised-button color="primary" type="submit">Guardar</button>
+      </div>
+    </form>
+  </div>
+  

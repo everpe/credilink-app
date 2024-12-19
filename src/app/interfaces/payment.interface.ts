@@ -1,7 +1,7 @@
 export interface PaymentCreateDto {
     type: string; // El tipo de pago, por ejemplo, 'interes' o 'CAPITAL'
     amount: number; // El monto del pago
-    payment_method: string; // El método de pago, por ejemplo, 'Efectivo', 'Transferencia', 'Tarjeta'
+    payment_method: 'Efectivo' | 'Transferencia' | 'Tarjeta'; // El método de pago, por ejemplo, 'Efectivo', 'Transferencia', 'Tarjeta'
   }
   
   export interface PaymentDataDto {
@@ -27,6 +27,16 @@ export interface PaymentCreateDto {
     currentCapital: number;
     remainingCapital: number;
     currentInterest: number;
+  }
+
+
+  export interface UpdatePaymentDto {
+    id: number;
+    payment_date: string;  // Fecha del pago en formato YYYY-MM-DD
+    sede: number;          // ID de la sede donde se realiza el abono
+    credit: number;        // ID del crédito al cual se aplica el abono
+    amount: number;        // Monto del abono
+    payment_type: 'Efectivo' | 'Transferencia' | 'Tarjeta'; // Tipo de pago permitido
   }
 
 
