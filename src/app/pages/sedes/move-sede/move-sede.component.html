@@ -1,31 +1,48 @@
 <div class="container mx-auto p-6">
     <h2 class="text-3xl font-bold text-center mb-8">Administrar sedes</h2>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-custom">
         <mat-card *ngFor="let sede of sedes"
-            class="relative hover:shadow-lg transition-shadow duration-300 rounded-xl border"
-            [ngClass]="{ 'border-blue-500 shadow-blue-500/50': isCurrentSede(sede.id) }">
-            <!-- Ícono en el encabezado -->
-            <div class="flex justify-center mt-4">
-                <div class="bg-blue-500 w-16 h-16 rounded-full flex items-center justify-center">
-                    <mat-icon color="primary" class="text-white">business</mat-icon>
-                </div>
+                  class="relative hover:shadow-lg transition-shadow duration-300 rounded-xl border"
+                  [ngClass]="{ 'border-blue-500 shadow-blue-500/50': isCurrentSede(sede.id) }">
+          <!-- Ícono en el encabezado -->
+          <div class="flex justify-center mt-4">
+            <div class="bg-blue-500 w-16 h-16 rounded-full flex items-center justify-center">
+              <mat-icon color="primary" class="text-white">business</mat-icon>
             </div>
-
-            <!-- Nombre de la Sede -->
-            <div class="text-center mt-4">
-                <h3 class="text-lg font-semibold text-gray-800">{{ sede.name }}</h3>
-            </div>
-
-            <!-- Botón de Selección -->
-            <mat-card-actions class="flex justify-center mt-4">
-                <button mat-raised-button color="primary" (click)="selectSede(sede)"
+          </div>
+      
+          <!-- Nombre de la Sede -->
+          <div class="text-center mt-4">
+            <h3 class="text-lg font-semibold text-gray-800">{{ sede.name }}</h3>
+            <p class="text-sm text-gray-600 font-medium">NIT: {{ sede.rut }}</p>
+          </div>
+      
+          <!-- Información Adicional -->
+          <div class="text-sm text-gray-600 mt-4 px-4">
+            <p><span class="font-bold">Dirección:</span> {{ sede.address }}</p>
+            <p><span class="font-bold">Teléfono:</span> {{ sede.coporative_phone }}</p>
+            <p><span class="font-bold">Correo:</span> {{ sede.corporate_email }}</p>
+            <p><span class="font-bold">Ciudad:</span> {{ sede.city }}</p>
+          </div>
+      
+          <!-- Botón de Selección -->
+          <mat-card-actions class="flex justify-center mt-4">
+            <!-- <button mat-raised-button
+                    (click)="selectSede(sede)"
+                    class="w-3/4 flex items-center justify-center gap-2"
+                    [ngClass]="{ 'bg-green-600 text-white': isCurrentSede(sede.id), 'bg-blue-500 text-white': !isCurrentSede(sede.id) }">
+              <mat-icon *ngIf="isCurrentSede(sede.id)">check_circle</mat-icon>
+              {{ isCurrentSede(sede.id) ? 'Actual' : 'Moverse' }}
+            </button> -->
+            <button mat-raised-button color="primary" (click)="selectSede(sede)"
                     class="w-3/4 flex items-center justify-center gap-2"
                     [ngClass]="{ 'bg-green-600': isCurrentSede(sede.id), 'bg-blue-500': !isCurrentSede(sede.id) }">
                     <mat-icon *ngIf="isCurrentSede(sede.id)">check_circle</mat-icon>
                     {{ isCurrentSede(sede.id) ? 'Actual' : 'Moverse' }}
                 </button>
-            </mat-card-actions>
+          </mat-card-actions>
         </mat-card>
-    </div>
+      </div>
+      
 </div>

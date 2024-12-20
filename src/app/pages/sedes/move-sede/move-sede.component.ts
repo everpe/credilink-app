@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { SedeMinDto } from 'src/app/interfaces/sede.interface';
+import { SedeDto, SedeMinDto } from 'src/app/interfaces/sede.interface';
 import { UserType } from 'src/app/interfaces/user.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { SedeService } from 'src/app/services/sedes/sede.service';
@@ -26,7 +26,7 @@ import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.comp
   styleUrl: './move-sede.component.scss'
 })
 export class MoveSedeComponent implements OnInit {
-  sedes: SedeMinDto[] = [];
+  sedes: SedeDto[] = [];
   currentSedeId: number | null = null;
 
   constructor(private sedeService: SedeService,
@@ -41,7 +41,7 @@ export class MoveSedeComponent implements OnInit {
   }
 
   loadSedes(): void {
-    this.sedeService.getSedesMin().subscribe((data) => {
+    this.sedeService.getSedes().subscribe((data) => {
       this.sedes = data;
     });
   }
