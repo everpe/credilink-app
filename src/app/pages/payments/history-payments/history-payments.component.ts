@@ -246,6 +246,7 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
   
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+          this.getCreditDetailById();
           this.getPayments();
       } else {
         this.snackbar.info('Cambios no efectuados.');

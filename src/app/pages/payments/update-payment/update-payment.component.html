@@ -17,26 +17,16 @@
           La fecha de pago es requerida
         </mat-error>
       </mat-form-field>
-      
-  
-      <!-- ID de la Sede -->
-      <!-- <mat-form-field appearance="outline">
-        <mat-label>ID de la Sede</mat-label>
-        <input matInput formControlName="sede" type="number" placeholder="Ingrese el ID de la sede" />
-        <mat-error *ngIf="paymentForm.get('sede')?.hasError('required')">Campo requerido</mat-error>
-      </mat-form-field> -->
-  
-      <!-- ID del Crédito -->
-      <!-- <mat-form-field appearance="outline">
-        <mat-label>ID del Crédito</mat-label>
-        <input matInput formControlName="credit" type="number" placeholder="Ingrese el ID del crédito" />
-        <mat-error *ngIf="paymentForm.get('credit')?.hasError('required')">Campo requerido</mat-error>
-      </mat-form-field> -->
-  
       <!-- Monto -->
       <mat-form-field appearance="outline">
         <mat-label>Monto</mat-label>
-        <input matInput formControlName="amount" type="number" placeholder="Ingrese el monto del pago" />
+        <input 
+          matInput 
+          [value]="formattedAmountPay"
+          placeholder="Ingrese el monto del pago" 
+          (keypress)="handleKeyPress($event)" 
+          (input)="onAmountPayCapitalInput($event)" 
+          />
         <mat-error *ngIf="paymentForm.get('amount')?.hasError('required')">Campo requerido</mat-error>
         <mat-error *ngIf="paymentForm.get('amount')?.hasError('min')">Debe ser mayor a 0</mat-error>
       </mat-form-field>
