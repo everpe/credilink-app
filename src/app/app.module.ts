@@ -27,6 +27,7 @@ import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { NgIdleModule  } from '@ng-idle/core';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,7 +47,8 @@ import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
     ReactiveFormsModule,
     MaterialModule,
     TablerIconsModule.pick(TablerIcons),
-    MatNativeDateModule 
+    MatNativeDateModule ,
+    NgIdleModule.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

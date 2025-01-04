@@ -22,6 +22,8 @@
     "@angular/platform-browser": "^17.3.7",
     "@angular/platform-browser-dynamic": "^17.3.7",
     "@angular/router": "^17.3.7",
+    "@ng-idle/core": "^16.0.0",
+    "@ng-idle/keepalive": "^16.0.0",
     "angular-tabler-icons": "^3.1.0",
     "apexcharts": "^3.49.0",
     "jspdf": "^2.5.2",
