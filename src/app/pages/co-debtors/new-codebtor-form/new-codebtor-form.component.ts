@@ -77,7 +77,7 @@ export class NewCodebtorFormComponent {
         phone: [this.codebtorData.phone || '', [Validators.required, Validators.pattern('^[0-9]{7,10}$')]],
         mobile: [this.codebtorData.mobile || '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
         address: [this.codebtorData.address || '', [Validators.required, Validators.maxLength(70)]],
-        neighborhood: [this.codebtorData.neighborhood || '', [Validators.required, Validators.maxLength(70)]],
+        neighborhood: [this.codebtorData.neighborhood || '', [ Validators.maxLength(70)]],
         city: [this.codebtorData.city || '', [Validators.required, Validators.maxLength(70)]],
         office_phone: [this.codebtorData.office_phone || '', [Validators.required, Validators.pattern('^[0-9]{7,10}$')]],
         type_linkage: [this.codebtorData.type_linkage?.id || '', Validators.required],

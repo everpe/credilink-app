@@ -47,7 +47,8 @@ export class UsersComponent implements OnInit {
     'email', 
     'type_user', 
     'document', 
-    'birthdate'
+    'birthdate',
+    'creation_date'
   ];
   totalUsers = 0;
   limit = 10;

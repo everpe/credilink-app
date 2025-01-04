@@ -72,7 +72,7 @@ export class NewClientFormComponent implements OnInit {
       phone: [this.clientData.phone || '', [Validators.required, Validators.pattern('^[0-9]{7,10}$')]],
       mobile: [this.clientData.mobile || '', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       address: [this.clientData.address || '', [Validators.required, Validators.maxLength(70)]],
-      neighborhood: [this.clientData.neighborhood || '', [Validators.required, Validators.maxLength(70)]],
+      neighborhood: [this.clientData.neighborhood || '', [Validators.maxLength(70)]],
       city: [this.clientData.city || '', [Validators.required, Validators.maxLength(70)]],
       office_phone: [this.clientData.office_phone || '', [Validators.required, Validators.pattern('^[0-9]{7,10}$')]],
       type_linkage: [this.clientData.type_linkage?.id || '', Validators.required],

@@ -39,6 +39,22 @@
         </mat-select>
         <mat-error *ngIf="paymentForm.get('payment_type')?.hasError('required')">Campo requerido</mat-error>
       </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Descripción</mat-label>
+        <textarea 
+          matInput 
+          formControlName="description" 
+          placeholder="Ingrese una descripción"
+          rows="3">
+        </textarea>
+        <mat-error *ngIf="paymentForm.get('description')?.hasError('required')">
+          La descripción es requerida.
+        </mat-error>
+        <mat-error *ngIf="paymentForm.get('description')?.hasError('maxLength')">
+          La descripción no puede superar los 250 caracteres.
+        </mat-error>
+      </mat-form-field>
   
       <!-- Botones -->
       <div class="flex justify-center gap-4">

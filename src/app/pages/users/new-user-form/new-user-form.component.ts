@@ -43,6 +43,7 @@ export class NewUserFormComponent implements OnInit {
   documentTypes = Object.values(TypeDocument);
   isEditMode: boolean = false;
   userDataEdit: User;
+  hide = true;
   constructor(private fb: FormBuilder, 
       private userService: UserService,
       private authService: AuthService,
@@ -59,7 +60,9 @@ export class NewUserFormComponent implements OnInit {
       username: [this.userDataEdit?.username || '', [Validators.required, Validators.maxLength(70)]],
       names: [this.userDataEdit?.names || '', [Validators.required, Validators.maxLength(70)]],
       surnames: [this.userDataEdit?.surnames || '',  [Validators.required, Validators.maxLength(70)]],
-      email: [this.userDataEdit?.email || '', [Validators.required, Validators.email]],
+      email: [this.userDataEdit?.email || '', [Validators.required,  Validators.pattern(
+        /^[a-zA-Z0-9._%+-ñÑ]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+      )]],
       password: ['', []],
       type_user: [this.userDataEdit?.type_user || '', Validators.required],
       type_document: [this.userDataEdit?.type_document || '', Validators.required],

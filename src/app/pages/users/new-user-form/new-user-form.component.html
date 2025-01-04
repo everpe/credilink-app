@@ -1,16 +1,16 @@
 <div class="contenedor p-4 mt-2">
     @if(this.isEditMode){
-        <h3 class="text-xl font-medium text-black text-center">Modificar usuario</h3>
+    <h3 class="text-xl font-medium text-black text-center">Modificar usuario</h3>
     }
     @else{
-        <h3 class="text-xl font-medium text-black text-center">Registro nuevo usuario</h3>
+    <h3 class="text-xl font-medium text-black text-center">Registro nuevo usuario</h3>
     }
     <mat-dialog-content>
         <form [formGroup]="userForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Nombre de Usuario -->
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Nombre de Usuario</mat-label>
-                <input matInput formControlName="username" (input)="convertToLowerCase($event)"/>
+                <input matInput formControlName="username" (input)="convertToLowerCase($event)" />
                 <mat-error *ngIf="userForm.get('username')?.hasError('required')">
                     El nombre de usuario es requerido
                 </mat-error>
@@ -18,11 +18,11 @@
                     Máximo 70 caracteres permitidos
                 </mat-error>
             </mat-form-field>
-        
+
             <!-- Nombre -->
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Nombres</mat-label>
-                <input matInput formControlName="names"/>
+                <input matInput formControlName="names" />
                 <mat-error *ngIf="userForm.get('names')?.hasError('required')">
                     El nombre es requerido
                 </mat-error>
@@ -30,7 +30,7 @@
                     Máximo 70 caracteres permitidos
                 </mat-error>
             </mat-form-field>
-        
+
             <!-- Apellido -->
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Apellidos</mat-label>
@@ -42,30 +42,33 @@
                     Máximo 70 caracteres permitidos
                 </mat-error>
             </mat-form-field>
-        
+
             <!-- Correo -->
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Correo</mat-label>
-                <input matInput formControlName="email" type="email" />
+                <input matInput formControlName="email" type="text" />
                 <mat-error *ngIf="userForm.get('email')?.hasError('required')">
-                    El correo electrónico es requerido
-                </mat-error>
-                <mat-error *ngIf="userForm.get('email')?.hasError('email') && !userForm.get('email')?.hasError('required')">
-                    Formato de correo incorrecto
+                    El correo electrónico es requerido.
+                  </mat-error>
+                  <mat-error *ngIf="userForm.get('email')?.hasError('pattern') && !userForm.get('email')?.hasError('required')">
+                    Formato de correo incorrecto.
+                  </mat-error>
+            </mat-form-field>
+
+            @if(!this.isEditMode){
+            <!-- Contraseña -->
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Contraseña</mat-label>
+                <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" />
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Mostrar contraseña'">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="userForm.get('password')?.hasError('required')">
+                    La contraseña es requerida
                 </mat-error>
             </mat-form-field>
-        
-            @if(!this.isEditMode){
-                <!-- Contraseña -->
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Contraseña</mat-label>
-                    <input matInput formControlName="password" type="password" />
-                    <mat-error *ngIf="userForm.get('password')?.hasError('required')">
-                        La contraseña es requerida
-                    </mat-error>
-                </mat-form-field>
             }
-        
+
             <!-- Tipo de Usuario -->
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Tipo de Usuario</mat-label>
@@ -76,7 +79,7 @@
                     El tipo de usuario es requerido
                 </mat-error>
             </mat-form-field>
-        
+
             <!-- Tipo de Documento -->
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Tipo de Documento</mat-label>
@@ -87,15 +90,11 @@
                     El tipo de documento es requerido
                 </mat-error>
             </mat-form-field>
-        
+
             <!-- Documento -->
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Documento</mat-label>
-                <input 
-                    matInput
-                    formControlName="document"
-                    (keypress)="handleKeyPress($event)" 
-                />
+                <input matInput formControlName="document" (keypress)="handleKeyPress($event)" />
                 <mat-error *ngIf="userForm.get('document')?.hasError('required')">
                     El documento es requerido
                 </mat-error>
@@ -103,7 +102,7 @@
                     Se requiere entre 8 y 10 dígitos
                 </mat-error>
             </mat-form-field>
-        
+
             <!-- Departamento -->
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Departamento</mat-label>
@@ -113,9 +112,9 @@
                 </mat-error>
                 <mat-error *ngIf="userForm.get('department')?.hasError('maxlength')">
                     Máximo 70 caracteres permitidos
-                  </mat-error>
+                </mat-error>
             </mat-form-field>
-        
+
             <!-- Ciudad -->
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Ciudad</mat-label>
@@ -125,9 +124,9 @@
                 </mat-error>
                 <mat-error *ngIf="userForm.get('city')?.hasError('maxlength')">
                     Máximo 70 caracteres permitidos
-                  </mat-error>
+                </mat-error>
             </mat-form-field>
-        
+
             <!-- Teléfono -->
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Teléfono</mat-label>
@@ -137,9 +136,9 @@
                 </mat-error>
                 <mat-error *ngIf="userForm.get('cellphone')?.hasError('pattern')">
                     Debe contener entre 7 y 10 dígitos
-                  </mat-error>
+                </mat-error>
             </mat-form-field>
-        
+
             <!-- Fecha de Nacimiento -->
             <mat-form-field class="w-full" appearance="outline">
                 <mat-label>Fecha de nacimiento</mat-label>
@@ -154,7 +153,7 @@
         </form>
     </mat-dialog-content>
     <mat-dialog-actions align="center" class="p-4">
-        <button mat-raised-button mat-dialog-close >Cerrar</button>
+        <button mat-raised-button mat-dialog-close>Cerrar</button>
         <button mat-raised-button color="primary" (click)="onSubmit()">Guardar</button>
     </mat-dialog-actions>
 </div>

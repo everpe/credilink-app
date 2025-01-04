@@ -11,6 +11,7 @@
     city: string;
     cellphone: string;
     birthdate: string;
+    creation_date: string;
   }
   
   export interface UserResponse {
