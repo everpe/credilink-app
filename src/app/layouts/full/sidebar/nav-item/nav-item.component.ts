@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 export class AppNavItemComponent implements OnChanges {
   @Input() item: NavItem | any;
   @Input() depth: any;
-   userType: any;
+  userType: UserType | null;
   constructor(public navService: NavService,
     public router: Router,
     private authService: AuthService,
@@ -25,7 +25,7 @@ export class AppNavItemComponent implements OnChanges {
     }
 
 
-    this.userType = authService.getTypeUserLogged();
+    this.userType = authService.getTypeUserLogged() as UserType;
   }
 
   ngOnChanges() {
@@ -44,8 +44,8 @@ export class AppNavItemComponent implements OnChanges {
   canShowItem(): boolean {
     if (this.userType === UserType.ADMIN) {
       return (
-        this.item.route === '/move/sede' ||
-        this.item.route === '/users'
+        this.item.route !== '/sedes' &&
+        this.item.route !== '/companies'
       );
     }
     return true; // Otros tipos de usuarios pueden ver todos los ítems

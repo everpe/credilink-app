@@ -9,7 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { debounceTime } from 'rxjs';
-import { User } from 'src/app/interfaces/user.interface';
+import { User, UserType } from 'src/app/interfaces/user.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserService } from 'src/app/services/users/user.service';
 import { NewUserFormComponent } from './new-user-form/new-user-form.component';
@@ -54,12 +54,15 @@ export class UsersComponent implements OnInit {
   limit = 10;
   offset = 0;
   sede = 0;
+  userType: UserType | null;
 
   constructor(private userService: UserService,
               private dialog: MatDialog,
               private snackBar: ToastrService,
               private authService: AuthService
-  ) {}
+  ) {
+    this.userType = authService.getTypeUserLogged() as UserType;
+  }
 
   ngOnInit(): void {
     this.sede = Number(this.authService.getSedeUser())
@@ -144,5 +147,12 @@ export class UsersComponent implements OnInit {
         });;
       }
     });
+  }
+
+  canShowAdmin(): boolean {
+    if (this.userType === UserType.ADMIN) {
+      return false;
+    }
+    return true; // Otros tipos de usuarios pueden ver todos los ítems
   }
 }

@@ -11,16 +11,12 @@
         </mat-form-field>
     
         <div class="flex gap-4 justify-center md:justify-end w-full md:w-auto">
-          <!-- Botón para registrar un nuevo usuario -->
-          <button mat-raised-button color="primary" class="flex items-center gap-2" (click)="openNewUserDialog()">
-            <mat-icon>person_add</mat-icon>
-            Nuevo usuario
-          </button>
-          <!-- Botón para descargar el reporte -->
-          <!-- <button mat-stroked-button color="primary" class="flex items-center gap-2" (click)="downloadReport()">
-            <mat-icon>download</mat-icon>
-            Reporte Excel
-          </button> -->
+          @if(canShowAdmin()){
+            <button mat-raised-button color="primary" class="flex items-center gap-2" (click)="openNewUserDialog()">
+              <mat-icon>person_add</mat-icon>
+              Nuevo usuario
+            </button>
+          }
         </div>
       </div>
     </mat-card-header>
@@ -70,14 +66,16 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="editUser(user)">
-                  <mat-icon color="primary">edit</mat-icon>
-                  <span>Editar</span>
-                </button>
-                <button mat-menu-item (click)="deleteUser(user)">
-                  <mat-icon color="warn">delete</mat-icon>
-                  <span>Desactivar</span>
-                </button>
+                @if(canShowAdmin()){
+                  <button mat-menu-item (click)="editUser(user)">
+                    <mat-icon color="primary">edit</mat-icon>
+                    <span>Editar</span>
+                  </button>
+                  <button mat-menu-item (click)="deleteUser(user)">
+                    <mat-icon color="warn">delete</mat-icon>
+                    <span>Desactivar</span>
+                  </button>
+                }
               </mat-menu>
             </td>
           </ng-container>
