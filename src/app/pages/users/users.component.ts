@@ -165,7 +165,7 @@ export class UsersComponent implements OnInit {
     });
   
     dialogRef.afterClosed().subscribe(result => {
-      if (!result) {
+      if (result) {
           this.loadUsers();  
       } else {
         this.snackBar.info('Cambios no efectuados.');
