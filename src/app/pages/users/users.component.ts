@@ -16,6 +16,7 @@ import { NewUserFormComponent } from './new-user-form/new-user-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @Component({
   selector: 'app-users',
@@ -154,5 +155,21 @@ export class UsersComponent implements OnInit {
       return false;
     }
     return true; // Otros tipos de usuarios pueden ver todos los ítems
+  }
+
+  changePassword(user: User): void{
+    const dialogRef = this.dialog.open(ChangePasswordComponent, {
+      width: '450px',
+      data: { id: user.id },  
+      disableClose: true
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+          this.loadUsers();  
+      } else {
+        this.snackBar.info('Cambios no efectuados.');
+      }
+    });
   }
 }

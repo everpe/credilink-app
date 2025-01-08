@@ -57,3 +57,7 @@
     sede: number;
   }
   
+  export interface ChangePasswordResponse {
+    message: string;
+    data: boolean;
+  }
