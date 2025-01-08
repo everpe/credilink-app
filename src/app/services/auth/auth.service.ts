@@ -126,4 +126,22 @@ export class AuthService {
     return this.http.put<ChangePasswordResponse>(url, body);
   }
 
+
+   /**
+   * Actualiza la contraseña del usuario autenticado.
+   * @param currentPassword Contraseña actual
+   * @param newPassword Nueva contraseña
+   * @param confirmPassword Confirmación de la nueva contraseña
+   * @returns Observable con el mensaje de éxito y estado booleano
+   */
+   updatePassword(currentPassword: string, newPassword: string, confirmPassword: string): Observable<ChangePasswordResponse> {
+    const url = `${environment.apiUrl}/users/change_password_my_user/`;
+    const body = {
+      current_password: currentPassword,
+      password: newPassword,
+      password_confirm: confirmPassword
+    };
+
+    return this.http.put<ChangePasswordResponse>(url, body);
+  }
 }

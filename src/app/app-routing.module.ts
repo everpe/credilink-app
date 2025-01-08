@@ -56,6 +56,11 @@ const routes: Routes = [
         canActivate: [authGuard,adminGuard],
         loadComponent: () => import('./pages/sedes/move-sede/move-sede.component').then(m => m.MoveSedeComponent)  
       },
+      {
+        path: 'update/password',
+        canActivate: [authGuard],
+        loadComponent: () => import('./pages/authentication/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)  
+      },
     ],
   },
   {

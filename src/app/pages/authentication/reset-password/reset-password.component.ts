@@ -1,15 +1,17 @@
-import { Component, Inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatError, MatFormFieldModule } from '@angular/material/form-field';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule, MatError } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { UserService } from 'src/app/services/users/user.service';
 
 @Component({
-  selector: 'app-change-password',
+  selector: 'app-reset-password',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -18,27 +20,27 @@ import { AuthService } from 'src/app/services/auth/auth.service';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatError,
     FormsModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressSpinnerModule
   ],
-  templateUrl: './change-password.component.html',
-  styleUrl: './change-password.component.scss'
+  templateUrl: './reset-password.component.html',
+  styleUrl: './reset-password.component.scss'
 })
-export class ChangePasswordComponent {
+export class ResetPasswordComponent {
   changePasswordForm: FormGroup;
   isSubmitting = false;
-  hide = true;
-  idUser = 0;
+  hideCurrent = true;
+  hidePassword = true;
+  hideConfirm = true;
+
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
-    private toastr: ToastrService,
-    private dialogRef: MatDialogRef<ChangePasswordComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    private userService: AuthService,
+    private toastr: ToastrService
   ) {
-    this.idUser = data?.id;
     this.changePasswordForm = this.fb.group({
+      current_password: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       password_confirm: ['', [Validators.required, Validators.minLength(6)]]
     });
@@ -49,6 +51,7 @@ export class ChangePasswordComponent {
   }
 
   onSubmit(): void {
+    this.changePasswordForm.markAllAsTouched();
     if (this.changePasswordForm.invalid) {
       this.toastr.warning('Por favor, completa el formulario correctamente.');
       return;
@@ -61,20 +64,23 @@ export class ChangePasswordComponent {
 
     this.isSubmitting = true;
 
-    this.authService.changePassword(this.idUser, this.f['password'].value, this.f['password_confirm'].value).subscribe({
+    this.userService.updatePassword(
+      this.f['current_password'].value,
+      this.f['password'].value,
+      this.f['password_confirm'].value
+    ).subscribe({
       next: (response) => {
-        this.toastr.success(response.message);
-        this.changePasswordForm.reset();
-        this.dialogRef.close(true);
-        // this.authService.logout();
+        if (response.data) {
+          this.toastr.success(response.message);
+          this.changePasswordForm.reset();
+          this.isSubmitting = false;
+        }
       },
       error: (error) => {
         this.toastr.error(error.error.message);
         console.error(error);
-      },
-      complete: () => {
         this.isSubmitting = false;
-      }
+      },
     });
   }
 }

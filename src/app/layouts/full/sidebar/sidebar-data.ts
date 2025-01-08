@@ -43,4 +43,9 @@ export const navItems: NavItem[] = [
     iconName: 'home-move',
     route: '/move/sede',
   },
+  {
+    displayName: 'Actualizar contraseña',
+    iconName: 'password',
+    route: '/update/password',
+  },
 ];
