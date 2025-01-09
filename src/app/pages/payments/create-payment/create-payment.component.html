@@ -45,14 +45,9 @@
                 <div class="form-row flex justify-between w-100">
                     <mat-form-field appearance="outline" class="field w-100">
                         <mat-label>Valor:</mat-label>
-                        <input 
-                            type="text" 
-                            matInput 
-                            [value]="formattedAmountPayInteres"
-                            (input)="onAmountPayInteresInput($event)" 
-                            placeholder="Valor pago interes"
-                            (keypress)="handleKeyPress($event)" 
-                        />
+                        <input type="text" matInput [value]="formattedAmountPayInteres"
+                            (input)="onAmountPayInteresInput($event)" placeholder="Valor pago interes"
+                            (keypress)="handleKeyPress($event)" />
                         <span matPrefix>$&nbsp;</span>
                     </mat-form-field>
 
@@ -75,14 +70,9 @@
                 <div class="form-row flex justify-between">
                     <mat-form-field appearance="outline" class="field w-100">
                         <mat-label>Valor:</mat-label>
-                        <input 
-                            type="text"
-                            matInput 
-                            [value]="formattedAmountPayCapital"
-                            (input)="onAmountPayCapitalInput($event)" 
-                            placeholder="Pago a capital"
-                            (keypress)="handleKeyPress($event)" 
-                        />
+                        <input type="text" matInput [value]="formattedAmountPayCapital"
+                            (input)="onAmountPayCapitalInput($event)" placeholder="Pago a capital"
+                            (keypress)="handleKeyPress($event)" />
                         <span matPrefix>$&nbsp;</span>
                     </mat-form-field>
 
@@ -98,16 +88,9 @@
             </div>
             <div class="col-span-1 lg:col-span-1 w-full flex items-center">
                 <mat-checkbox formControlName="skip_interest_check">¿Omitir intereses completos?</mat-checkbox>
-           
+
             </div>
-            @if(this.paymentForm.get('skip_interest_check')?.value){
-                <div class="col-span-1 lg:col-span-1 w-full flex items-center">
-                    <mat-form-field appearance="outline" class="w-full md:col-span-3">
-                        <mat-label>Observaciones</mat-label>
-                        <textarea matInput formControlName="description"></textarea>
-                      </mat-form-field>
-                </div>
-            }
+
 
             <!-- Sección de totales a la derecha -->
             <div class="summary-section">
@@ -126,6 +109,15 @@
                     <span class="summary-value">{{ totalAmount | currency: '' }}</span>
                 </div>
             </div>
+
+            <!-- @if(this.paymentForm.get('skip_interest_check')?.value){ -->
+            <div class="col-span-2 lg:col-span-2 w-full flex items-center">
+                <mat-form-field appearance="outline" class="w-full md:col-span-3">
+                    <mat-label>Observaciones</mat-label>
+                    <textarea matInput formControlName="description"></textarea>
+                </mat-form-field>
+            </div>
+            <!-- } -->
         </form>
     </div>
 
