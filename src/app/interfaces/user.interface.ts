@@ -12,6 +12,7 @@
     cellphone: string;
     birthdate: string;
     creation_date: string;
+    status: boolean
   }
   
   export interface UserResponse {

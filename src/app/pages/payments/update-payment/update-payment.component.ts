@@ -59,7 +59,7 @@ export class UpdatePaymentComponent {
       credit: [this.data.payment.credit, [Validators.required]], // ID del crédito
       amount: [this.data.payment.amount, [Validators.required, Validators.min(1)]], // Monto
       payment_type: [this.data.payment.paymentType, [Validators.required]], // Tipo de pago
-      description: [this.data.payment.description || '', [Validators.required, Validators.maxLength(250)]]
+      description: [this.data.payment.description || '', [ Validators.maxLength(250)]]
     });
     this.formattedAmountPay = this.formatNumberWithCommas(parseFloat(this.data.payment.amount) || 0)
   }

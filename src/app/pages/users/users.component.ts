@@ -131,9 +131,10 @@ export class UsersComponent implements OnInit {
   }
 
   deleteUser(user: User): void {
+    var text =  user.status ? 'desactivar' : 'activar';
     const dialogRef = this.dialog.open(ConfirmComponent, {
       width: '400px',
-      data: { message : `¿Está seguro que desea desactivar este usuario: ${user.username.toUpperCase()} ?` }
+      data: { message : `¿Está seguro que desea ${text} este usuario: ${user.username.toUpperCase()} ?` }
     });
 
     dialogRef.afterClosed().subscribe(result => {

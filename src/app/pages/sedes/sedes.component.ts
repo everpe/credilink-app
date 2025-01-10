@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardHeader, MatCardContent } from '@angular/material/card';
@@ -7,8 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { SedeDto } from 'src/app/interfaces/sede.interface';
 import { SedeService } from 'src/app/services/sedes/sede.service';
@@ -35,8 +35,9 @@ import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.comp
   templateUrl: './sedes.component.html',
   styleUrl: './sedes.component.scss'
 })
-export class SedesComponent implements OnInit {
-  sedes: SedeDto[] = [];
+export class SedesComponent implements OnInit {  
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  sedes = new MatTableDataSource<SedeDto>([]);
   displayedColumns: string[] = [
     'actions',
     'name',
@@ -56,6 +57,7 @@ export class SedesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.sedes.paginator = this.paginator;
     this.loadSedes();
   }
 
@@ -63,7 +65,8 @@ export class SedesComponent implements OnInit {
     this.isLoading = true;
     this.sedeService.getSedes().subscribe({
       next: (data) => {
-        this.sedes = data;
+        this.sedes.data = data;
+        this.sedes.paginator = this.paginator;
         this.isLoading = false;
       },
       error: (err) => {

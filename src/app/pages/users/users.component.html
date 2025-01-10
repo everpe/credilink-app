@@ -72,8 +72,8 @@
                     <span>Editar</span>
                   </button>
                   <button mat-menu-item (click)="deleteUser(user)">
-                    <mat-icon color="warn">delete</mat-icon>
-                    <span>Desactivar</span>
+                    <mat-icon [color]="user.status ? 'warn' : 'primary'">{{ user.status ? 'toggle_off' : 'toggle_on' }}</mat-icon>
+                    <span>{{ user.status ? 'Desactivar' : 'Activar' }}</span>
                   </button>
                   <button mat-menu-item (click)="changePassword(user)">
                     <mat-icon color="primary">key</mat-icon>

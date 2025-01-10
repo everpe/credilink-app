@@ -33,19 +33,29 @@
                 </mat-error>
             </mat-form-field>
 
-
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Compañía</mat-label>
-                <mat-select formControlName="company">
-                    @for (item of companies; track item; let i = $index) {
-                    <mat-option [value]="item.id">{{ item.company_name }}</mat-option>
-                    }
-                </mat-select>
-                @if(sedeForm.get('company')?.hasError('required')){
-                <mat-error>Campo requerido</mat-error>
+                <input
+                    type="text"
+                    matInput
+                    [matAutocomplete]="auto"
+                    formControlName="company"
+                    (input)="filterCompanies($event)"
+                    (focus)="showDefaultCompanies()"
+                    placeholder="Escribe y selecciona una compañía"
+                />
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCompany">
+                    <mat-option
+                    *ngFor="let company of filteredCompanies"
+                    [value]="company"
+                    >
+                    {{ company.company_name }}
+                    </mat-option>
+                </mat-autocomplete>
+                @if (sedeForm.get('company')?.hasError('required')) {
+                    <mat-error>Campo requerido</mat-error>
                 }
             </mat-form-field>
-
 
             <mat-form-field appearance="outline">
                 <mat-label>RUT</mat-label>
