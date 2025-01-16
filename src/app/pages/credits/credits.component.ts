@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { ToastrService } from 'ngx-toastr';
 import { debounceTime, map, Observable, of, switchMap } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -359,5 +359,13 @@ export class CreditsComponent implements OnInit {
       //   this.getCoDebtors();   
       // }
     });
+  }
+
+  onTabChange(event: MatTabChangeEvent): void {
+    const selectedIndex = event.index;
+
+    if (selectedIndex === 2) { // Índice de la pestaña "Notificaciones"
+      this.sharedService.triggerReloadCredits();
+    }
   }
 }

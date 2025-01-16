@@ -1,7 +1,7 @@
 <h2 class="text-2xl font-semibold">Créditos</h2>
 
 <div class="container mx-auto mt-4">
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" (selectedTabChange)="onTabChange($event)">
         <mat-tab label="">
             <ng-template mat-tab-label>
                 <mat-icon class="example-tab-icon">add_circle</mat-icon>

@@ -15,13 +15,14 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
-import { debounceTime, map, Observable, of, switchMap } from 'rxjs';
+import { debounceTime, map, Observable, of, Subscription, switchMap } from 'rxjs';
 import { TypeLinkage, JobRelationship } from 'src/app/interfaces/client.interface';
 import { GetCreditDto } from 'src/app/interfaces/credit.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ClientService } from 'src/app/services/clients/client.service';
 import { CreditService } from 'src/app/services/credits/credit.service';
 import { NotificationService } from 'src/app/services/notifications/notification.service';
+import { SharedService } from 'src/app/services/shared/shared.service';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
 
 @Component({
@@ -66,11 +67,13 @@ export class NotificationsComponent  implements OnInit {
   selection = new SelectionModel<GetCreditDto>(true, []);
   lisTypeLinkages: TypeLinkage[] = [];
   lisJobRelationShips: JobRelationship[] = [];
+  private reloadSubscription!: Subscription;
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
     private clientService: ClientService,
     private creditService: CreditService,
+    private sharedService: SharedService,
     private snackBar: ToastrService,
     private notificationService: NotificationService,
     private dialog: MatDialog,
@@ -100,6 +103,11 @@ export class NotificationsComponent  implements OnInit {
         }
       })
     ) ?? of([]);
+    this.reloadSubscription = this.sharedService.reloadCredits$.subscribe((shouldReload) => {
+      if (shouldReload) {
+        this.loadCredits(); // Vuelve a cargar la lista de créditos
+      }
+    })
     this.loadCredits();
     this.getAllTypeLinkages();
     this.GetAllJobRelationships();
