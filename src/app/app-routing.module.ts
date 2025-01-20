@@ -53,7 +53,7 @@ const routes: Routes = [
       },
       {
         path: 'move/sede',
-        canActivate: [authGuard,adminGuard],
+        canActivate: [authGuard],
         loadComponent: () => import('./pages/sedes/move-sede/move-sede.component').then(m => m.MoveSedeComponent)  
       },
       {
