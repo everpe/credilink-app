@@ -12,7 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { debounceTime, map, Observable, of, Subscription, switchMap } from 'rxjs';
@@ -24,6 +24,7 @@ import { CreditService } from 'src/app/services/credits/credit.service';
 import { NotificationService } from 'src/app/services/notifications/notification.service';
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
+import { ConfirmNotificationComponent } from './confirm-notification/confirm-notification.component';
 
 @Component({
   selector: 'notifications-credit',
@@ -84,7 +85,8 @@ export class NotificationsComponent  implements OnInit {
       load_status: [''],
       job_relationship: [''],
       type_linkage: [''],
-      sede: [this.authService.getSedeUser(), Validators.required]
+      sede: [this.authService.getSedeUser(), Validators.required],
+      reminder_type: [null]
     });
   }
 
@@ -131,7 +133,8 @@ export class NotificationsComponent  implements OnInit {
       client: this.notificacionesForm.get('client')?.value,
       load_status: this.notificacionesForm.get('load_status')?.value,
       job_relationship: this.notificacionesForm.get('job_relationship')?.value,
-      type_linkage: this.notificacionesForm.get('type_linkage')?.value
+      type_linkage: this.notificacionesForm.get('type_linkage')?.value,
+      reminder_type: this.notificacionesForm.get('reminder_type')?.value
     };
 
     this.creditService.filterCredits(filters)?.subscribe(
@@ -227,6 +230,7 @@ export class NotificationsComponent  implements OnInit {
       }
     );
   }
+
   GetAllJobRelationships(){
     this.clientService.getJobRelationships(Number(this.authService.getSedeUser()) ?? 0).subscribe(
       (data: JobRelationship[]) => {
@@ -238,4 +242,37 @@ export class NotificationsComponent  implements OnInit {
     );
 
   }
+
+    // Método que se invoca al seleccionar una opción en el select
+    openReminderModal(event: MatSelectChange): void {
+      const selectedReminder = event.value;
+      let modalMessage = '';
+  
+      // Si se seleccionó un valor (distinto de "Ninguno")
+      if (selectedReminder) {
+        modalMessage = `Recordatorio: ${selectedReminder}\n\n`;
+      }
+      // Agregar el mensaje fijo de asistencia
+      modalMessage += `CreditosQ&F: Hola Andres Navarro, queremos recordarle que tiene
+      intereses pendientes hasta el mes de enero por un valor de 500.s000.
+      Por favor, envíe el comprobante de pago a través del WhatsApp del Sr.
+      Luis Antonio Quintero: https://wa.me/+573008101347.
+      Si necesita más información o asistencia, no dude en contactarnos.`
+  
+      // Abrir el modal y pasar el mensaje
+      const dialogRef = this.dialog.open(ConfirmNotificationComponent, {
+        data: { message: modalMessage },
+        disableClose: true
+      });
+  
+      // Verificar la respuesta del modal
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.filterCredits();
+        }else{
+          this.notificacionesForm.get('reminder_type')?.setValue(null);
+        }
+        // Si se presionó "Si", se mantiene el valor seleccionado.
+      });
+    }
 }

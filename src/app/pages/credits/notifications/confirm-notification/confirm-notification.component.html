@@ -1,0 +1,12 @@
+<div class="contenedor p-11 py-1">
+    <h2 mat-dialog-title>Recordatorio</h2>
+    <mat-dialog-content>
+      <p>{{ data.message }}</p>
+    </mat-dialog-content>
+      <div class="flex justify-center md:col-span-2 space-x-4">
+        <button mat-raised-button (click)="onCancel()" type="button">No</button> 
+        <button mat-raised-button color="primary" (click)="onConfirm()" type="button">Si</button> 
+      </div>
+</div>
+
+

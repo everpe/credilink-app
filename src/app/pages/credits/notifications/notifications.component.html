@@ -51,6 +51,18 @@
                   </mat-select>
                 </mat-form-field>
 
+                <mat-form-field appearance="outline" class="col-span-1 lg:col-span-1 w-full">
+                  <mat-label>Tipo de Recordatorio</mat-label>
+                  <mat-select formControlName="reminder_type" (selectionChange)="openReminderModal($event)">
+                    <!-- Opción para "ninguno" -->
+                    <mat-option [value]="null">Ninguno</mat-option>
+                    <mat-option [value]="'Recordatorio de pago'">Recordatorio de pago</mat-option>
+                    <mat-option [value]="'Debe pagar puntual'">Debe pagar puntual</mat-option>
+                    <mat-option [value]="'¿Para cuando el pago?'">¿Para cuando el pago?</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                
+
                 <div class="flex justify-center">
                     <button mat-raised-button color="primary" type="submit" class="flex items-center mt-3" (click)="sendNotificationSelectedCredits()">
                       <mat-icon class="mr-2">notifications</mat-icon> 
@@ -102,13 +114,7 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4">Valor interés </th>
                     <td mat-cell *matCellDef="let credit">{{ credit.interest_value | currency:'' }}</td>
                   </ng-container>
-              
-                  <!-- Tasa de Interés -->
-                  <!-- <ng-container matColumnDef="interest_rate">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4">Tasa interés</th>
-                    <td mat-cell *matCellDef="let credit">{{ credit.interest_rate }}</td>
-                  </ng-container> -->
-              
+                 
                   <!-- Total Deuda -->
                   <ng-container matColumnDef="total_debt">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-bold p-4">Total deuda </th>
