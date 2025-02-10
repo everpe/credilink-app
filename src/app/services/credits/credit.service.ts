@@ -58,10 +58,6 @@ export class CreditService {
     if (filters.type_linkage) {
       params = params.set('type_linkage', filters.type_linkage);
     }
-    if (filters.reminder_type) {
-      params = params.set('reminder_type', filters.reminder_type);
-    }
-  
     // //  esperamos un archivo binario (excel) en la respuesta
     // if (filters.export) {
     //   params = params.set('export', Boolean(filters.export ?? false).toString());

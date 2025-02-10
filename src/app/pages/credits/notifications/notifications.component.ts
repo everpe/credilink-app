@@ -134,7 +134,7 @@ export class NotificationsComponent  implements OnInit {
       load_status: this.notificacionesForm.get('load_status')?.value,
       job_relationship: this.notificacionesForm.get('job_relationship')?.value,
       type_linkage: this.notificacionesForm.get('type_linkage')?.value,
-      reminder_type: this.notificacionesForm.get('reminder_type')?.value
+      // reminder_type: this.notificacionesForm.get('reminder_type')?.value
     };
 
     this.creditService.filterCredits(filters)?.subscribe(
@@ -166,20 +166,18 @@ export class NotificationsComponent  implements OnInit {
   
       dialogRef.afterClosed().subscribe(result => {
         if(result){
-          this.notificationService.sendNotification(selectedCreditIds).subscribe(
-            response => {
-              this.snackBar.success('Los mensajes se han enviado correctamente');
-              this.selection.clear();
-            },
-            error => {
-              this.snackBar.error(error.error.error);
-            }
-          );
+          this.notificationService.sendNotification(selectedCreditIds, this.notificacionesForm.get('reminder_type')?.value)
+              .subscribe({
+                next: (data) => {
+                  this.snackBar.success(data.message);
+                  this.selection.clear();
+                },
+                error:(err) => {
+                  this.snackBar.error(err.error.error);
+                }
+              });
         }
       });
-
-
-
     } else {
       this.snackBar.info('Debe seleccionar uno o varios créditos para notificar.');
     }
@@ -267,10 +265,9 @@ export class NotificationsComponent  implements OnInit {
   
       // Verificar la respuesta del modal
       dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.filterCredits();
-        }else{
+        if (!result) {
           this.notificacionesForm.get('reminder_type')?.setValue(null);
+          // this.filterCredits();
         }
         // Si se presionó "Si", se mantiene el valor seleccionado.
       });

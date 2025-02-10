@@ -9,8 +9,8 @@ import { environment } from 'src/environments/environment';
 export class NotificationService {
   constructor(private http: HttpClient) {}
 
-  sendNotification(creditsId: number[]): Observable<any> {
-    const body = { credits_id: creditsId };
+  sendNotification(creditsId: number[], reminder_type: string): Observable<any> {
+    const body = { credits_id: creditsId, reminder_type };
 
     return this.http.post<any>(`${environment.apiUrl}/credits/send_notification/`, body);
   }
