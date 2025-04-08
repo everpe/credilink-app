@@ -57,7 +57,7 @@ import { NewCodebtorFormComponent } from '../co-debtors/new-codebtor-form/new-co
 export class CreditsComponent implements OnInit {
   creditForm!: FormGroup;
   filteredClients: Observable<any[]> = of([]);  // Simulación de clientes filtrados
-  filteredCoDebtorsArray: any[][] = [];
+  filteredCoDebtorsByField: any[][] = [];
 
   monthlyInterest: number = 0; // Valor para mostrar el interés mensual
   formattedLoanAmount: string = '';
@@ -198,16 +198,9 @@ export class CreditsComponent implements OnInit {
     this.formattedLoanAmount = "";
     this.monthlyInterest = 0;
 
-
     //reseterar formArray
-    const coDebtorsFormArray = this.creditForm.get('co_debtors') as FormArray;
-    coDebtorsFormArray.clear(); // Vacía los controles actuales
-    coDebtorsFormArray.push(
-      this.formBuilder.group({
-        coDebtorSearch: ['', Validators.required],
-        coDebtorId: [null, Validators.required]
-      })
-    );
+    this.coDebtors.clear();
+    this.addCoDebtorField();
 
     Object.keys(this.creditForm.controls).forEach(key => {
       this.creditForm.get(key)?.setErrors(null); // Limpia los errores de validación
@@ -291,17 +284,17 @@ export class CreditsComponent implements OnInit {
     });
 
     // Inicializa la lista de filtrados para este nuevo grupo
-    this.filteredCoDebtorsArray.push([]);
+    this.filteredCoDebtorsByField.push([]);
 
     // Suscribirse a los cambios del campo `coDebtorSearch`
     const index = this.coDebtors.length; // Obtén el índice del nuevo grupo
     coDebtorGroup.get('coDebtorSearch')?.valueChanges.pipe(
-        debounceTime(300),
+        debounceTime(350),
         switchMap(value => this.codebtorService.getCoDebtors(0, 20, 1, value ?? '').pipe(
             map(response => response?.results || [])
         ))
     ).subscribe(filteredCoDebtors => {
-        this.filteredCoDebtorsArray[index] = filteredCoDebtors; // Actualiza la lista en el índice correspondiente
+        this.filteredCoDebtorsByField[index] = filteredCoDebtors; // Actualiza la lista en el índice correspondiente
     });
 
     this.coDebtors.push(coDebtorGroup);
@@ -333,7 +326,7 @@ export class CreditsComponent implements OnInit {
       coDebtorId: coDebtor.id,
       // coDebtorSearch: '' 
     });
-    this.filteredCoDebtorsArray[index] = []; 
+    this.filteredCoDebtorsByField[index] = []; 
   }
 
 
@@ -368,4 +361,12 @@ export class CreditsComponent implements OnInit {
       this.sharedService.triggerReloadCredits();
     }
   }
+
+  clearCoDebtorSearch(index: number): void {
+    const control = this.coDebtors.at(index).get('coDebtorSearch');
+    if (control && !control.value?.id) {
+      control.reset(); // o control.setValue('') si prefieres dejarlo como string vacío
+    }
+  }
+  
 }

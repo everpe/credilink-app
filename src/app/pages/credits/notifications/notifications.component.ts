@@ -150,6 +150,7 @@ export class NotificationsComponent  implements OnInit {
     );
   }
 
+  
   getSelectedCreditIds(): number[] {
     return this.selection.selected.map(credit => credit.id);
   }
@@ -241,35 +242,67 @@ export class NotificationsComponent  implements OnInit {
 
   }
 
-    // Método que se invoca al seleccionar una opción en el select
-    openReminderModal(event: MatSelectChange): void {
-      const selectedReminder = event.value;
-      let modalMessage = '';
-  
-      // Si se seleccionó un valor (distinto de "Ninguno")
-      if (selectedReminder) {
-        modalMessage = `Recordatorio: ${selectedReminder}\n\n`;
-      }
-      // Agregar el mensaje fijo de asistencia
-      modalMessage += `CreditosQ&F: Hola Andres Navarro, queremos recordarle que tiene
-      intereses pendientes hasta el mes de enero por un valor de 500.s000.
-      Por favor, envíe el comprobante de pago a través del WhatsApp del Sr.
-      Luis Antonio Quintero: https://wa.me/+573008101347.
-      Si necesita más información o asistencia, no dude en contactarnos.`
-  
-      // Abrir el modal y pasar el mensaje
-      const dialogRef = this.dialog.open(ConfirmNotificationComponent, {
-        data: { message: modalMessage },
-        disableClose: true
-      });
-  
-      // Verificar la respuesta del modal
-      dialogRef.afterClosed().subscribe(result => {
-        if (!result) {
-          this.notificacionesForm.get('reminder_type')?.setValue(null);
-          // this.filterCredits();
-        }
-        // Si se presionó "Si", se mantiene el valor seleccionado.
-      });
+  // Método que se invoca al seleccionar una opción en el select
+  openReminderModal(event: MatSelectChange): void {
+    const selectedReminder = event.value;
+    let modalMessage = '';
+
+    // Si se seleccionó un valor (distinto de "Ninguno")
+    if (selectedReminder) {
+      modalMessage = `Recordatorio: ${selectedReminder}\n\n`;
     }
+    // Agregar el mensaje fijo de asistencia
+    modalMessage += `CreditosQ&F: Hola Andres Navarro, queremos recordarle que tiene
+    intereses pendientes hasta el mes de enero por un valor de 500.s000.
+    Por favor, envíe el comprobante de pago a través del WhatsApp del Sr.
+    Luis Antonio Quintero: https://wa.me/+573008101347.
+    Si necesita más información o asistencia, no dude en contactarnos.`
+
+    // Abrir el modal y pasar el mensaje
+    const dialogRef = this.dialog.open(ConfirmNotificationComponent, {
+      data: { message: modalMessage },
+      disableClose: true
+    });
+
+    // Verificar la respuesta del modal
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        this.notificacionesForm.get('reminder_type')?.setValue(null);
+        // this.filterCredits();
+      }
+      // Si se presionó "Si", se mantiene el valor seleccionado.
+    });
+  }
+
+  resetFilters() {
+    this.notificacionesForm.reset({
+      client: [],
+      clientSearch: '',
+      load_status: '',
+      job_relationship: '',
+      type_linkage: '',
+      sede: this.authService.getSedeUser(),
+      reminder_type: null
+    });
+
+    // Limpiar los observables de clientes y codeudores
+    this.filteredClients = this.notificacionesForm.get('clientSearch')?.valueChanges.pipe(
+      debounceTime(300),
+      switchMap(value => {
+        if (value) {
+          return this.clientService.getClients(0, 20, 1, value).pipe(
+            map(response => response?.results || [])
+          );
+        } else {
+          this.notificacionesForm.get('client')?.setValue(null);
+          this.filterCredits();
+          return of([]);
+        }
+      })
+    ) ?? of([]);
+
+    // Volvemos a cargar los créditos sin filtros
+    this.loadCredits();
+
+  }
 }

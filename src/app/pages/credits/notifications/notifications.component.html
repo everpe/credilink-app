@@ -63,8 +63,12 @@
                 </mat-form-field>
                 
 
-                <div class="flex justify-center">
-                    <button mat-raised-button color="primary" type="submit" class="flex items-center mt-3" (click)="sendNotificationSelectedCredits()">
+                <div class="flex justify-center items-center col-span-1 lg:col-span-1 space-x-2 mt-3">
+                  <button mat-raised-button color="secoundary" type="button" class="flex items-center" (click)="resetFilters()">
+                    <mat-icon class="mr-2">clear</mat-icon>
+                    Limpiar
+                  </button>
+                    <button mat-raised-button color="primary" type="submit" class="flex items-center " (click)="sendNotificationSelectedCredits()">
                       <mat-icon class="mr-2">notifications</mat-icon> 
                       Enviar notificación
                     </button>

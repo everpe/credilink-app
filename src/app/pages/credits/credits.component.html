@@ -64,11 +64,12 @@
                                         formControlName="coDebtorSearch"
                                         placeholder="Buscar por nombres, apellidos, o número documento"
                                         [matAutocomplete]="autoCoDebtor"
+                                        (blur)="clearCoDebtorSearch(i)"
                                     >
                                     <mat-autocomplete #autoCoDebtor="matAutocomplete"
                                                     (optionSelected)="onCoDebtorSelected($event.option.value, i)"
                                                     [displayWith]="displayCoDebtor">
-                                        <mat-option *ngFor="let coDebtor of filteredCoDebtorsArray[i]" [value]="coDebtor">
+                                        <mat-option *ngFor="let coDebtor of filteredCoDebtorsByField[i]" [value]="coDebtor">
                                             {{ coDebtor.first_name }} {{ coDebtor.last_name }} - {{ coDebtor.document_number }}
                                         </mat-option>
                                     </mat-autocomplete>
@@ -93,6 +94,9 @@
                             <mat-icon>add_circle</mat-icon>
                         </button>
                     </mat-card-content>
+<!-- 
+                   vco_debtors FormArray: {{ coDebtors.value | json}}
+                   filtrados: {{ filteredCoDebtorsByField | json}} -->
                 </mat-card>
   
 
