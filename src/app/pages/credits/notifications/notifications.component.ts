@@ -25,6 +25,7 @@ import { NotificationService } from 'src/app/services/notifications/notification
 import { SharedService } from 'src/app/services/shared/shared.service';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
 import { ConfirmNotificationComponent } from './confirm-notification/confirm-notification.component';
+import { LoaderComponent } from 'src/app/shared/components/loader/loader.component';
 
 @Component({
   selector: 'notifications-credit',
@@ -44,7 +45,8 @@ import { ConfirmNotificationComponent } from './confirm-notification/confirm-not
     MatTableModule,
     MatPaginatorModule,
     MatCheckboxModule,
-    MatDialogModule
+    MatDialogModule,
+    LoaderComponent
   ],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.scss'
@@ -70,6 +72,7 @@ export class NotificationsComponent  implements OnInit {
   lisJobRelationShips: JobRelationship[] = [];
   private reloadSubscription!: Subscription;
 
+  isLoading = false;
   constructor(private fb: FormBuilder,
     private authService: AuthService,
     private clientService: ClientService,
@@ -98,9 +101,10 @@ export class NotificationsComponent  implements OnInit {
           return this.clientService.getClients(0, 20, 1, value).pipe(
             map(response => response?.results || [])
           );
-        } else {
+        }
+        else {
           this.notificacionesForm.get('client')?.setValue(null);
-          this.filterCredits();
+          // this.filterCredits();
           return of([]);
         }
       })
@@ -116,18 +120,23 @@ export class NotificationsComponent  implements OnInit {
   }
 
   loadCredits(): void {
+    this.isLoading = true;
     this.creditService.getCredits(Number(this.authService.getSedeUser()) ?? 0).subscribe(
       (data: GetCreditDto[]) => {
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator; // Asignar el paginador
+        this.isLoading = false;
       },
       error => {
         console.error('Error al cargar créditos', error);
+        this.isLoading = false;
       }
     );
+
   }
 
   filterCredits(){
+    this.isLoading = true;
     const filters = {
       sede: this.notificacionesForm.get('sede')?.value,
       client: this.notificacionesForm.get('client')?.value,
@@ -140,12 +149,13 @@ export class NotificationsComponent  implements OnInit {
     this.creditService.filterCredits(filters)?.subscribe(
       (credits) => {
           this.dataSource.data = credits;
+          this.isLoading = false;
           this.snackBar.success('Créditos filtrados correctamente', 'Éxito');
-
       },
       (error) => {
         this.snackBar.error(error.error.error, 'Error');
         console.error(error);
+        this.isLoading = false;
       }
     );
   }
@@ -191,7 +201,7 @@ export class NotificationsComponent  implements OnInit {
   }
   onClientSelected(client: any): void {
     this.notificacionesForm.get('client')?.setValue(client.id);
-    this.filterCredits();
+    // this.filterCredits();
   }
 
 
@@ -304,5 +314,12 @@ export class NotificationsComponent  implements OnInit {
     // Volvemos a cargar los créditos sin filtros
     this.loadCredits();
 
+  }
+
+  clearClientSearch(): void {
+    const control = this.notificacionesForm.get('clientSearch');
+    if (control && !control.value?.id) {
+      control.setValue(''); 
+    }
   }
 }
