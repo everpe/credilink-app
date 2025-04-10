@@ -16,6 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatMenuModule } from '@angular/material/menu';
 import { NewClientFormComponent } from '../../clients/new-client-form/new-client-form.component';
 import { UpdatePaymentComponent } from '../update-payment/update-payment.component';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 @Component({
   selector: 'app-history-payments',
   standalone: true,
@@ -27,12 +28,14 @@ import { UpdatePaymentComponent } from '../update-payment/update-payment.compone
     MatDialogModule,
     MatPaginatorModule,
     MatMenuModule,
+    MatSortModule 
   ],
   templateUrl: './history-payments.component.html',
   styleUrl: './history-payments.component.scss'
 })
 export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   infoCredito: GetCreditDto;
   currentDate: Date = new Date();
   displayedColumnsStateCredit: string[] = ['concept', 'amount'];
@@ -92,14 +95,14 @@ export class HistoryPaymentsComponent implements OnInit, AfterViewInit {
         ];
   
         // Convertir las fechas de string a Date y ordenarlas
-        const sortedPayments = response.data.payments.sort((a: any, b: any) => {
-          const dateA = new Date(a.payment_date).getTime();
-          const dateB = new Date(b.payment_date).getTime();
-          return dateB - dateA; // De más reciente a más antigua
-        });
+        // const sortedPayments = response.data.payments.sort((a: any, b: any) => {
+        //   const dateA = new Date(a.payment_date).getTime();
+        //   const dateB = new Date(b.payment_date).getTime();
+        //   return dateB - dateA; // De más reciente a más antigua
+        // });
   
         // Mapear los pagos a la estructura deseada
-        this.historyPayments.data = sortedPayments.map((payment: any) => ({
+        this.historyPayments.data = response.data.payments.map((payment: any) => ({
           id: payment.id,
           type: payment.type,
           paymentType: payment.payment_type,

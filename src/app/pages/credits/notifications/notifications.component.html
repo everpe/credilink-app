@@ -2,9 +2,9 @@
     <mat-card class="mat-elevation-z6 rounded-lg">
         <mat-card-header class="px-4">
             <div [formGroup]="notificacionesForm"
-                class="notificaciones-container grid grid-cols-1 lg:grid-cols-3 gap-4 w-full">
+                class="notificaciones-container grid grid-cols-1 lg:grid-cols-4 gap-4 w-full">
 
-                <mat-form-field class="col-span-1 lg:col-span-1 w-full" appearance="outline">
+                <mat-form-field class="col-span-1 lg:col-span-2 w-full" appearance="outline">
                     <mat-label class="ml-11">Buscar cliente</mat-label>
                     <mat-icon matPrefix>person_search</mat-icon>
 
@@ -26,10 +26,8 @@
                     </mat-autocomplete>
                 </mat-form-field>
 
-
-
                 <mat-form-field appearance="outline" class="col-span-1 lg:col-span-1 w-full">
-                    <mat-label class="ml-10">Estado del crédito</mat-label>
+                    <mat-label class="ml-10">Estado crédito</mat-label>
                     <mat-select formControlName="load_status">
                         <mat-option value="ACTIVO">ACTIVO</mat-option>
                         <mat-option value="PAGADO">PAGADO</mat-option>
@@ -38,9 +36,8 @@
                     <mat-icon matPrefix>info</mat-icon>
                 </mat-form-field>
 
-
                 <mat-form-field appearance="outline" class="col-span-1 lg:col-span-1 w-full">
-                  <mat-label>Relación de Trabajo</mat-label>
+                  <mat-label>Relación Trabajo</mat-label>
                   <mat-select formControlName="job_relationship" #jobRelationshipSelect>
                     <mat-option>Ninguno</mat-option>
                     <mat-option *ngFor="let relationship of lisJobRelationShips" [value]="relationship.id">
@@ -70,24 +67,21 @@
                   </mat-select>
                 </mat-form-field>
                 
-
                 <div class="flex justify-center items-center col-span-1 lg:col-span-1 space-x-2">
-                  <div  class="grid grid-cols-1 gap-2">
-                    <button mat-raised-button color="primary" type="button" class="flex items-center" (click)="filterCredits()">
-                      <mat-icon class="mr-2">search</mat-icon>
-                      Filtrar
-                    </button>
-
-                    <button mat-raised-button color="secoundary" type="button" class="flex items-center" (click)="resetFilters()">
-                      <mat-icon class="mr-2">clear</mat-icon>
-                      Limpiar
-                    </button>
-                  </div>
-
-                <button mat-raised-button color="primary" type="submit" class="flex items-center " (click)="sendNotificationSelectedCredits()">
-                  <mat-icon >notifications</mat-icon> 
-                  Enviar Notificación
-                </button>
+                  <button mat-raised-button color="secoundary" type="button" class="flex items-center" (click)="resetFilters()">
+                    <mat-icon class="mr-2">clear</mat-icon>
+                    Limpiar
+                  </button>
+                  <button mat-raised-button color="primary" type="button" class="flex items-center" (click)="filterCredits()">
+                    <mat-icon class="mr-2">search</mat-icon>
+                    Filtrar
+                  </button>
+                </div>
+                <div class="flex justify-center items-center col-span-1 lg:col-span-1 space-x-2">
+                  <button mat-raised-button color="primary" type="submit" class="flex items-center " (click)="sendNotificationSelectedCredits()">
+                    <mat-icon >notifications</mat-icon> 
+                    Enviar Notificación
+                  </button>
                 </div>
             </div>
         </mat-card-header>

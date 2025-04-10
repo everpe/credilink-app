@@ -26,6 +26,7 @@ import { SharedService } from 'src/app/services/shared/shared.service';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
 import { ConfirmNotificationComponent } from './confirm-notification/confirm-notification.component';
 import { LoaderComponent } from 'src/app/shared/components/loader/loader.component';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'notifications-credit',
@@ -58,6 +59,7 @@ export class NotificationsComponent  implements OnInit {
   
   dataSource = new MatTableDataSource<GetCreditDto>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   displayedColumns: string[] = [
     'select',
     'client',
